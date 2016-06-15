@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Controllers on Blue Jay</title>
+    <link>http://blue-jay.github.io/controllers/</link>
+    <description>Recent content in Controllers on Blue Jay</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 08 Mar 2016 21:07:13 +0100</lastBuildDate>
+    <atom:link href="http://blue-jay.github.io/controllers/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Controllers</title>
+      <link>http://blue-jay.github.io/controllers/</link>
+      <pubDate>Tue, 08 Mar 2016 21:07:13 +0100</pubDate>
+      
+      <guid>http://blue-jay.github.io/controllers/</guid>
+      <description>
+
+&lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
+
+&lt;p&gt;The controller files are all organized under the &lt;strong&gt;controller&lt;/strong&gt; folder. The controllers
+handle much of the interactions between the models and the views as well as specify
+which routes map to which functions.&lt;/p&gt;
+
+&lt;h2 id=&#34;routing&#34;&gt;Routing&lt;/h2&gt;
+
+&lt;p&gt;In the &lt;strong&gt;bootstrap&lt;/strong&gt; package, the &lt;strong&gt;RegisterServices()&lt;/strong&gt; function calls: &lt;code&gt;controller.LoadRoutes()&lt;/code&gt;
+The &lt;strong&gt;LoadRoutes()&lt;/strong&gt; function in the &lt;strong&gt;controller&lt;/strong&gt; package loads the routes for each of the individual controllers:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// LoadRoutes loads the routes for each of the controllers
+func LoadRoutes() {
+	about.Load()
+	debug.Load()
+	auth.LoadRegister()
+	auth.LoadLogin()
+	core.LoadIndex()
+	core.LoadError()
+	core.LoadStatic()
+	notepad.Load()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here is the &lt;strong&gt;Load()&lt;/strong&gt; function from the &lt;strong&gt;controller/notepad&lt;/strong&gt; package:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;var (
+	uri = &amp;quot;/notepad&amp;quot;
+)
+
+func Load() {
+	c := router.Chain(acl.DisallowAnon)
+	router.Get(uri, Index, c...)
+	router.Get(uri+&amp;quot;/create&amp;quot;, Create, c...)
+	router.Post(uri, Store, c...)
+	router.Get(uri+&amp;quot;/view/:id&amp;quot;, Show, c...)
+	router.Get(uri+&amp;quot;/edit/:id&amp;quot;, Edit, c...)
+	router.Patch(uri+&amp;quot;/edit/:id&amp;quot;, Update, c...)
+	router.Delete(uri+&amp;quot;/:id&amp;quot;, Destroy, c...)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;There are a few things to note here. The &lt;strong&gt;router&lt;/strong&gt; references the &lt;strong&gt;lib/router&lt;/strong&gt; package
+which is a wrapper for the &lt;a href=&#34;http://github.com/julienschmidt/httprouter&#34;&gt;julienschmidt/httprouter&lt;/a&gt; package.
+The &lt;strong&gt;router.Chain()&lt;/strong&gt; function uses the &lt;a href=&#34;http://github.com/justinas/alice&#34;&gt;justinas/alice&lt;/a&gt; package
+to help with middleware chaining.&lt;/p&gt;
+
+&lt;p&gt;This may start to sound like a framework, but it&amp;rsquo;s actually a good way to build your wrapper
+packages that live in the &lt;strong&gt;lib&lt;/strong&gt; folder. If you want to use a different router, you can modify
+the &lt;strong&gt;lib/router&lt;/strong&gt; package easily and you won&amp;rsquo;t have to change any code in your controllers.&lt;/p&gt;
+
+&lt;p&gt;It&amp;rsquo;s a good idea to follow a naming convention for the controller functions (Laravel developers
+will notice it&amp;rsquo;s the same convention Taylor Orwell uses).&lt;/p&gt;
+
+&lt;h3 id=&#34;these-are-a-few-things-you-can-do-with-controllers&#34;&gt;These are a few things you can do with controllers.&lt;/h3&gt;
+
+&lt;p&gt;Access a gorilla session:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Get the current session
+sess := session.Instance(r)
+...
+// Close the session after you are finished making changes
+sess.Save(r, w)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Trigger 1 of 4 different types of flash messages on the next page load (no other code needed):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;sess.AddFlash(view.Flash{&amp;quot;Sorry, no brute force :-)&amp;quot;, view.FlashNotice})
+sess.Save(r, w) // Ensure you save the session after making a change to it
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Validate form fields are not empty:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Ensure a user submitted all the required form fields
+if validate, missingField := view.Validate(r, []string{&amp;quot;email&amp;quot;, &amp;quot;password&amp;quot;}); !validate {
+	sess.AddFlash(view.Flash{&amp;quot;Field missing: &amp;quot; + missingField, view.FlashError})
+	sess.Save(r, w)
+	LoginGET(w, r)
+	return
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Render a template:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Create a new view
+v := view.New(r)
+
+// Set the template name
+v.Name = &amp;quot;login/login&amp;quot;
+
+// Assign a variable that is accessible in the form
+v.Vars[&amp;quot;token&amp;quot;] = csrfbanana.Token(w, r, sess)
+
+// Refill any form fields from a POST operation
+view.Repopulate([]string{&amp;quot;email&amp;quot;}, r.Form, v.Vars)
+
+// Render the template
+v.Render(w)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Return the flash messages during an Ajax request:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Get session
+sess := session.Instance(r)
+
+// Set the flash message
+sess.AddFlash(view.Flash{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, view.FlashError})
+sess.Save(r, w)
+
+// Display the flash messages as JSON
+v := view.New(r)
+v.SendFlashes(w)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Handle the database query:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Get database result
+result, err := model.UserByEmail(email)
+
+if err == sql.ErrNoRows {
+	// User does not exist
+} else if err != nil {
+	// Display error message
+} else if passhash.MatchString(result.Password, password) {
+	// Password matches!	
+} else {
+	// Password does not match
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Send an email:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Email a user
+err := email.SendEmail(email.ReadConfig().From, &amp;quot;This is the subject&amp;quot;, &amp;quot;This is the body!&amp;quot;)
+if err != nil {
+	log.Println(err)
+	sess.AddFlash(view.Flash{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, view.FlashError})
+	sess.Save(r, w)
+	return
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Validate a form if the Google reCAPTCHA is enabled in the config:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Validate with Google reCAPTCHA
+if !recaptcha.Verified(r) {
+    sess.AddFlash(view.Flash{&amp;quot;reCAPTCHA invalid!&amp;quot;, view.FlashError})
+    sess.Save(r, w)
+    RegisterGET(w, r)
+    return
+}
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

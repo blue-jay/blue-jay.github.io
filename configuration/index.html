@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+  
+  
+  
+  
+   <html class="no-js"> 
+
+  <head lang="en-us">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
+    <title>Configuration - Blue Jay</title>
+    <meta name="generator" content="Hugo 0.15" />
+
+    
+    <meta name="description" content="Blue Jay is a toolkit written in Go for the web.">
+    
+    <link rel="canonical" href="http://blue-jay.github.io/configuration/">
+    
+    <meta name="author" content="Joseph Spurrier">
+    
+
+    <meta property="og:url" content="http://blue-jay.github.io/configuration/">
+    <meta property="og:title" content="Blue Jay">
+    <meta property="og:image" content="http://blue-jay.github.io/images/bluejaylogo.png">
+    <meta name="apple-mobile-web-app-title" content="Blue Jay">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <link rel="shortcut icon" type="image/x-icon" href="http://blue-jay.github.io/images/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="http://blue-jay.github.io/images/favicon.ico">
+
+    <style>
+      @font-face {
+        font-family: 'Icon';
+        src: url('http://blue-jay.github.io/fonts/icon.eot?52m981');
+        src: url('http://blue-jay.github.io/fonts/icon.eot?#iefix52m981')
+               format('embedded-opentype'),
+             url('http://blue-jay.github.io/fonts/icon.woff?52m981')
+               format('woff'),
+             url('http://blue-jay.github.io/fonts/icon.ttf?52m981')
+               format('truetype'),
+             url('http://blue-jay.github.io/fonts/icon.svg?52m981#icon')
+               format('svg');
+        font-weight: normal;
+        font-style: normal;
+      }
+    </style>
+
+    <link rel="stylesheet" href="http://blue-jay.github.io/stylesheets/application.css">
+    <link rel="stylesheet" href="http://blue-jay.github.io/stylesheets/palettes.css">
+    <link rel="stylesheet" href="http://blue-jay.github.io/stylesheets/highlight/highlight.css">
+
+    
+    
+    
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ubuntu:400,700|Ubuntu%2bMono">
+    <style>
+      body, input {
+        font-family: 'Ubuntu', Helvetica, Arial, sans-serif;
+      }
+      pre, code {
+        font-family: 'Ubuntu Mono', 'Courier New', 'Courier', monospace;
+      }
+    </style>
+    
+    
+    <link rel="stylesheet" href="http://blue-jay.github.io/stylesheets/global.css">
+    
+    <link rel="stylesheet" href="http://blue-jay.github.io/stylesheets/colors.css">
+    
+    <script src="http://blue-jay.github.io/javascripts/modernizr.js"></script>
+
+    
+
+  </head>
+  <body class="palette-primary-jayblue palette-accent-amber">
+
+
+
+	
+	
+
+
+<div class="backdrop">
+	<div class="backdrop-paper"></div>
+</div>
+
+<input class="toggle" type="checkbox" id="toggle-drawer">
+<input class="toggle" type="checkbox" id="toggle-search">
+<label class="toggle-button overlay" for="toggle-drawer"></label>
+
+<header class="header">
+	<nav aria-label="Header">
+  <div class="bar default">
+    <div class="button button-menu" role="button" aria-label="Menu">
+      <label class="toggle-button icon icon-menu" for="toggle-drawer">
+        <span></span>
+      </label>
+    </div>
+    <div class="stretch">
+      <div class="title">
+        Configuration
+      </div>
+    </div>
+
+    
+
+    
+    <div class="button button-github" role="button" aria-label="GitHub">
+      <a href="https://github.com/blue-jay" title="@blue-jay on GitHub" target="_blank" class="toggle-button icon icon-github"></a>
+    </div>
+    
+    
+        
+  </div>
+  <div class="bar search">
+    <div class="button button-close" role="button" aria-label="Close">
+      <label class="toggle-button icon icon-back" for="toggle-search"></label>
+    </div>
+    <div class="stretch">
+      <div class="field">
+        <input class="query" type="text" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck>
+      </div>
+    </div>
+    <div class="button button-reset" role="button" aria-label="Search">
+      <button class="toggle-button icon icon-close" id="reset-search"></button>
+    </div>
+  </div>
+</nav>
+</header>
+
+<main class="main">
+	<div class="drawer">
+		<nav aria-label="Navigation">
+  <a href="https://github.com/blue-jay/blueprint" class="project">
+    <div class="banner">
+      
+        <div class="logo">
+          <img src="http://blue-jay.github.io/images/bluejaylogo.png">
+        </div>
+      
+      <div class="name">
+        <strong>Blue Jay <span class="version">1.0</span></strong>
+        
+          <br>
+          blue-jay/blueprint
+        
+      </div>
+    </div>
+  </a>
+
+  <div class="scrollable">
+    <div class="wrapper">
+      
+        <ul class="repo">
+          <li class="repo-download">
+            <a href="https://github.com/blue-jay/blueprint/archive/master.zip" target="_blank" title="Download" data-action="download">
+              <i class="icon icon-download"></i> Download
+            </a>
+          </li>
+          <li class="repo-stars">
+            <a href="https://github.com/blue-jay/blueprint/stargazers" target="_blank" title="Stargazers" data-action="star">
+              <i class="icon icon-star"></i> Stars
+              <span class="count">&ndash;</span>
+            </a>
+          </li>
+        </ul>
+        <hr>
+      
+
+      <div class="toc">
+        
+        <ul>
+          
+
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Toolkit Overview" href="http://blue-jay.github.io/">
+	
+	Toolkit Overview
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a class="current" title="Configuration" href="http://blue-jay.github.io/configuration/">
+	
+	Configuration
+</a>
+
+
+<ul id="scrollspy">
+</ul>
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Controllers" href="http://blue-jay.github.io/controllers/">
+	
+	Controllers
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Views" href="http://blue-jay.github.io/views/">
+	
+	Views
+</a>
+
+
+  
+</li>
+
+
+        </ul>
+        
+
+        
+        <hr>
+        <span class="section">The author</span>
+        
+        <ul>
+          
+
+          
+          <li>
+            <a href="https://github.com/blue-jay" target="_blank" title="@blue-jay on GitHub">
+              @blue-jay on GitHub
+            </a>
+          </li>
+          
+        </ul>
+        
+      </div>
+    </div>
+  </div>
+</nav>
+
+	</div>
+
+	<article class="article">
+		<div class="wrapper">
+			<h1>Configuration </h1>
+
+			
+
+<h2 id="basic-usage">Basic Usage</h2>
+
+<p>Throughout this documentation, keep in mind everything in Blueprint is configurable.
+You are not using a framework so you don&rsquo;t have to follow rules. You don&rsquo;t need to
+use any of the components with Blueprint, but it does give you a nice foundation to
+start from. If you want to use YAML instead of JSON, I recommend creating a wrapper
+library in the <strong>lib</strong> folder and then loading your env.yaml file via the <strong>bootstrap</strong>
+package.</p>
+
+<p>One of the first steps before using Blueprint is to create <strong>env.json</strong>. You can make
+a copy of <strong>env.json.example</strong> and then name it <strong>env.json</strong>. The <strong>env.json</strong> file is a
+good place to set variables for the application so you
+don&rsquo;t have to hardcode them. If you want to add any
+of your own settings, you can add them to <strong>env.json</strong> and update the <strong>Info</strong> struct
+in the <strong>bootstrap</strong> package. Here is an example <strong>env.json</strong>:</p>
+
+<pre><code class="language-json">{
+	&quot;Database&quot;: {
+		&quot;Type&quot;: &quot;MySQL&quot;,
+		&quot;MySQL&quot;: {
+			&quot;Username&quot;: &quot;root&quot;,
+			&quot;Password&quot;: &quot;&quot;,
+			&quot;Database&quot;: &quot;blueprint&quot;,
+			&quot;Hostname&quot;: &quot;127.0.0.1&quot;,
+			&quot;Port&quot;: 3306,
+			&quot;Parameter&quot;: &quot;?parseTime=true&quot;
+		}
+	},
+	&quot;Email&quot;: {
+		&quot;Username&quot;: &quot;&quot;,
+		&quot;Password&quot;: &quot;&quot;,
+		&quot;Hostname&quot;: &quot;&quot;,
+		&quot;Port&quot;: 25,
+		&quot;From&quot;: &quot;&quot;
+	},
+	&quot;Server&quot;: {
+		&quot;Hostname&quot;: &quot;&quot;,
+		&quot;UseHTTP&quot;: true,
+		&quot;UseHTTPS&quot;: false,
+		&quot;RedirectToHTTPS&quot;: false,
+		&quot;HTTPPort&quot;: 80,
+		&quot;HTTPSPort&quot;: 443,
+		&quot;CertFile&quot;: &quot;tls/server.crt&quot;,
+		&quot;KeyFile&quot;: &quot;tls/server.key&quot;
+	},
+	&quot;Session&quot;: {
+		&quot;SecretKey&quot;: &quot;@r4B?EThaSEh_drudR7P_hub=s#s2Pah&quot;,
+		&quot;Name&quot;: &quot;sess&quot;,
+		&quot;Options&quot;: {
+			&quot;Path&quot;: &quot;/&quot;,
+			&quot;Domain&quot;: &quot;&quot;,
+			&quot;MaxAge&quot;: 28800,
+			&quot;Secure&quot;: false,
+			&quot;HttpOnly&quot;: true
+		}
+	},
+	&quot;Template&quot;: {
+		&quot;Root&quot;: &quot;base&quot;,
+		&quot;Children&quot;: [
+			&quot;partial/menu&quot;,
+			&quot;partial/footer&quot;
+		]
+	},
+	&quot;View&quot;: {
+		&quot;BaseURI&quot;: &quot;/&quot;,
+		&quot;Extension&quot;: &quot;tmpl&quot;,
+		&quot;Folder&quot;: &quot;template&quot;,
+		&quot;Caching&quot;: true
+	}
+}
+</code></pre>
+
+<h2 id="configuration-structure">Configuration Structure</h2>
+
+<p>The <strong>env.json</strong> file contains the configuration for Blueprint. It removes the need
+to hardcode any of these values and makes it easy to move Blueprint to another system
+with a different set up.</p>
+
+<p>The <strong>env.json</strong> file is parsed and the result is stored in the <strong>Info</strong> struct from the
+<strong>bootstrap</strong> package:</p>
+
+<pre><code class="language-go">// Info contains the application settings
+type Info struct {
+	Database database.Info   `json:&quot;Database&quot;`
+	Email    email.SMTPInfo  `json:&quot;Email&quot;`
+	Server   server.Server   `json:&quot;Server&quot;`
+	Session  session.Session `json:&quot;Session&quot;`
+	Template view.Template   `json:&quot;Template&quot;`
+	View     view.View       `json:&quot;View&quot;`
+}
+</code></pre>
+
+<p>The <strong>Info</strong> struct is simply a container that nests structs from packages in the <strong>lib</strong> folder
+that need variables configured. Here is a list mapping the JSON keys to structs:</p>
+
+<pre><code class="language-text">Database	- Info struct in lib/database
+Email		- SMTPInfo struct in lib/email
+Server		- Server struct in lib/server
+Session		- Session struct in lib/session
+Template	- Template struct in lib/view
+View		- View struct in lib/view
+</code></pre>
+
+<h2 id="enable-https">Enable HTTPS</h2>
+
+<p>To enable HTTPS:</p>
+
+<ol>
+<li>Set <strong>UseHTTPS</strong> to true</li>
+<li>Create a folder called <strong>tls</strong> in the project root folder</li>
+<li>Place your own certificate and key files in the <strong>tls</strong> folder</li>
+</ol>
+
+<p><strong>Note:</strong> If you want to redirect HTTP to HTTPS, you can set <strong>RedirectToHTTPS</strong> to true as well.</p>
+
+<h2 id="tip-add-a-section">Tip: Add a Section</h2>
+
+<p>To add a new key called <strong>Captcha</strong>, you could do the following:</p>
+
+<ol>
+<li>Create a new package in the <strong>lib</strong> folder called <strong>captcha</strong></li>
+<li>Create a struct called <strong>Info</strong> in the <strong>lib/captcha</strong> package</li>
+<li>Add the <strong>Captcha</strong> key and any values to the <strong>env.json</strong> file</li>
+<li>Add code to the <strong>RegisterServices()</strong> function that passes the parsed config to the <strong>lib/captcha</strong> package</li>
+<li>Add code to your controllers that references your <strong>lib/captcha</strong> package</li>
+</ol>
+
+<h2 id="tip-remove-a-section">Tip: Remove a Section</h2>
+
+<p>To remove the <strong>Email</strong> key, you could do the following:</p>
+
+<ol>
+<li>Remove the <strong>Email</strong> key and value from the <strong>env.json</strong> file</li>
+<li>Remove the <strong>Email</strong> nested struct from the <strong>Info</strong> struct in the <strong>bootstrap</strong> package</li>
+<li>Remove any code setting up the package from the <strong>RegisterServices()</strong> function in the <strong>bootstrap</strong> package</li>
+<li>Remove the <strong>lib/email</strong> package from the filesystem</li>
+<li>Find any references to the <strong>lib/email</strong> package in your code using the jay command line, <code>jay find &quot;lib/email&quot; &quot;*.go&quot;</code>,
+then delete the imports and referencing code</li>
+</ol>
+
+			
+			<aside class="copyright" role="note">
+				
+				&copy; 2016 Released under the MIT license &ndash;
+				
+				Documentation built with
+				<a href="https://www.gohugo.io" target="_blank">Hugo</a>
+				using the
+				<a href="http://github.com/digitalcraftsman/hugo-material-docs" target="_blank">
+					Material
+				</a> theme.
+			</aside>
+
+			<footer class="footer">
+				
+
+<nav class="pagination" aria-label="Footer">
+  <div class="previous">
+  
+      <a href="http://blue-jay.github.io/" title="Toolkit Overview">
+        <span class="direction">
+          Previous
+        </span>
+        <div class="page">
+          <div class="button button-previous" role="button" aria-label="Previous">
+            <i class="icon icon-back"></i>
+          </div>
+          <div class="stretch">
+            <div class="title">
+              Toolkit Overview
+            </div>
+          </div>
+        </div>
+      </a>
+  
+  </div>
+
+  <div class="next">
+  
+      <a href="http://blue-jay.github.io/controllers/" title="Controllers">
+        <span class="direction">
+          Next
+        </span>
+        <div class="page">
+          <div class="stretch">
+            <div class="title">
+              Controllers
+            </div>
+          </div>
+          <div class="button button-next" role="button" aria-label="Next">
+            <i class="icon icon-forward"></i>
+          </div>
+        </div>
+      </a>
+  
+  </div>
+</nav>
+
+
+
+
+
+			</footer>
+		</div>
+	</article>
+
+	<div class="results" role="status" aria-live="polite">
+		<div class="scrollable">
+			<div class="wrapper">
+				<div class="meta"></div>
+				<div class="list"></div>
+			</div>
+		</div>
+	</div>
+</main>
+
+    <script>
+    
+      var base_url = 'http:\/\/blue-jay.github.io\/';
+      var repo_id  = 'blue-jay\/blueprint';
+    
+    </script>
+
+    <script src="http://blue-jay.github.io/javascripts/application.js"></script>
+    
+
+    <script>
+      /* Add headers to scrollspy */
+      var headers   = document.getElementsByTagName("h2");
+      var scrollspy = document.getElementById('scrollspy');
+
+      if(headers.length > 0) {
+        for(var i = 0; i < headers.length; i++) {
+          var li = document.createElement("li");
+          li.setAttribute("class", "anchor");
+
+          var a  = document.createElement("a");
+          a.setAttribute("href", "#" + headers[i].id);
+          a.setAttribute("title", headers[i].innerHTML);
+          a.innerHTML = headers[i].innerHTML;
+          
+          li.appendChild(a)
+          scrollspy.appendChild(li);
+        }
+      } else {
+        scrollspy.parentElement.removeChild(scrollspy)
+      }
+      
+
+      /* Add permanent link next to the headers */
+      var headers = document.querySelectorAll("h1, h2, h3, h4, h5, h6");
+
+      for(var i = 0; i < headers.length; i++) {
+          var a = document.createElement("a");
+          a.setAttribute("class", "headerlink");
+          a.setAttribute("href", "#" + headers[i].id);
+          a.setAttribute("title", "Permanent link")
+          a.innerHTML = "#";
+          headers[i].appendChild(a);
+      }
+    </script>
+
+    
+
+    <script src="//gohugo.io/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>

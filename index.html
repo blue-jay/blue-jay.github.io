@@ -1,7 +1,607 @@
 <!DOCTYPE html>
-<html>
-<body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
-</body>
+  
+  
+  
+  
+   <html class="no-js"> 
+
+  <head lang="en-us">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
+    <title>Blue Jay</title>
+    <meta name="generator" content="Hugo 0.15" />
+
+    
+    <meta name="description" content="Blue Jay is a toolkit written in Go for the web.">
+    
+    <link rel="canonical" href="http://blue-jay.github.io/">
+    
+    <meta name="author" content="Joseph Spurrier">
+    
+
+    <meta property="og:url" content="http://blue-jay.github.io/">
+    <meta property="og:title" content="Blue Jay">
+    <meta property="og:image" content="http://blue-jay.github.io/images/bluejaylogo.png">
+    <meta name="apple-mobile-web-app-title" content="Blue Jay">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <link rel="shortcut icon" type="image/x-icon" href="http://blue-jay.github.io/images/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="http://blue-jay.github.io/images/favicon.ico">
+
+    <style>
+      @font-face {
+        font-family: 'Icon';
+        src: url('http://blue-jay.github.io/fonts/icon.eot?52m981');
+        src: url('http://blue-jay.github.io/fonts/icon.eot?#iefix52m981')
+               format('embedded-opentype'),
+             url('http://blue-jay.github.io/fonts/icon.woff?52m981')
+               format('woff'),
+             url('http://blue-jay.github.io/fonts/icon.ttf?52m981')
+               format('truetype'),
+             url('http://blue-jay.github.io/fonts/icon.svg?52m981#icon')
+               format('svg');
+        font-weight: normal;
+        font-style: normal;
+      }
+    </style>
+
+    <link rel="stylesheet" href="http://blue-jay.github.io/stylesheets/application.css">
+    <link rel="stylesheet" href="http://blue-jay.github.io/stylesheets/palettes.css">
+    <link rel="stylesheet" href="http://blue-jay.github.io/stylesheets/highlight/highlight.css">
+
+    
+    
+    
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ubuntu:400,700|Ubuntu%2bMono">
+    <style>
+      body, input {
+        font-family: 'Ubuntu', Helvetica, Arial, sans-serif;
+      }
+      pre, code {
+        font-family: 'Ubuntu Mono', 'Courier New', 'Courier', monospace;
+      }
+    </style>
+    
+    
+    <link rel="stylesheet" href="http://blue-jay.github.io/stylesheets/global.css">
+    
+    <link rel="stylesheet" href="http://blue-jay.github.io/stylesheets/colors.css">
+    
+    <script src="http://blue-jay.github.io/javascripts/modernizr.js"></script>
+
+    
+    <link href="http://blue-jay.github.io/index.xml" rel="alternate" type="application/rss+xml" title="Blue Jay" />
+    <link href="http://blue-jay.github.io/index.xml" rel="feed" type="application/rss+xml" title="Blue Jay" />
+    
+
+  </head>
+  <body class="palette-primary-jayblue palette-accent-amber">
+
+
+
+	
+	
+
+
+<div class="backdrop">
+	<div class="backdrop-paper"></div>
+</div>
+
+<input class="toggle" type="checkbox" id="toggle-drawer">
+<input class="toggle" type="checkbox" id="toggle-search">
+<label class="toggle-button overlay" for="toggle-drawer"></label>
+
+<header class="header">
+	<nav aria-label="Header">
+  <div class="bar default">
+    <div class="button button-menu" role="button" aria-label="Menu">
+      <label class="toggle-button icon icon-menu" for="toggle-drawer">
+        <span></span>
+      </label>
+    </div>
+    <div class="stretch">
+      <div class="title">
+        Blue Jay
+      </div>
+    </div>
+
+    
+
+    
+    <div class="button button-github" role="button" aria-label="GitHub">
+      <a href="https://github.com/blue-jay" title="@blue-jay on GitHub" target="_blank" class="toggle-button icon icon-github"></a>
+    </div>
+    
+    
+        
+  </div>
+  <div class="bar search">
+    <div class="button button-close" role="button" aria-label="Close">
+      <label class="toggle-button icon icon-back" for="toggle-search"></label>
+    </div>
+    <div class="stretch">
+      <div class="field">
+        <input class="query" type="text" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck>
+      </div>
+    </div>
+    <div class="button button-reset" role="button" aria-label="Search">
+      <button class="toggle-button icon icon-close" id="reset-search"></button>
+    </div>
+  </div>
+</nav>
+</header>
+
+<main class="main">
+	<div class="drawer">
+		<nav aria-label="Navigation">
+  <a href="https://github.com/blue-jay/blueprint" class="project">
+    <div class="banner">
+      
+        <div class="logo">
+          <img src="http://blue-jay.github.io/images/bluejaylogo.png">
+        </div>
+      
+      <div class="name">
+        <strong>Blue Jay <span class="version">1.0</span></strong>
+        
+          <br>
+          blue-jay/blueprint
+        
+      </div>
+    </div>
+  </a>
+
+  <div class="scrollable">
+    <div class="wrapper">
+      
+        <ul class="repo">
+          <li class="repo-download">
+            <a href="https://github.com/blue-jay/blueprint/archive/master.zip" target="_blank" title="Download" data-action="download">
+              <i class="icon icon-download"></i> Download
+            </a>
+          </li>
+          <li class="repo-stars">
+            <a href="https://github.com/blue-jay/blueprint/stargazers" target="_blank" title="Stargazers" data-action="star">
+              <i class="icon icon-star"></i> Stars
+              <span class="count">&ndash;</span>
+            </a>
+          </li>
+        </ul>
+        <hr>
+      
+
+      <div class="toc">
+        
+        <ul>
+          
+
+
+
+
+<li>
+  
+    
+
+
+
+<a class="current" title="Toolkit Overview" href="http://blue-jay.github.io/">
+	
+	Toolkit Overview
+</a>
+
+
+<ul id="scrollspy">
+</ul>
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Configuration" href="http://blue-jay.github.io/configuration/">
+	
+	Configuration
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Controllers" href="http://blue-jay.github.io/controllers/">
+	
+	Controllers
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Views" href="http://blue-jay.github.io/views/">
+	
+	Views
+</a>
+
+
+  
+</li>
+
+
+        </ul>
+        
+
+        
+        <hr>
+        <span class="section">The author</span>
+        
+        <ul>
+          
+
+          
+          <li>
+            <a href="https://github.com/blue-jay" target="_blank" title="@blue-jay on GitHub">
+              @blue-jay on GitHub
+            </a>
+          </li>
+          
+        </ul>
+        
+      </div>
+    </div>
+  </div>
+</nav>
+
+	</div>
+
+	<article class="article">
+		<div class="wrapper">
+			
+				<h1>Toolkit Overview </h1>
+
+				
+
+<p><a href="https://goreportcard.com/report/github.com/blue-jay/blueprint"><img src="https://goreportcard.com/badge/github.com/blue-jay/blueprint" alt="Go Report Card" /></a>
+<a href="https://godoc.org/github.com/blue-jay/blueprint"><img src="https://godoc.org/github.com/blue-jay/blueprint?status.svg" alt="GoDoc" /></a></p>
+
+<p>Blue Jay is a toolkit designed to get your web application off the ground. It&rsquo;s a collection of command line tools along with a web blueprint that is flexible enough to fit any project, yet provides a foundation so you can focus on the task instead of designing your own tools. You can easily change the structure and there is no rigid framework to which you have to conform. Even the command line tools like code generation and database migration are portable so they can be used outside your project.</p>
+
+<p>There are a few components:</p>
+
+<ul>
+<li><p><strong>Blueprint</strong> is a model-view-controller (MVC) style web skeleton</p></li>
+
+<li><p><strong>Jay</strong> is a command line tool with modules for find/replace, database migrations, and code generation</p></li>
+</ul>
+
+<h2 id="why-blue-jay">Why Blue Jay?</h2>
+
+<p>There are a few web frameworks for Go, but we support the Go mentality that you should keep
+your application dependency lean. Less dependencies means less bugs.
+It&rsquo;s also great to start developing your application right away instead of learning
+all the features of a framework and then developing once you are proficient enough.
+Blue Jay provides a lean web skeleton called Blueprint to demonstrate how to structure
+a web application without locking developers to a framework. Blueprint includes well thought out
+example code that demonstrates a typical web workflow.</p>
+
+<p>One of the things you&rsquo;ll notice while using Blueprint is how to abstract out
+external packages to make it easy to swap out components. Ultimately, you should
+be able to write code once and use it in all of your other projects. The <strong>lib</strong>
+folder is a great place for all these packages with very few dependencies.</p>
+
+<p>You&rsquo;ll also notice certain packages need to be thread-safe when building web applications.
+An example is the <strong>lib/view</strong> package which provides thread-safe template caching.</p>
+
+<p>The other reason for Blue Jay is the command line tools in <strong>jay</strong>. jay provides an easy way
+to find/replace in a project when refactoring, migrate your database forwards or backwards, and
+generate a file or sets or files using the Go <a href="https://golang.org/pkg/html/template/">html/template</a>
+package. Code generation can help you build faster and more efficiently which is a perfect compliment
+to Blueprint.</p>
+
+<h2 id="why-go">Why Go?</h2>
+
+<p>One of the big draws to Go is the rich standard library. The standard library includes a web server,
+web-safe templating, and
+many other tools necessary to build a web application. Any features missing from the standard library are
+written by other Go developers who are happy to contribute to the thriving community.</p>
+
+<p>Go allows you to write code that compiles to the majority of the architectures we use today so all your
+code is pretty much portable. Go accels when you want to write command line apps instead of just scripts,
+but that&rsquo;s not the language&rsquo;s only niche.
+The designers of Go wanted to build a language that solved problems between the Google development teams.
+It&rsquo;s a modern language that allows you to easily multi-thread your applications safely so you can use the
+power of the hardware.</p>
+
+<h2 id="high-level">High Level</h2>
+
+<p>Blueprint is a complete web application with built-in web server.
+It requires MySQL so you&rsquo;ll need to set up your own instance of the database.
+The application has a public home page, authenticated home page, login page, register page,
+about page, and a simple notepad to demonstrate GET, POST, UPDATE, and DELETE operations.</p>
+
+<p>The entrypoint for the web app is <strong>blueprint.go</strong>. The file calls the <strong>bootstrap</strong> package
+which loads the application settings, creates the session store, connects to the database,
+sets up the view, loads the routes, attaches the middleware, and starts the web server.</p>
+
+<p>The front end is built using Bootstrap with a few small changes to fonts and spacing. The flash
+messages are customized so they show up at the bottom right of the screen.</p>
+
+<p>All of the error and warning messages should display to the
+user or in the console. Informational messages are displayed to the user via
+flash messages that disappear after 4 seconds.</p>
+
+<h2 id="quick-start-with-mysql">Quick Start with MySQL</h2>
+
+<ol>
+<li>To download, run the following command: <code>go get github.com/blue-ray/blueprint</code></li>
+<li>Start a MySQL instance and import <strong>database/quickstart.sql</strong> to create the database and tables.</li>
+<li>Make a copy of env.json.example and name it: <strong>env.json</strong></li>
+<li>Edit the <strong>Database</strong> section in <strong>config/config.json</strong> so the connection information matches your MySQL instance.</li>
+<li>Use <code>go run</code> from the root of the project directory.</li>
+<li>Open your web browser to <a href="http://localhost">http://localhost</a> and you should see the welcome page.</li>
+<li>Navigate to the register page at <a href="http://localhost/register">http://localhost/register</a> and create a new user.</li>
+<li>You can now login at <a href="http://localhost/login">http://localhost/login</a> and try the Notepad app.</li>
+</ol>
+
+<h2 id="structure">Structure</h2>
+
+<p>The project is organized into the following root folders:</p>
+
+<pre><code class="language-text">bootstrap	- initial set up of the application
+controller	- page logic and routes
+database	- migration scripts
+generate	- templates used with code generation command line tool
+lib			- packages accessible throughout the application
+model		- database structs representing tables and queries
+static		- statically served files like CSS and JSS
+template	- HTML templates parsed using the Go html/template package
+</code></pre>
+
+<p>The following files exist at the project root:</p>
+
+<pre><code class="language-text">blueprint.go 		- entrypoint for the application
+env.json.example 	- variables for the application
+</code></pre>
+
+<h2 id="external-packages">External Packages</h2>
+
+<p>There are a few external packages that must be retrieved using <code>go get</code>:</p>
+
+<pre><code class="language-text">github.com/gorilla/context				- registry for global request variables
+github.com/gorilla/sessions				- cookie and filesystem sessions
+github.com/go-sql-driver/mysql 			- MySQL driver
+github.com/jmoiron/sqlx 				- MySQL general purpose extensions
+github.com/josephspurrier/csrfbanana 	- CSRF protection for gorilla sessions
+github.com/julienschmidt/httprouter 	- high performance HTTP request router
+github.com/justinas/alice				- middleware chaining
+golang.org/x/crypto/bcrypt 				- password hashing algorithm
+</code></pre>
+
+<h2 id="javascript">JavaScript</h2>
+
+<p>You can trigger a flash notification using JavaScript.</p>
+
+<pre><code class="language-javascript">flashError(&quot;You must type in a username.&quot;);
+
+flashSuccess(&quot;Record created!&quot;);
+
+flashNotice(&quot;There seems to be a piece missing.&quot;);
+
+flashWarning(&quot;Something does not seem right...&quot;);
+</code></pre>
+
+<h2 id="database">Database</h2>
+
+<p>It&rsquo;s a good idea to abstract the database layer out so if you need to make
+changes, you don&rsquo;t have to look through business logic to find the queries. All
+the queries are stored in the models folder.</p>
+
+<p>This project supports BoltDB, MongoDB, and MySQL. All the queries are stored in
+the same files so you can easily change the database without modifying anything
+but the config file.</p>
+
+<p>The user.go and note.go files are at the root of the model directory and are a
+compliation of all the queries for each database type. There are a few hacks in
+the models to get the structs to work with all the supported databases.</p>
+
+<p>Connect to the database (only once needed in your application):</p>
+
+<pre><code class="language-go">// Connect to database
+database.Connect(config.Database)
+</code></pre>
+
+<p>Read from the database:</p>
+
+<pre><code class="language-go">result := User{}
+err := database.DB.Get(&amp;result, &quot;SELECT id, password, status_id, first_name FROM user WHERE email = ? LIMIT 1&quot;, email)
+return result, err
+</code></pre>
+
+<p>Write to the database:</p>
+
+<pre><code class="language-go">_, err := database.DB.Exec(&quot;INSERT INTO user (first_name, last_name, email, password) VALUES (?,?,?,?)&quot;, firstName, lastName, email, password)
+return err
+</code></pre>
+
+<h2 id="middleware">Middleware</h2>
+
+<p>There are a few pieces of middleware included. The package called csrfbanana
+protects against Cross-Site Request Forgery attacks and prevents double submits.
+The package httprouterwrapper provides helper functions to make funcs compatible
+with httprouter. The package logrequest will log every request made against the
+website to the console. The package pprofhandler enables pprof so it will work
+with httprouter. In route.go, all the individual routes use alice to make
+chaining very easy.</p>
+
+<h2 id="screenshots">Screenshots</h2>
+
+<p>Public Home:</p>
+
+<p><img src="https://cloud.githubusercontent.com/assets/2394539/11319464/e2cd0eac-9045-11e5-9b24-5e480240cd69.jpg" alt="Image of Public Home" /></p>
+
+<p>About:</p>
+
+<p><img src="https://cloud.githubusercontent.com/assets/2394539/11319462/e2c4d2d2-9045-11e5-805f-8b40598c92c3.jpg" alt="Image of About" /></p>
+
+<p>Register:</p>
+
+<p><img src="https://cloud.githubusercontent.com/assets/2394539/11319466/e2d03500-9045-11e5-9c8e-c28fe663ed0f.jpg" alt="Image of Register" /></p>
+
+<p>Login:</p>
+
+<p><img src="https://cloud.githubusercontent.com/assets/2394539/11319463/e2cd1a00-9045-11e5-8b8e-68030d870cbe.jpg" alt="Image of Login" /></p>
+
+<p>Authenticated Home:</p>
+
+<p><img src="https://cloud.githubusercontent.com/assets/2394539/14809208/75f340d2-0b59-11e6-8d2a-cd26ee872281.PNG" alt="Image of Auth Home" /></p>
+
+<p>View Notes:</p>
+
+<p><img src="https://cloud.githubusercontent.com/assets/2394539/14809205/75f08432-0b59-11e6-8737-84ee796bd82e.PNG" alt="Image of Notepad View" /></p>
+
+<p>Add Note:</p>
+
+<p><img src="https://cloud.githubusercontent.com/assets/2394539/14809207/75f338f8-0b59-11e6-9719-61355957996c.PNG" alt="Image of Notepad Add" /></p>
+
+<p>Edit Note:</p>
+
+<p><img src="https://cloud.githubusercontent.com/assets/2394539/14809206/75f33970-0b59-11e6-8acf-b3d533477aac.PNG" alt="Image of Notepad Edit" /></p>
+
+<h2 id="feedback">Feedback</h2>
+
+<p>All feedback is welcome. Let me know if you have any suggestions, questions, or criticisms.
+If something is not idiomatic to Go, please let me know know so we can make it better.</p>
+
+			
+			
+			<aside class="copyright" role="note">
+				
+				&copy; 2016 Released under the MIT license &ndash;
+				
+				Documentation built with
+				<a href="https://www.gohugo.io" target="_blank">Hugo</a>
+				using the
+				<a href="http://github.com/digitalcraftsman/hugo-material-docs" target="_blank">
+					Material
+				</a> theme.
+			</aside>
+
+			<footer class="footer">
+				
+
+
+
+<nav class="pagination" aria-label="Footer">
+  <div class="previous">
+  </div>
+
+  
+  
+  <div class="next">
+      <a href="http://blue-jay.github.io/configuration/" title="Configuration">
+        <span class="direction">
+          Next
+        </span>
+        <div class="page">
+          <div class="stretch">
+            <div class="title">
+              Configuration
+            </div>
+          </div>
+          <div class="button button-next" role="button" aria-label="Next">
+            <i class="icon icon-forward"></i>
+          </div>
+        </div>
+      </a>
+  </div>
+</nav>
+
+
+
+			</footer>
+		</div>
+	</article>
+
+	<div class="results" role="status" aria-live="polite">
+		<div class="scrollable">
+			<div class="wrapper">
+				<div class="meta"></div>
+				<div class="list"></div>
+			</div>
+		</div>
+	</div>
+</main>
+
+    <script>
+    
+      var base_url = 'http:\/\/blue-jay.github.io\/';
+      var repo_id  = 'blue-jay\/blueprint';
+    
+    </script>
+
+    <script src="http://blue-jay.github.io/javascripts/application.js"></script>
+    
+
+    <script>
+      /* Add headers to scrollspy */
+      var headers   = document.getElementsByTagName("h2");
+      var scrollspy = document.getElementById('scrollspy');
+
+      if(headers.length > 0) {
+        for(var i = 0; i < headers.length; i++) {
+          var li = document.createElement("li");
+          li.setAttribute("class", "anchor");
+
+          var a  = document.createElement("a");
+          a.setAttribute("href", "#" + headers[i].id);
+          a.setAttribute("title", headers[i].innerHTML);
+          a.innerHTML = headers[i].innerHTML;
+          
+          li.appendChild(a)
+          scrollspy.appendChild(li);
+        }
+      } else {
+        scrollspy.parentElement.removeChild(scrollspy)
+      }
+      
+
+      /* Add permanent link next to the headers */
+      var headers = document.querySelectorAll("h1, h2, h3, h4, h5, h6");
+
+      for(var i = 0; i < headers.length; i++) {
+          var a = document.createElement("a");
+          a.setAttribute("class", "headerlink");
+          a.setAttribute("href", "#" + headers[i].id);
+          a.setAttribute("title", "Permanent link")
+          a.innerHTML = "#";
+          headers[i].appendChild(a);
+      }
+    </script>
+
+    
+
+    <script src="//gohugo.io/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
 </html>

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Views on Blue Jay</title>
+    <link>http://blue-jay.github.io/views/</link>
+    <description>Recent content in Views on Blue Jay</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 08 Mar 2016 21:07:13 +0100</lastBuildDate>
+    <atom:link href="http://blue-jay.github.io/views/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Views</title>
+      <link>http://blue-jay.github.io/views/</link>
+      <pubDate>Tue, 08 Mar 2016 21:07:13 +0100</pubDate>
+      
+      <guid>http://blue-jay.github.io/views/</guid>
+      <description>
+
+&lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
+
+&lt;p&gt;Views contain the HTML served by your application and separate your controller / application logic from your presentation logic. The views are parsed by the &lt;a href=&#34;https://golang.org/pkg/html/template/&#34;&gt;html/template&lt;/a&gt; package.&lt;/p&gt;
+
+&lt;p&gt;A view should include the four &lt;strong&gt;define&lt;/strong&gt; blocks (&lt;strong&gt;title&lt;/strong&gt;, &lt;strong&gt;head&lt;/strong&gt;, &lt;strong&gt;content&lt;/strong&gt;, and &lt;strong&gt;foot&lt;/strong&gt;) and may look like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;{{define &amp;quot;title&amp;quot;}}Welcome{{end}}
+{{define &amp;quot;head&amp;quot;}}{{end}}
+{{define &amp;quot;content&amp;quot;}}
+&amp;lt;div class=&amp;quot;container&amp;quot;&amp;gt;
+	&amp;lt;div class=&amp;quot;page-header&amp;quot;&amp;gt;
+		&amp;lt;h1&amp;gt;Hello, {{.first_name}}&amp;lt;/h1&amp;gt;
+	&amp;lt;/div&amp;gt;
+	&amp;lt;p&amp;gt;You have arrived. Click {{LINK &amp;quot;notepad&amp;quot; &amp;quot;here&amp;quot;}} to view your notepad.&amp;lt;/p&amp;gt;
+	{{template &amp;quot;footer&amp;quot; .}}
+&amp;lt;/div&amp;gt;
+{{end}}
+{{define &amp;quot;foot&amp;quot;}}{{end}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Since this view is stored at &lt;strong&gt;view/index/auth.tmpl&lt;/strong&gt;, we may render it using the &lt;strong&gt;view&lt;/strong&gt; helper package like so:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// import &amp;quot;github.com/blue-jay/blueprint/lib/view&amp;quot;
+v := view.New(&amp;quot;index/auth&amp;quot;)
+v.Vars[&amp;quot;first_name&amp;quot;] = session.Values[&amp;quot;first_name&amp;quot;]
+v.Render(w, r)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you don&amp;rsquo;t have to pass any variables to the template, you could shorten it like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// import &amp;quot;github.com/blue-jay/blueprint/lib/view&amp;quot;
+view.New(&amp;quot;index/auth&amp;quot;).Render(w, r)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;base-template&#34;&gt;Base Template&lt;/h2&gt;
+
+&lt;p&gt;By default, the &lt;strong&gt;view/base.tmpl&lt;/strong&gt; template is used as the base template (as specified in env.json). If you want to
+change the base template for a template, you can try this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;v := view.New(&amp;quot;index/auth&amp;quot;).Base(&amp;quot;alternate&amp;quot;)
+v.Render(w, r)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;A shorter way to specify the view with a different base template and then render is like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;view.New(&amp;quot;about/about&amp;quot;).Base(&amp;quot;alternate&amp;quot;).Render(w, r)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;view-package&#34;&gt;View Package&lt;/h2&gt;
+
+&lt;p&gt;The optional &lt;strong&gt;lib/view&lt;/strong&gt; package is a wrapper for the Go &lt;a href=&#34;https://golang.org/pkg/html/template/&#34;&gt;html/template&lt;/a&gt; package
+and provides the following:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;thread-safe template caching&lt;/li&gt;
+&lt;li&gt;easy way to extend the list of functions available in templates&lt;/li&gt;
+&lt;li&gt;easy way to modify the variables available in templates&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The set up of the &lt;strong&gt;view&lt;/strong&gt; package is handled by the &lt;strong&gt;bootstrap&lt;/strong&gt; package:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// import &amp;quot;github.com/blue-jay/blueprint/lib/view&amp;quot;
+// Set up the views
+view.SetConfig(config.View)
+view.SetTemplates(config.Template.Root, config.Template.Children)
+
+// Set up the functions for the views
+view.SetFunctions(
+	extend.Assets(config.View),
+	extend.Link(config.View),
+	extend.NoEscape(),
+	extend.PrettyTime(),
+)
+
+// Set up the variables for the views
+view.SetVariables(
+	modify.AuthLevel,
+	modify.BaseURI,
+	modify.Token,
+	flash.Modify,
+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;organization&#34;&gt;Organization&lt;/h2&gt;
+
+&lt;p&gt;The HTML templates are organized into folders under the &lt;strong&gt;view&lt;/strong&gt; folder:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;about/about.tmpl	- quick blurb about the app
+auth/login.tmpl		- login page
+auth/register.tmpl	- register page
+index/anon.tmpl		- public home page
+index/auth.tmpl		- home page once you login
+note/create.tmpl	- create a note
+note/edit.tmpl		- edit a note
+note/index.tmpl		- view all notes
+note/show.tmpl		- view a note
+partial/footer.tmpl	- footer at the bottom of all pages
+partial/menu.tmpl	- menu at the top of all pages
+base.tmpl			- base template for all pages
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;included-functions&#34;&gt;Included Functions&lt;/h2&gt;
+
+&lt;p&gt;There are a few functions that are included to make working with the templates
+and static files easier:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;!-- CSS files with timestamps --&amp;gt;
+{{CSS &amp;quot;static/css/normalize3.0.0.min.css&amp;quot;}}
+parses to
+&amp;lt;link rel=&amp;quot;stylesheet&amp;quot; type=&amp;quot;text/css&amp;quot; href=&amp;quot;/static/css/normalize3.0.0.min.css?1435528339&amp;quot; /&amp;gt;
+
+&amp;lt;!-- JS files with timestamps --&amp;gt;
+{{JS &amp;quot;static/js/jquery1.11.0.min.js&amp;quot;}}
+parses to
+&amp;lt;script type=&amp;quot;text/javascript&amp;quot; src=&amp;quot;/static/js/jquery1.11.0.min.js?1435528404&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+
+&amp;lt;!-- Hyperlinks --&amp;gt;
+{{LINK &amp;quot;register&amp;quot; &amp;quot;Create a new account.&amp;quot;}}
+parses to
+&amp;lt;a href=&amp;quot;/register&amp;quot;&amp;gt;Create a new account.&amp;lt;/a&amp;gt;
+
+&amp;lt;!-- Output an unescaped variable (not a safe idea, but it is useful when troubleshooting) --&amp;gt;
+{{.SomeVariable | NOESCAPE}}
+
+&amp;lt;!-- Time format --&amp;gt;
+{{.SomeTime | PRETTYTIME}}
+parses to format
+3:04 PM 01/02/2006
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;included-variables&#34;&gt;Included Variables&lt;/h2&gt;
+
+&lt;p&gt;There are a few variables you can use in templates as well:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;!-- Use AuthLevel=auth to determine if a user is logged in (if session.Values[&amp;quot;id&amp;quot;] != nil) --&amp;gt;
+{{if eq .AuthLevel &amp;quot;auth&amp;quot;}}
+You are logged in.
+{{else}}
+You are not logged in.
+{{end}}
+
+&amp;lt;!-- Use BaseURI to print the base URL specified in the env.json file --&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;{{.BaseURI}}about&amp;quot;&amp;gt;About&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+
+&amp;lt;!-- Use token to output the CSRF token in a form --&amp;gt;
+&amp;lt;input type=&amp;quot;hidden&amp;quot; name=&amp;quot;token&amp;quot; value=&amp;quot;{{.token}}&amp;quot;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;header-and-footer&#34;&gt;Header and Footer&lt;/h2&gt;
+
+&lt;p&gt;It&amp;rsquo;s also easy to add template-specific code before the closing &lt;/head&gt; and &lt;/body&gt; tags:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;!-- Code is added before the closing &amp;lt;/head&amp;gt; tag --&amp;gt;
+{{define &amp;quot;head&amp;quot;}}&amp;lt;meta name=&amp;quot;robots&amp;quot; content=&amp;quot;noindex&amp;quot;&amp;gt;{{end}}
+
+...
+
+&amp;lt;!-- Code is added before the closing &amp;lt;/body&amp;gt; tag --&amp;gt;
+{{define &amp;quot;foot&amp;quot;}}{{JS &amp;quot;//www.google.com/recaptcha/api.js&amp;quot;}}{{end}}
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

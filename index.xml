@@ -1,0 +1,718 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Blue Jay</title>
+    <link>http://blue-jay.github.io/</link>
+    <description>Recent content on Blue Jay</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 08 Mar 2016 21:07:13 +0100</lastBuildDate>
+    <atom:link href="http://blue-jay.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Toolkit Overview</title>
+      <link>http://blue-jay.github.io/</link>
+      <pubDate>Tue, 08 Mar 2016 21:07:13 +0100</pubDate>
+      
+      <guid>http://blue-jay.github.io/</guid>
+      <description>
+
+&lt;p&gt;&lt;a href=&#34;https://goreportcard.com/report/github.com/blue-jay/blueprint&#34;&gt;&lt;img src=&#34;https://goreportcard.com/badge/github.com/blue-jay/blueprint&#34; alt=&#34;Go Report Card&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;https://godoc.org/github.com/blue-jay/blueprint&#34;&gt;&lt;img src=&#34;https://godoc.org/github.com/blue-jay/blueprint?status.svg&#34; alt=&#34;GoDoc&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Blue Jay is a toolkit designed to get your web application off the ground. It&amp;rsquo;s a collection of command line tools along with a web blueprint that is flexible enough to fit any project, yet provides a foundation so you can focus on the task instead of designing your own tools. You can easily change the structure and there is no rigid framework to which you have to conform. Even the command line tools like code generation and database migration are portable so they can be used outside your project.&lt;/p&gt;
+
+&lt;p&gt;There are a few components:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Blueprint&lt;/strong&gt; is a model-view-controller (MVC) style web skeleton&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Jay&lt;/strong&gt; is a command line tool with modules for find/replace, database migrations, and code generation&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;why-blue-jay&#34;&gt;Why Blue Jay?&lt;/h2&gt;
+
+&lt;p&gt;There are a few web frameworks for Go, but we support the Go mentality that you should keep
+your application dependency lean. Less dependencies means less bugs.
+It&amp;rsquo;s also great to start developing your application right away instead of learning
+all the features of a framework and then developing once you are proficient enough.
+Blue Jay provides a lean web skeleton called Blueprint to demonstrate how to structure
+a web application without locking developers to a framework. Blueprint includes well thought out
+example code that demonstrates a typical web workflow.&lt;/p&gt;
+
+&lt;p&gt;One of the things you&amp;rsquo;ll notice while using Blueprint is how to abstract out
+external packages to make it easy to swap out components. Ultimately, you should
+be able to write code once and use it in all of your other projects. The &lt;strong&gt;lib&lt;/strong&gt;
+folder is a great place for all these packages with very few dependencies.&lt;/p&gt;
+
+&lt;p&gt;You&amp;rsquo;ll also notice certain packages need to be thread-safe when building web applications.
+An example is the &lt;strong&gt;lib/view&lt;/strong&gt; package which provides thread-safe template caching.&lt;/p&gt;
+
+&lt;p&gt;The other reason for Blue Jay is the command line tools in &lt;strong&gt;jay&lt;/strong&gt;. jay provides an easy way
+to find/replace in a project when refactoring, migrate your database forwards or backwards, and
+generate a file or sets or files using the Go &lt;a href=&#34;https://golang.org/pkg/html/template/&#34;&gt;html/template&lt;/a&gt;
+package. Code generation can help you build faster and more efficiently which is a perfect compliment
+to Blueprint.&lt;/p&gt;
+
+&lt;h2 id=&#34;why-go&#34;&gt;Why Go?&lt;/h2&gt;
+
+&lt;p&gt;One of the big draws to Go is the rich standard library. The standard library includes a web server,
+web-safe templating, and
+many other tools necessary to build a web application. Any features missing from the standard library are
+written by other Go developers who are happy to contribute to the thriving community.&lt;/p&gt;
+
+&lt;p&gt;Go allows you to write code that compiles to the majority of the architectures we use today so all your
+code is pretty much portable. Go accels when you want to write command line apps instead of just scripts,
+but that&amp;rsquo;s not the language&amp;rsquo;s only niche.
+The designers of Go wanted to build a language that solved problems between the Google development teams.
+It&amp;rsquo;s a modern language that allows you to easily multi-thread your applications safely so you can use the
+power of the hardware.&lt;/p&gt;
+
+&lt;h2 id=&#34;high-level&#34;&gt;High Level&lt;/h2&gt;
+
+&lt;p&gt;Blueprint is a complete web application with built-in web server.
+It requires MySQL so you&amp;rsquo;ll need to set up your own instance of the database.
+The application has a public home page, authenticated home page, login page, register page,
+about page, and a simple notepad to demonstrate GET, POST, UPDATE, and DELETE operations.&lt;/p&gt;
+
+&lt;p&gt;The entrypoint for the web app is &lt;strong&gt;blueprint.go&lt;/strong&gt;. The file calls the &lt;strong&gt;bootstrap&lt;/strong&gt; package
+which loads the application settings, creates the session store, connects to the database,
+sets up the view, loads the routes, attaches the middleware, and starts the web server.&lt;/p&gt;
+
+&lt;p&gt;The front end is built using Bootstrap with a few small changes to fonts and spacing. The flash
+messages are customized so they show up at the bottom right of the screen.&lt;/p&gt;
+
+&lt;p&gt;All of the error and warning messages should display to the
+user or in the console. Informational messages are displayed to the user via
+flash messages that disappear after 4 seconds.&lt;/p&gt;
+
+&lt;h2 id=&#34;quick-start-with-mysql&#34;&gt;Quick Start with MySQL&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;To download, run the following command: &lt;code&gt;go get github.com/blue-ray/blueprint&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Start a MySQL instance and import &lt;strong&gt;database/quickstart.sql&lt;/strong&gt; to create the database and tables.&lt;/li&gt;
+&lt;li&gt;Make a copy of env.json.example and name it: &lt;strong&gt;env.json&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Edit the &lt;strong&gt;Database&lt;/strong&gt; section in &lt;strong&gt;config/config.json&lt;/strong&gt; so the connection information matches your MySQL instance.&lt;/li&gt;
+&lt;li&gt;Use &lt;code&gt;go run&lt;/code&gt; from the root of the project directory.&lt;/li&gt;
+&lt;li&gt;Open your web browser to &lt;a href=&#34;http://localhost&#34;&gt;http://localhost&lt;/a&gt; and you should see the welcome page.&lt;/li&gt;
+&lt;li&gt;Navigate to the register page at &lt;a href=&#34;http://localhost/register&#34;&gt;http://localhost/register&lt;/a&gt; and create a new user.&lt;/li&gt;
+&lt;li&gt;You can now login at &lt;a href=&#34;http://localhost/login&#34;&gt;http://localhost/login&lt;/a&gt; and try the Notepad app.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;structure&#34;&gt;Structure&lt;/h2&gt;
+
+&lt;p&gt;The project is organized into the following root folders:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;bootstrap	- initial set up of the application
+controller	- page logic and routes
+database	- migration scripts
+generate	- templates used with code generation command line tool
+lib			- packages accessible throughout the application
+model		- database structs representing tables and queries
+static		- statically served files like CSS and JSS
+template	- HTML templates parsed using the Go html/template package
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The following files exist at the project root:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;blueprint.go 		- entrypoint for the application
+env.json.example 	- variables for the application
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;external-packages&#34;&gt;External Packages&lt;/h2&gt;
+
+&lt;p&gt;There are a few external packages that must be retrieved using &lt;code&gt;go get&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;github.com/gorilla/context				- registry for global request variables
+github.com/gorilla/sessions				- cookie and filesystem sessions
+github.com/go-sql-driver/mysql 			- MySQL driver
+github.com/jmoiron/sqlx 				- MySQL general purpose extensions
+github.com/josephspurrier/csrfbanana 	- CSRF protection for gorilla sessions
+github.com/julienschmidt/httprouter 	- high performance HTTP request router
+github.com/justinas/alice				- middleware chaining
+golang.org/x/crypto/bcrypt 				- password hashing algorithm
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;javascript&#34;&gt;JavaScript&lt;/h2&gt;
+
+&lt;p&gt;You can trigger a flash notification using JavaScript.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;flashError(&amp;quot;You must type in a username.&amp;quot;);
+
+flashSuccess(&amp;quot;Record created!&amp;quot;);
+
+flashNotice(&amp;quot;There seems to be a piece missing.&amp;quot;);
+
+flashWarning(&amp;quot;Something does not seem right...&amp;quot;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;database&#34;&gt;Database&lt;/h2&gt;
+
+&lt;p&gt;It&amp;rsquo;s a good idea to abstract the database layer out so if you need to make
+changes, you don&amp;rsquo;t have to look through business logic to find the queries. All
+the queries are stored in the models folder.&lt;/p&gt;
+
+&lt;p&gt;This project supports BoltDB, MongoDB, and MySQL. All the queries are stored in
+the same files so you can easily change the database without modifying anything
+but the config file.&lt;/p&gt;
+
+&lt;p&gt;The user.go and note.go files are at the root of the model directory and are a
+compliation of all the queries for each database type. There are a few hacks in
+the models to get the structs to work with all the supported databases.&lt;/p&gt;
+
+&lt;p&gt;Connect to the database (only once needed in your application):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Connect to database
+database.Connect(config.Database)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Read from the database:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;result := User{}
+err := database.DB.Get(&amp;amp;result, &amp;quot;SELECT id, password, status_id, first_name FROM user WHERE email = ? LIMIT 1&amp;quot;, email)
+return result, err
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Write to the database:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;_, err := database.DB.Exec(&amp;quot;INSERT INTO user (first_name, last_name, email, password) VALUES (?,?,?,?)&amp;quot;, firstName, lastName, email, password)
+return err
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;middleware&#34;&gt;Middleware&lt;/h2&gt;
+
+&lt;p&gt;There are a few pieces of middleware included. The package called csrfbanana
+protects against Cross-Site Request Forgery attacks and prevents double submits.
+The package httprouterwrapper provides helper functions to make funcs compatible
+with httprouter. The package logrequest will log every request made against the
+website to the console. The package pprofhandler enables pprof so it will work
+with httprouter. In route.go, all the individual routes use alice to make
+chaining very easy.&lt;/p&gt;
+
+&lt;h2 id=&#34;screenshots&#34;&gt;Screenshots&lt;/h2&gt;
+
+&lt;p&gt;Public Home:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://cloud.githubusercontent.com/assets/2394539/11319464/e2cd0eac-9045-11e5-9b24-5e480240cd69.jpg&#34; alt=&#34;Image of Public Home&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;About:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://cloud.githubusercontent.com/assets/2394539/11319462/e2c4d2d2-9045-11e5-805f-8b40598c92c3.jpg&#34; alt=&#34;Image of About&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Register:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://cloud.githubusercontent.com/assets/2394539/11319466/e2d03500-9045-11e5-9c8e-c28fe663ed0f.jpg&#34; alt=&#34;Image of Register&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Login:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://cloud.githubusercontent.com/assets/2394539/11319463/e2cd1a00-9045-11e5-8b8e-68030d870cbe.jpg&#34; alt=&#34;Image of Login&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Authenticated Home:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://cloud.githubusercontent.com/assets/2394539/14809208/75f340d2-0b59-11e6-8d2a-cd26ee872281.PNG&#34; alt=&#34;Image of Auth Home&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;View Notes:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://cloud.githubusercontent.com/assets/2394539/14809205/75f08432-0b59-11e6-8737-84ee796bd82e.PNG&#34; alt=&#34;Image of Notepad View&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Add Note:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://cloud.githubusercontent.com/assets/2394539/14809207/75f338f8-0b59-11e6-9719-61355957996c.PNG&#34; alt=&#34;Image of Notepad Add&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Edit Note:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://cloud.githubusercontent.com/assets/2394539/14809206/75f33970-0b59-11e6-8acf-b3d533477aac.PNG&#34; alt=&#34;Image of Notepad Edit&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;feedback&#34;&gt;Feedback&lt;/h2&gt;
+
+&lt;p&gt;All feedback is welcome. Let me know if you have any suggestions, questions, or criticisms.
+If something is not idiomatic to Go, please let me know know so we can make it better.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Configuration</title>
+      <link>http://blue-jay.github.io/configuration/</link>
+      <pubDate>Tue, 08 Mar 2016 21:07:13 +0100</pubDate>
+      
+      <guid>http://blue-jay.github.io/configuration/</guid>
+      <description>
+
+&lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
+
+&lt;p&gt;Throughout this documentation, keep in mind everything in Blueprint is configurable.
+You are not using a framework so you don&amp;rsquo;t have to follow rules. You don&amp;rsquo;t need to
+use any of the components with Blueprint, but it does give you a nice foundation to
+start from. If you want to use YAML instead of JSON, I recommend creating a wrapper
+library in the &lt;strong&gt;lib&lt;/strong&gt; folder and then loading your env.yaml file via the &lt;strong&gt;bootstrap&lt;/strong&gt;
+package.&lt;/p&gt;
+
+&lt;p&gt;One of the first steps before using Blueprint is to create &lt;strong&gt;env.json&lt;/strong&gt;. You can make
+a copy of &lt;strong&gt;env.json.example&lt;/strong&gt; and then name it &lt;strong&gt;env.json&lt;/strong&gt;. The &lt;strong&gt;env.json&lt;/strong&gt; file is a
+good place to set variables for the application so you
+don&amp;rsquo;t have to hardcode them. If you want to add any
+of your own settings, you can add them to &lt;strong&gt;env.json&lt;/strong&gt; and update the &lt;strong&gt;Info&lt;/strong&gt; struct
+in the &lt;strong&gt;bootstrap&lt;/strong&gt; package. Here is an example &lt;strong&gt;env.json&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+	&amp;quot;Database&amp;quot;: {
+		&amp;quot;Type&amp;quot;: &amp;quot;MySQL&amp;quot;,
+		&amp;quot;MySQL&amp;quot;: {
+			&amp;quot;Username&amp;quot;: &amp;quot;root&amp;quot;,
+			&amp;quot;Password&amp;quot;: &amp;quot;&amp;quot;,
+			&amp;quot;Database&amp;quot;: &amp;quot;blueprint&amp;quot;,
+			&amp;quot;Hostname&amp;quot;: &amp;quot;127.0.0.1&amp;quot;,
+			&amp;quot;Port&amp;quot;: 3306,
+			&amp;quot;Parameter&amp;quot;: &amp;quot;?parseTime=true&amp;quot;
+		}
+	},
+	&amp;quot;Email&amp;quot;: {
+		&amp;quot;Username&amp;quot;: &amp;quot;&amp;quot;,
+		&amp;quot;Password&amp;quot;: &amp;quot;&amp;quot;,
+		&amp;quot;Hostname&amp;quot;: &amp;quot;&amp;quot;,
+		&amp;quot;Port&amp;quot;: 25,
+		&amp;quot;From&amp;quot;: &amp;quot;&amp;quot;
+	},
+	&amp;quot;Server&amp;quot;: {
+		&amp;quot;Hostname&amp;quot;: &amp;quot;&amp;quot;,
+		&amp;quot;UseHTTP&amp;quot;: true,
+		&amp;quot;UseHTTPS&amp;quot;: false,
+		&amp;quot;RedirectToHTTPS&amp;quot;: false,
+		&amp;quot;HTTPPort&amp;quot;: 80,
+		&amp;quot;HTTPSPort&amp;quot;: 443,
+		&amp;quot;CertFile&amp;quot;: &amp;quot;tls/server.crt&amp;quot;,
+		&amp;quot;KeyFile&amp;quot;: &amp;quot;tls/server.key&amp;quot;
+	},
+	&amp;quot;Session&amp;quot;: {
+		&amp;quot;SecretKey&amp;quot;: &amp;quot;@r4B?EThaSEh_drudR7P_hub=s#s2Pah&amp;quot;,
+		&amp;quot;Name&amp;quot;: &amp;quot;sess&amp;quot;,
+		&amp;quot;Options&amp;quot;: {
+			&amp;quot;Path&amp;quot;: &amp;quot;/&amp;quot;,
+			&amp;quot;Domain&amp;quot;: &amp;quot;&amp;quot;,
+			&amp;quot;MaxAge&amp;quot;: 28800,
+			&amp;quot;Secure&amp;quot;: false,
+			&amp;quot;HttpOnly&amp;quot;: true
+		}
+	},
+	&amp;quot;Template&amp;quot;: {
+		&amp;quot;Root&amp;quot;: &amp;quot;base&amp;quot;,
+		&amp;quot;Children&amp;quot;: [
+			&amp;quot;partial/menu&amp;quot;,
+			&amp;quot;partial/footer&amp;quot;
+		]
+	},
+	&amp;quot;View&amp;quot;: {
+		&amp;quot;BaseURI&amp;quot;: &amp;quot;/&amp;quot;,
+		&amp;quot;Extension&amp;quot;: &amp;quot;tmpl&amp;quot;,
+		&amp;quot;Folder&amp;quot;: &amp;quot;template&amp;quot;,
+		&amp;quot;Caching&amp;quot;: true
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;configuration-structure&#34;&gt;Configuration Structure&lt;/h2&gt;
+
+&lt;p&gt;The &lt;strong&gt;env.json&lt;/strong&gt; file contains the configuration for Blueprint. It removes the need
+to hardcode any of these values and makes it easy to move Blueprint to another system
+with a different set up.&lt;/p&gt;
+
+&lt;p&gt;The &lt;strong&gt;env.json&lt;/strong&gt; file is parsed and the result is stored in the &lt;strong&gt;Info&lt;/strong&gt; struct from the
+&lt;strong&gt;bootstrap&lt;/strong&gt; package:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Info contains the application settings
+type Info struct {
+	Database database.Info   `json:&amp;quot;Database&amp;quot;`
+	Email    email.SMTPInfo  `json:&amp;quot;Email&amp;quot;`
+	Server   server.Server   `json:&amp;quot;Server&amp;quot;`
+	Session  session.Session `json:&amp;quot;Session&amp;quot;`
+	Template view.Template   `json:&amp;quot;Template&amp;quot;`
+	View     view.View       `json:&amp;quot;View&amp;quot;`
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;strong&gt;Info&lt;/strong&gt; struct is simply a container that nests structs from packages in the &lt;strong&gt;lib&lt;/strong&gt; folder
+that need variables configured. Here is a list mapping the JSON keys to structs:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;Database	- Info struct in lib/database
+Email		- SMTPInfo struct in lib/email
+Server		- Server struct in lib/server
+Session		- Session struct in lib/session
+Template	- Template struct in lib/view
+View		- View struct in lib/view
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;enable-https&#34;&gt;Enable HTTPS&lt;/h2&gt;
+
+&lt;p&gt;To enable HTTPS:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Set &lt;strong&gt;UseHTTPS&lt;/strong&gt; to true&lt;/li&gt;
+&lt;li&gt;Create a folder called &lt;strong&gt;tls&lt;/strong&gt; in the project root folder&lt;/li&gt;
+&lt;li&gt;Place your own certificate and key files in the &lt;strong&gt;tls&lt;/strong&gt; folder&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; If you want to redirect HTTP to HTTPS, you can set &lt;strong&gt;RedirectToHTTPS&lt;/strong&gt; to true as well.&lt;/p&gt;
+
+&lt;h2 id=&#34;tip-add-a-section&#34;&gt;Tip: Add a Section&lt;/h2&gt;
+
+&lt;p&gt;To add a new key called &lt;strong&gt;Captcha&lt;/strong&gt;, you could do the following:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Create a new package in the &lt;strong&gt;lib&lt;/strong&gt; folder called &lt;strong&gt;captcha&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Create a struct called &lt;strong&gt;Info&lt;/strong&gt; in the &lt;strong&gt;lib/captcha&lt;/strong&gt; package&lt;/li&gt;
+&lt;li&gt;Add the &lt;strong&gt;Captcha&lt;/strong&gt; key and any values to the &lt;strong&gt;env.json&lt;/strong&gt; file&lt;/li&gt;
+&lt;li&gt;Add code to the &lt;strong&gt;RegisterServices()&lt;/strong&gt; function that passes the parsed config to the &lt;strong&gt;lib/captcha&lt;/strong&gt; package&lt;/li&gt;
+&lt;li&gt;Add code to your controllers that references your &lt;strong&gt;lib/captcha&lt;/strong&gt; package&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;tip-remove-a-section&#34;&gt;Tip: Remove a Section&lt;/h2&gt;
+
+&lt;p&gt;To remove the &lt;strong&gt;Email&lt;/strong&gt; key, you could do the following:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Remove the &lt;strong&gt;Email&lt;/strong&gt; key and value from the &lt;strong&gt;env.json&lt;/strong&gt; file&lt;/li&gt;
+&lt;li&gt;Remove the &lt;strong&gt;Email&lt;/strong&gt; nested struct from the &lt;strong&gt;Info&lt;/strong&gt; struct in the &lt;strong&gt;bootstrap&lt;/strong&gt; package&lt;/li&gt;
+&lt;li&gt;Remove any code setting up the package from the &lt;strong&gt;RegisterServices()&lt;/strong&gt; function in the &lt;strong&gt;bootstrap&lt;/strong&gt; package&lt;/li&gt;
+&lt;li&gt;Remove the &lt;strong&gt;lib/email&lt;/strong&gt; package from the filesystem&lt;/li&gt;
+&lt;li&gt;Find any references to the &lt;strong&gt;lib/email&lt;/strong&gt; package in your code using the jay command line, &lt;code&gt;jay find &amp;quot;lib/email&amp;quot; &amp;quot;*.go&amp;quot;&lt;/code&gt;,
+then delete the imports and referencing code&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Controllers</title>
+      <link>http://blue-jay.github.io/controllers/</link>
+      <pubDate>Tue, 08 Mar 2016 21:07:13 +0100</pubDate>
+      
+      <guid>http://blue-jay.github.io/controllers/</guid>
+      <description>
+
+&lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
+
+&lt;p&gt;The controller files are all organized under the &lt;strong&gt;controller&lt;/strong&gt; folder. The controllers
+handle much of the interactions between the models and the views as well as specify
+which routes map to which functions.&lt;/p&gt;
+
+&lt;h2 id=&#34;routing&#34;&gt;Routing&lt;/h2&gt;
+
+&lt;p&gt;In the &lt;strong&gt;bootstrap&lt;/strong&gt; package, the &lt;strong&gt;RegisterServices()&lt;/strong&gt; function calls: &lt;code&gt;controller.LoadRoutes()&lt;/code&gt;
+The &lt;strong&gt;LoadRoutes()&lt;/strong&gt; function in the &lt;strong&gt;controller&lt;/strong&gt; package loads the routes for each of the individual controllers:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// LoadRoutes loads the routes for each of the controllers
+func LoadRoutes() {
+	about.Load()
+	debug.Load()
+	auth.LoadRegister()
+	auth.LoadLogin()
+	core.LoadIndex()
+	core.LoadError()
+	core.LoadStatic()
+	notepad.Load()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here is the &lt;strong&gt;Load()&lt;/strong&gt; function from the &lt;strong&gt;controller/notepad&lt;/strong&gt; package:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;var (
+	uri = &amp;quot;/notepad&amp;quot;
+)
+
+func Load() {
+	c := router.Chain(acl.DisallowAnon)
+	router.Get(uri, Index, c...)
+	router.Get(uri+&amp;quot;/create&amp;quot;, Create, c...)
+	router.Post(uri, Store, c...)
+	router.Get(uri+&amp;quot;/view/:id&amp;quot;, Show, c...)
+	router.Get(uri+&amp;quot;/edit/:id&amp;quot;, Edit, c...)
+	router.Patch(uri+&amp;quot;/edit/:id&amp;quot;, Update, c...)
+	router.Delete(uri+&amp;quot;/:id&amp;quot;, Destroy, c...)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;There are a few things to note here. The &lt;strong&gt;router&lt;/strong&gt; references the &lt;strong&gt;lib/router&lt;/strong&gt; package
+which is a wrapper for the &lt;a href=&#34;http://github.com/julienschmidt/httprouter&#34;&gt;julienschmidt/httprouter&lt;/a&gt; package.
+The &lt;strong&gt;router.Chain()&lt;/strong&gt; function uses the &lt;a href=&#34;http://github.com/justinas/alice&#34;&gt;justinas/alice&lt;/a&gt; package
+to help with middleware chaining.&lt;/p&gt;
+
+&lt;p&gt;This may start to sound like a framework, but it&amp;rsquo;s actually a good way to build your wrapper
+packages that live in the &lt;strong&gt;lib&lt;/strong&gt; folder. If you want to use a different router, you can modify
+the &lt;strong&gt;lib/router&lt;/strong&gt; package easily and you won&amp;rsquo;t have to change any code in your controllers.&lt;/p&gt;
+
+&lt;p&gt;It&amp;rsquo;s a good idea to follow a naming convention for the controller functions (Laravel developers
+will notice it&amp;rsquo;s the same convention Taylor Orwell uses).&lt;/p&gt;
+
+&lt;h3 id=&#34;these-are-a-few-things-you-can-do-with-controllers&#34;&gt;These are a few things you can do with controllers.&lt;/h3&gt;
+
+&lt;p&gt;Access a gorilla session:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Get the current session
+sess := session.Instance(r)
+...
+// Close the session after you are finished making changes
+sess.Save(r, w)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Trigger 1 of 4 different types of flash messages on the next page load (no other code needed):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;sess.AddFlash(view.Flash{&amp;quot;Sorry, no brute force :-)&amp;quot;, view.FlashNotice})
+sess.Save(r, w) // Ensure you save the session after making a change to it
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Validate form fields are not empty:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Ensure a user submitted all the required form fields
+if validate, missingField := view.Validate(r, []string{&amp;quot;email&amp;quot;, &amp;quot;password&amp;quot;}); !validate {
+	sess.AddFlash(view.Flash{&amp;quot;Field missing: &amp;quot; + missingField, view.FlashError})
+	sess.Save(r, w)
+	LoginGET(w, r)
+	return
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Render a template:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Create a new view
+v := view.New(r)
+
+// Set the template name
+v.Name = &amp;quot;login/login&amp;quot;
+
+// Assign a variable that is accessible in the form
+v.Vars[&amp;quot;token&amp;quot;] = csrfbanana.Token(w, r, sess)
+
+// Refill any form fields from a POST operation
+view.Repopulate([]string{&amp;quot;email&amp;quot;}, r.Form, v.Vars)
+
+// Render the template
+v.Render(w)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Return the flash messages during an Ajax request:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Get session
+sess := session.Instance(r)
+
+// Set the flash message
+sess.AddFlash(view.Flash{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, view.FlashError})
+sess.Save(r, w)
+
+// Display the flash messages as JSON
+v := view.New(r)
+v.SendFlashes(w)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Handle the database query:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Get database result
+result, err := model.UserByEmail(email)
+
+if err == sql.ErrNoRows {
+	// User does not exist
+} else if err != nil {
+	// Display error message
+} else if passhash.MatchString(result.Password, password) {
+	// Password matches!	
+} else {
+	// Password does not match
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Send an email:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Email a user
+err := email.SendEmail(email.ReadConfig().From, &amp;quot;This is the subject&amp;quot;, &amp;quot;This is the body!&amp;quot;)
+if err != nil {
+	log.Println(err)
+	sess.AddFlash(view.Flash{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, view.FlashError})
+	sess.Save(r, w)
+	return
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Validate a form if the Google reCAPTCHA is enabled in the config:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Validate with Google reCAPTCHA
+if !recaptcha.Verified(r) {
+    sess.AddFlash(view.Flash{&amp;quot;reCAPTCHA invalid!&amp;quot;, view.FlashError})
+    sess.Save(r, w)
+    RegisterGET(w, r)
+    return
+}
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Views</title>
+      <link>http://blue-jay.github.io/views/</link>
+      <pubDate>Tue, 08 Mar 2016 21:07:13 +0100</pubDate>
+      
+      <guid>http://blue-jay.github.io/views/</guid>
+      <description>
+
+&lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
+
+&lt;p&gt;Views contain the HTML served by your application and separate your controller / application logic from your presentation logic. The views are parsed by the &lt;a href=&#34;https://golang.org/pkg/html/template/&#34;&gt;html/template&lt;/a&gt; package.&lt;/p&gt;
+
+&lt;p&gt;A view should include the four &lt;strong&gt;define&lt;/strong&gt; blocks (&lt;strong&gt;title&lt;/strong&gt;, &lt;strong&gt;head&lt;/strong&gt;, &lt;strong&gt;content&lt;/strong&gt;, and &lt;strong&gt;foot&lt;/strong&gt;) and may look like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;{{define &amp;quot;title&amp;quot;}}Welcome{{end}}
+{{define &amp;quot;head&amp;quot;}}{{end}}
+{{define &amp;quot;content&amp;quot;}}
+&amp;lt;div class=&amp;quot;container&amp;quot;&amp;gt;
+	&amp;lt;div class=&amp;quot;page-header&amp;quot;&amp;gt;
+		&amp;lt;h1&amp;gt;Hello, {{.first_name}}&amp;lt;/h1&amp;gt;
+	&amp;lt;/div&amp;gt;
+	&amp;lt;p&amp;gt;You have arrived. Click {{LINK &amp;quot;notepad&amp;quot; &amp;quot;here&amp;quot;}} to view your notepad.&amp;lt;/p&amp;gt;
+	{{template &amp;quot;footer&amp;quot; .}}
+&amp;lt;/div&amp;gt;
+{{end}}
+{{define &amp;quot;foot&amp;quot;}}{{end}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Since this view is stored at &lt;strong&gt;view/index/auth.tmpl&lt;/strong&gt;, we may render it using the &lt;strong&gt;view&lt;/strong&gt; helper package like so:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// import &amp;quot;github.com/blue-jay/blueprint/lib/view&amp;quot;
+v := view.New(&amp;quot;index/auth&amp;quot;)
+v.Vars[&amp;quot;first_name&amp;quot;] = session.Values[&amp;quot;first_name&amp;quot;]
+v.Render(w, r)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you don&amp;rsquo;t have to pass any variables to the template, you could shorten it like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// import &amp;quot;github.com/blue-jay/blueprint/lib/view&amp;quot;
+view.New(&amp;quot;index/auth&amp;quot;).Render(w, r)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;base-template&#34;&gt;Base Template&lt;/h2&gt;
+
+&lt;p&gt;By default, the &lt;strong&gt;view/base.tmpl&lt;/strong&gt; template is used as the base template (as specified in env.json). If you want to
+change the base template for a template, you can try this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;v := view.New(&amp;quot;index/auth&amp;quot;).Base(&amp;quot;alternate&amp;quot;)
+v.Render(w, r)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;A shorter way to specify the view with a different base template and then render is like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;view.New(&amp;quot;about/about&amp;quot;).Base(&amp;quot;alternate&amp;quot;).Render(w, r)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;view-package&#34;&gt;View Package&lt;/h2&gt;
+
+&lt;p&gt;The optional &lt;strong&gt;lib/view&lt;/strong&gt; package is a wrapper for the Go &lt;a href=&#34;https://golang.org/pkg/html/template/&#34;&gt;html/template&lt;/a&gt; package
+and provides the following:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;thread-safe template caching&lt;/li&gt;
+&lt;li&gt;easy way to extend the list of functions available in templates&lt;/li&gt;
+&lt;li&gt;easy way to modify the variables available in templates&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The set up of the &lt;strong&gt;view&lt;/strong&gt; package is handled by the &lt;strong&gt;bootstrap&lt;/strong&gt; package:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// import &amp;quot;github.com/blue-jay/blueprint/lib/view&amp;quot;
+// Set up the views
+view.SetConfig(config.View)
+view.SetTemplates(config.Template.Root, config.Template.Children)
+
+// Set up the functions for the views
+view.SetFunctions(
+	extend.Assets(config.View),
+	extend.Link(config.View),
+	extend.NoEscape(),
+	extend.PrettyTime(),
+)
+
+// Set up the variables for the views
+view.SetVariables(
+	modify.AuthLevel,
+	modify.BaseURI,
+	modify.Token,
+	flash.Modify,
+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;organization&#34;&gt;Organization&lt;/h2&gt;
+
+&lt;p&gt;The HTML templates are organized into folders under the &lt;strong&gt;view&lt;/strong&gt; folder:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;about/about.tmpl	- quick blurb about the app
+auth/login.tmpl		- login page
+auth/register.tmpl	- register page
+index/anon.tmpl		- public home page
+index/auth.tmpl		- home page once you login
+note/create.tmpl	- create a note
+note/edit.tmpl		- edit a note
+note/index.tmpl		- view all notes
+note/show.tmpl		- view a note
+partial/footer.tmpl	- footer at the bottom of all pages
+partial/menu.tmpl	- menu at the top of all pages
+base.tmpl			- base template for all pages
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;included-functions&#34;&gt;Included Functions&lt;/h2&gt;
+
+&lt;p&gt;There are a few functions that are included to make working with the templates
+and static files easier:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;!-- CSS files with timestamps --&amp;gt;
+{{CSS &amp;quot;static/css/normalize3.0.0.min.css&amp;quot;}}
+parses to
+&amp;lt;link rel=&amp;quot;stylesheet&amp;quot; type=&amp;quot;text/css&amp;quot; href=&amp;quot;/static/css/normalize3.0.0.min.css?1435528339&amp;quot; /&amp;gt;
+
+&amp;lt;!-- JS files with timestamps --&amp;gt;
+{{JS &amp;quot;static/js/jquery1.11.0.min.js&amp;quot;}}
+parses to
+&amp;lt;script type=&amp;quot;text/javascript&amp;quot; src=&amp;quot;/static/js/jquery1.11.0.min.js?1435528404&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+
+&amp;lt;!-- Hyperlinks --&amp;gt;
+{{LINK &amp;quot;register&amp;quot; &amp;quot;Create a new account.&amp;quot;}}
+parses to
+&amp;lt;a href=&amp;quot;/register&amp;quot;&amp;gt;Create a new account.&amp;lt;/a&amp;gt;
+
+&amp;lt;!-- Output an unescaped variable (not a safe idea, but it is useful when troubleshooting) --&amp;gt;
+{{.SomeVariable | NOESCAPE}}
+
+&amp;lt;!-- Time format --&amp;gt;
+{{.SomeTime | PRETTYTIME}}
+parses to format
+3:04 PM 01/02/2006
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;included-variables&#34;&gt;Included Variables&lt;/h2&gt;
+
+&lt;p&gt;There are a few variables you can use in templates as well:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;!-- Use AuthLevel=auth to determine if a user is logged in (if session.Values[&amp;quot;id&amp;quot;] != nil) --&amp;gt;
+{{if eq .AuthLevel &amp;quot;auth&amp;quot;}}
+You are logged in.
+{{else}}
+You are not logged in.
+{{end}}
+
+&amp;lt;!-- Use BaseURI to print the base URL specified in the env.json file --&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;{{.BaseURI}}about&amp;quot;&amp;gt;About&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+
+&amp;lt;!-- Use token to output the CSRF token in a form --&amp;gt;
+&amp;lt;input type=&amp;quot;hidden&amp;quot; name=&amp;quot;token&amp;quot; value=&amp;quot;{{.token}}&amp;quot;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;header-and-footer&#34;&gt;Header and Footer&lt;/h2&gt;
+
+&lt;p&gt;It&amp;rsquo;s also easy to add template-specific code before the closing &lt;/head&gt; and &lt;/body&gt; tags:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;!-- Code is added before the closing &amp;lt;/head&amp;gt; tag --&amp;gt;
+{{define &amp;quot;head&amp;quot;}}&amp;lt;meta name=&amp;quot;robots&amp;quot; content=&amp;quot;noindex&amp;quot;&amp;gt;{{end}}
+
+...
+
+&amp;lt;!-- Code is added before the closing &amp;lt;/body&amp;gt; tag --&amp;gt;
+{{define &amp;quot;foot&amp;quot;}}{{JS &amp;quot;//www.google.com/recaptcha/api.js&amp;quot;}}{{end}}
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+  
+  
+  
+  
+   <html class="no-js"> 
+
+  <head lang="en-us">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
+    <title>Controllers - Blue Jay</title>
+    <meta name="generator" content="Hugo 0.15" />
+
+    
+    <meta name="description" content="Blue Jay is a toolkit written in Go for the web.">
+    
+    <link rel="canonical" href="http://blue-jay.github.io/controllers/">
+    
+    <meta name="author" content="Joseph Spurrier">
+    
+
+    <meta property="og:url" content="http://blue-jay.github.io/controllers/">
+    <meta property="og:title" content="Blue Jay">
+    <meta property="og:image" content="http://blue-jay.github.io/images/bluejaylogo.png">
+    <meta name="apple-mobile-web-app-title" content="Blue Jay">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <link rel="shortcut icon" type="image/x-icon" href="http://blue-jay.github.io/images/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="http://blue-jay.github.io/images/favicon.ico">
+
+    <style>
+      @font-face {
+        font-family: 'Icon';
+        src: url('http://blue-jay.github.io/fonts/icon.eot?52m981');
+        src: url('http://blue-jay.github.io/fonts/icon.eot?#iefix52m981')
+               format('embedded-opentype'),
+             url('http://blue-jay.github.io/fonts/icon.woff?52m981')
+               format('woff'),
+             url('http://blue-jay.github.io/fonts/icon.ttf?52m981')
+               format('truetype'),
+             url('http://blue-jay.github.io/fonts/icon.svg?52m981#icon')
+               format('svg');
+        font-weight: normal;
+        font-style: normal;
+      }
+    </style>
+
+    <link rel="stylesheet" href="http://blue-jay.github.io/stylesheets/application.css">
+    <link rel="stylesheet" href="http://blue-jay.github.io/stylesheets/palettes.css">
+    <link rel="stylesheet" href="http://blue-jay.github.io/stylesheets/highlight/highlight.css">
+
+    
+    
+    
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ubuntu:400,700|Ubuntu%2bMono">
+    <style>
+      body, input {
+        font-family: 'Ubuntu', Helvetica, Arial, sans-serif;
+      }
+      pre, code {
+        font-family: 'Ubuntu Mono', 'Courier New', 'Courier', monospace;
+      }
+    </style>
+    
+    
+    <link rel="stylesheet" href="http://blue-jay.github.io/stylesheets/global.css">
+    
+    <link rel="stylesheet" href="http://blue-jay.github.io/stylesheets/colors.css">
+    
+    <script src="http://blue-jay.github.io/javascripts/modernizr.js"></script>
+
+    
+
+  </head>
+  <body class="palette-primary-jayblue palette-accent-amber">
+
+
+
+	
+	
+
+
+<div class="backdrop">
+	<div class="backdrop-paper"></div>
+</div>
+
+<input class="toggle" type="checkbox" id="toggle-drawer">
+<input class="toggle" type="checkbox" id="toggle-search">
+<label class="toggle-button overlay" for="toggle-drawer"></label>
+
+<header class="header">
+	<nav aria-label="Header">
+  <div class="bar default">
+    <div class="button button-menu" role="button" aria-label="Menu">
+      <label class="toggle-button icon icon-menu" for="toggle-drawer">
+        <span></span>
+      </label>
+    </div>
+    <div class="stretch">
+      <div class="title">
+        Controller
+      </div>
+    </div>
+
+    
+
+    
+    <div class="button button-github" role="button" aria-label="GitHub">
+      <a href="https://github.com/blue-jay" title="@blue-jay on GitHub" target="_blank" class="toggle-button icon icon-github"></a>
+    </div>
+    
+    
+        
+  </div>
+  <div class="bar search">
+    <div class="button button-close" role="button" aria-label="Close">
+      <label class="toggle-button icon icon-back" for="toggle-search"></label>
+    </div>
+    <div class="stretch">
+      <div class="field">
+        <input class="query" type="text" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck>
+      </div>
+    </div>
+    <div class="button button-reset" role="button" aria-label="Search">
+      <button class="toggle-button icon icon-close" id="reset-search"></button>
+    </div>
+  </div>
+</nav>
+</header>
+
+<main class="main">
+	<div class="drawer">
+		<nav aria-label="Navigation">
+  <a href="https://github.com/blue-jay/blueprint" class="project">
+    <div class="banner">
+      
+        <div class="logo">
+          <img src="http://blue-jay.github.io/images/bluejaylogo.png">
+        </div>
+      
+      <div class="name">
+        <strong>Blue Jay <span class="version">1.0</span></strong>
+        
+          <br>
+          blue-jay/blueprint
+        
+      </div>
+    </div>
+  </a>
+
+  <div class="scrollable">
+    <div class="wrapper">
+      
+        <ul class="repo">
+          <li class="repo-download">
+            <a href="https://github.com/blue-jay/blueprint/archive/master.zip" target="_blank" title="Download" data-action="download">
+              <i class="icon icon-download"></i> Download
+            </a>
+          </li>
+          <li class="repo-stars">
+            <a href="https://github.com/blue-jay/blueprint/stargazers" target="_blank" title="Stargazers" data-action="star">
+              <i class="icon icon-star"></i> Stars
+              <span class="count">&ndash;</span>
+            </a>
+          </li>
+        </ul>
+        <hr>
+      
+
+      <div class="toc">
+        
+        <ul>
+          
+
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Toolkit Overview" href="http://blue-jay.github.io/">
+	
+	Toolkit Overview
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Configuration" href="http://blue-jay.github.io/configuration/">
+	
+	Configuration
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a class="current" title="Controllers" href="http://blue-jay.github.io/controllers/">
+	
+	Controllers
+</a>
+
+
+<ul id="scrollspy">
+</ul>
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Views" href="http://blue-jay.github.io/views/">
+	
+	Views
+</a>
+
+
+  
+</li>
+
+
+        </ul>
+        
+
+        
+        <hr>
+        <span class="section">The author</span>
+        
+        <ul>
+          
+
+          
+          <li>
+            <a href="https://github.com/blue-jay" target="_blank" title="@blue-jay on GitHub">
+              @blue-jay on GitHub
+            </a>
+          </li>
+          
+        </ul>
+        
+      </div>
+    </div>
+  </div>
+</nav>
+
+	</div>
+
+	<article class="article">
+		<div class="wrapper">
+			<h1>Controllers </h1>
+
+			
+
+<h2 id="basic-usage">Basic Usage</h2>
+
+<p>The controller files are all organized under the <strong>controller</strong> folder. The controllers
+handle much of the interactions between the models and the views as well as specify
+which routes map to which functions.</p>
+
+<h2 id="routing">Routing</h2>
+
+<p>In the <strong>bootstrap</strong> package, the <strong>RegisterServices()</strong> function calls: <code>controller.LoadRoutes()</code>
+The <strong>LoadRoutes()</strong> function in the <strong>controller</strong> package loads the routes for each of the individual controllers:</p>
+
+<pre><code class="language-go">// LoadRoutes loads the routes for each of the controllers
+func LoadRoutes() {
+	about.Load()
+	debug.Load()
+	auth.LoadRegister()
+	auth.LoadLogin()
+	core.LoadIndex()
+	core.LoadError()
+	core.LoadStatic()
+	notepad.Load()
+}
+</code></pre>
+
+<p>Here is the <strong>Load()</strong> function from the <strong>controller/notepad</strong> package:</p>
+
+<pre><code class="language-go">var (
+	uri = &quot;/notepad&quot;
+)
+
+func Load() {
+	c := router.Chain(acl.DisallowAnon)
+	router.Get(uri, Index, c...)
+	router.Get(uri+&quot;/create&quot;, Create, c...)
+	router.Post(uri, Store, c...)
+	router.Get(uri+&quot;/view/:id&quot;, Show, c...)
+	router.Get(uri+&quot;/edit/:id&quot;, Edit, c...)
+	router.Patch(uri+&quot;/edit/:id&quot;, Update, c...)
+	router.Delete(uri+&quot;/:id&quot;, Destroy, c...)
+}
+</code></pre>
+
+<p>There are a few things to note here. The <strong>router</strong> references the <strong>lib/router</strong> package
+which is a wrapper for the <a href="http://github.com/julienschmidt/httprouter">julienschmidt/httprouter</a> package.
+The <strong>router.Chain()</strong> function uses the <a href="http://github.com/justinas/alice">justinas/alice</a> package
+to help with middleware chaining.</p>
+
+<p>This may start to sound like a framework, but it&rsquo;s actually a good way to build your wrapper
+packages that live in the <strong>lib</strong> folder. If you want to use a different router, you can modify
+the <strong>lib/router</strong> package easily and you won&rsquo;t have to change any code in your controllers.</p>
+
+<p>It&rsquo;s a good idea to follow a naming convention for the controller functions (Laravel developers
+will notice it&rsquo;s the same convention Taylor Orwell uses).</p>
+
+<h3 id="these-are-a-few-things-you-can-do-with-controllers">These are a few things you can do with controllers.</h3>
+
+<p>Access a gorilla session:</p>
+
+<pre><code class="language-go">// Get the current session
+sess := session.Instance(r)
+...
+// Close the session after you are finished making changes
+sess.Save(r, w)
+</code></pre>
+
+<p>Trigger 1 of 4 different types of flash messages on the next page load (no other code needed):</p>
+
+<pre><code class="language-go">sess.AddFlash(view.Flash{&quot;Sorry, no brute force :-)&quot;, view.FlashNotice})
+sess.Save(r, w) // Ensure you save the session after making a change to it
+</code></pre>
+
+<p>Validate form fields are not empty:</p>
+
+<pre><code class="language-go">// Ensure a user submitted all the required form fields
+if validate, missingField := view.Validate(r, []string{&quot;email&quot;, &quot;password&quot;}); !validate {
+	sess.AddFlash(view.Flash{&quot;Field missing: &quot; + missingField, view.FlashError})
+	sess.Save(r, w)
+	LoginGET(w, r)
+	return
+}
+</code></pre>
+
+<p>Render a template:</p>
+
+<pre><code class="language-go">// Create a new view
+v := view.New(r)
+
+// Set the template name
+v.Name = &quot;login/login&quot;
+
+// Assign a variable that is accessible in the form
+v.Vars[&quot;token&quot;] = csrfbanana.Token(w, r, sess)
+
+// Refill any form fields from a POST operation
+view.Repopulate([]string{&quot;email&quot;}, r.Form, v.Vars)
+
+// Render the template
+v.Render(w)
+</code></pre>
+
+<p>Return the flash messages during an Ajax request:</p>
+
+<pre><code class="language-go">// Get session
+sess := session.Instance(r)
+
+// Set the flash message
+sess.AddFlash(view.Flash{&quot;An error occurred on the server. Please try again later.&quot;, view.FlashError})
+sess.Save(r, w)
+
+// Display the flash messages as JSON
+v := view.New(r)
+v.SendFlashes(w)
+</code></pre>
+
+<p>Handle the database query:</p>
+
+<pre><code class="language-go">// Get database result
+result, err := model.UserByEmail(email)
+
+if err == sql.ErrNoRows {
+	// User does not exist
+} else if err != nil {
+	// Display error message
+} else if passhash.MatchString(result.Password, password) {
+	// Password matches!	
+} else {
+	// Password does not match
+}
+</code></pre>
+
+<p>Send an email:</p>
+
+<pre><code class="language-go">// Email a user
+err := email.SendEmail(email.ReadConfig().From, &quot;This is the subject&quot;, &quot;This is the body!&quot;)
+if err != nil {
+	log.Println(err)
+	sess.AddFlash(view.Flash{&quot;An error occurred on the server. Please try again later.&quot;, view.FlashError})
+	sess.Save(r, w)
+	return
+}
+</code></pre>
+
+<p>Validate a form if the Google reCAPTCHA is enabled in the config:</p>
+
+<pre><code class="language-go">// Validate with Google reCAPTCHA
+if !recaptcha.Verified(r) {
+    sess.AddFlash(view.Flash{&quot;reCAPTCHA invalid!&quot;, view.FlashError})
+    sess.Save(r, w)
+    RegisterGET(w, r)
+    return
+}
+</code></pre>
+
+			
+			<aside class="copyright" role="note">
+				
+				&copy; 2016 Released under the MIT license &ndash;
+				
+				Documentation built with
+				<a href="https://www.gohugo.io" target="_blank">Hugo</a>
+				using the
+				<a href="http://github.com/digitalcraftsman/hugo-material-docs" target="_blank">
+					Material
+				</a> theme.
+			</aside>
+
+			<footer class="footer">
+				
+
+<nav class="pagination" aria-label="Footer">
+  <div class="previous">
+  
+      <a href="http://blue-jay.github.io/configuration/" title="Configuration">
+        <span class="direction">
+          Previous
+        </span>
+        <div class="page">
+          <div class="button button-previous" role="button" aria-label="Previous">
+            <i class="icon icon-back"></i>
+          </div>
+          <div class="stretch">
+            <div class="title">
+              Configuration
+            </div>
+          </div>
+        </div>
+      </a>
+  
+  </div>
+
+  <div class="next">
+  
+      <a href="http://blue-jay.github.io/views/" title="Views">
+        <span class="direction">
+          Next
+        </span>
+        <div class="page">
+          <div class="stretch">
+            <div class="title">
+              Views
+            </div>
+          </div>
+          <div class="button button-next" role="button" aria-label="Next">
+            <i class="icon icon-forward"></i>
+          </div>
+        </div>
+      </a>
+  
+  </div>
+</nav>
+
+
+
+
+
+			</footer>
+		</div>
+	</article>
+
+	<div class="results" role="status" aria-live="polite">
+		<div class="scrollable">
+			<div class="wrapper">
+				<div class="meta"></div>
+				<div class="list"></div>
+			</div>
+		</div>
+	</div>
+</main>
+
+    <script>
+    
+      var base_url = 'http:\/\/blue-jay.github.io\/';
+      var repo_id  = 'blue-jay\/blueprint';
+    
+    </script>
+
+    <script src="http://blue-jay.github.io/javascripts/application.js"></script>
+    
+
+    <script>
+      /* Add headers to scrollspy */
+      var headers   = document.getElementsByTagName("h2");
+      var scrollspy = document.getElementById('scrollspy');
+
+      if(headers.length > 0) {
+        for(var i = 0; i < headers.length; i++) {
+          var li = document.createElement("li");
+          li.setAttribute("class", "anchor");
+
+          var a  = document.createElement("a");
+          a.setAttribute("href", "#" + headers[i].id);
+          a.setAttribute("title", headers[i].innerHTML);
+          a.innerHTML = headers[i].innerHTML;
+          
+          li.appendChild(a)
+          scrollspy.appendChild(li);
+        }
+      } else {
+        scrollspy.parentElement.removeChild(scrollspy)
+      }
+      
+
+      /* Add permanent link next to the headers */
+      var headers = document.querySelectorAll("h1, h2, h3, h4, h5, h6");
+
+      for(var i = 0; i < headers.length; i++) {
+          var a = document.createElement("a");
+          a.setAttribute("class", "headerlink");
+          a.setAttribute("href", "#" + headers[i].id);
+          a.setAttribute("title", "Permanent link")
+          a.innerHTML = "#";
+          headers[i].appendChild(a);
+      }
+    </script>
+
+    
+
+    <script src="//gohugo.io/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </body>
+</html>
