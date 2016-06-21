@@ -8,18 +8,18 @@
   <head lang="en-us">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
-    <title>Views - Blue Jay</title>
+    <title>Routing - Blue Jay</title>
     <meta name="generator" content="Hugo 0.15" />
 
     
     <meta name="description" content="Blue Jay is a toolkit written in Go for the web.">
     
-    <link rel="canonical" href="http://blue-jay.github.io/views/">
+    <link rel="canonical" href="http://blue-jay.github.io/routing/">
     
     <meta name="author" content="Joseph Spurrier">
     
 
-    <meta property="og:url" content="http://blue-jay.github.io/views/">
+    <meta property="og:url" content="http://blue-jay.github.io/routing/">
     <meta property="og:title" content="Blue Jay">
     <meta property="og:image" content="http://blue-jay.github.io/images/bluejaylogo.png">
     <meta name="apple-mobile-web-app-title" content="Blue Jay">
@@ -99,7 +99,7 @@
     </div>
     <div class="stretch">
       <div class="title">
-        View
+        Routing
       </div>
     </div>
 
@@ -216,11 +216,14 @@
 
 
 
-<a  title="Routing" href="http://blue-jay.github.io/routing/">
+<a class="current" title="Routing" href="http://blue-jay.github.io/routing/">
 	
 	Routing
 </a>
 
+
+<ul id="scrollspy">
+</ul>
 
   
 </li>
@@ -284,14 +287,11 @@
 
 
 
-<a class="current" title="Views" href="http://blue-jay.github.io/views/">
+<a  title="Views" href="http://blue-jay.github.io/views/">
 	
 	Views
 </a>
 
-
-<ul id="scrollspy">
-</ul>
 
   
 </li>
@@ -325,182 +325,135 @@
 
 	<article class="article">
 		<div class="wrapper">
-			<h1>Views </h1>
+			<h1>Routing </h1>
 
 			
 
 <h2 id="basic-usage">Basic Usage</h2>
 
-<p>Views contain the HTML served by your application and separate your controller / application logic from your presentation logic. The views are parsed by the <a href="https://golang.org/pkg/html/template/">html/template</a> package.</p>
+<p>When a user requests a page from your application, the routes determine which
+page is shown. The URL is mapped to a controller function. For that reason,
+the routes are stored in the controller file. The controller files are all
+organized under the <strong>controller</strong> folder.</p>
 
-<p>A view should include the four <strong>define</strong> blocks (<strong>title</strong>, <strong>head</strong>, <strong>content</strong>, and <strong>foot</strong>) and may look like this:</p>
+<h2 id="routing">Routing</h2>
 
-<pre><code class="language-html">{{define &quot;title&quot;}}Welcome{{end}}
-{{define &quot;head&quot;}}{{end}}
-{{define &quot;content&quot;}}
-&lt;div class=&quot;container&quot;&gt;
-	&lt;div class=&quot;page-header&quot;&gt;
-		&lt;h1&gt;Hello, {{.first_name}}&lt;/h1&gt;
-	&lt;/div&gt;
-	&lt;p&gt;You have arrived. Click {{LINK &quot;notepad&quot; &quot;here&quot;}} to view your notepad.&lt;/p&gt;
-	{{template &quot;footer&quot; .}}
-&lt;/div&gt;
-{{end}}
-{{define &quot;foot&quot;}}{{end}}
+<p>In the <strong>bootstrap</strong> package, the <strong>RegisterServices()</strong> function
+calls the <strong>controller.LoadRoutes()</strong> function.</p>
+
+<p>The <strong>LoadRoutes()</strong> function in the <strong>controller</strong> package loads the routes
+for each of the individual controllers:</p>
+
+<pre><code class="language-go">// LoadRoutes loads the routes for each of the controllers
+func LoadRoutes() {
+    about.Load()
+    debug.Load()
+    auth.LoadRegister()
+    auth.LoadLogin()
+    core.LoadIndex()
+    core.LoadError()
+    core.LoadStatic()
+    notepad.Load()
+}
 </code></pre>
 
-<p>Since this view is stored at <strong>view/index/auth.tmpl</strong>, we may render it using the <strong>view</strong> helper package like so:</p>
+<p>Here is the <strong>Load()</strong> function from the <strong>controller/notepad</strong> package:</p>
 
-<pre><code class="language-go">// import &quot;github.com/blue-jay/blueprint/lib/view&quot;
-v := view.New(&quot;index/auth&quot;)
-v.Vars[&quot;first_name&quot;] = session.Values[&quot;first_name&quot;]
-v.Render(w, r)
+<pre><code class="language-go">func Load() {
+    // Add middleware that disallows anonymous access
+    c := router.Chain(acl.DisallowAnon)
+
+    // Map HTTP methods and URLs to functions wrapped in the middleware chain
+    router.Get(&quot;/notepad&quot;, Index, c...)
+    router.Get(&quot;/notepad/create&quot;, Create, c...)
+    router.Post(&quot;/notepad&quot;, Store, c...)
+    router.Get(&quot;/notepad/view/:id&quot;, Show, c...)
+    router.Get(&quot;/notepad/edit/:id&quot;, Edit, c...)
+    router.Patch(&quot;/notepad/edit/:id&quot;, Update, c...)
+    router.Delete(&quot;/notepad/:id&quot;, Destroy, c...)
+}
 </code></pre>
 
-<p>If you don&rsquo;t have to pass any variables to the template, you could shorten it like this:</p>
+<p>There are a few things to note here. The <strong>router</strong> references the
+<strong>lib/router</strong> package which is a wrapper for the
+<a href="http://github.com/julienschmidt/httprouter">julienschmidt/httprouter</a> package.
+The <strong>router.Chain()</strong> function uses the
+<a href="http://github.com/justinas/alice">justinas/alice</a> package
+to help with middleware chaining.</p>
 
-<pre><code class="language-go">// import &quot;github.com/blue-jay/blueprint/lib/view&quot;
-view.New(&quot;index/auth&quot;).Render(w, r)
-</code></pre>
+<p>This is one way to build your wrapper packages that live in the <strong>lib</strong> folder.
+If you want to use a different router, you can modify the <strong>lib/router</strong>
+package easily and will only have to change a few lines of code in your
+controllers.</p>
 
-<h2 id="base-template">Base Template</h2>
+<h2 id="static-assets">Static Assets</h2>
 
-<p>By default, the <strong>view/base.tmpl</strong> template is used as the base template (as specified in env.json). If you want to
-change the base template for a template, you can try this:</p>
+<p>You can serve your <strong>static</strong> folder with your CSS, JavaScript, and images so
+they are accessible. You would access an asset like this:
+<code>http://example.com/static/favicon.ico</code></p>
 
-<pre><code class="language-go">v := view.New(&quot;index/auth&quot;).Base(&quot;alternate&quot;)
-v.Render(w, r)
-</code></pre>
+<p><a href="https://github.com/blue-jay/blueprint/blob/master/controller/core/static.go">Source</a></p>
 
-<p>A shorter way to specify the view with a different base template and then render is like this:</p>
+<pre><code class="language-go">package core
 
-<pre><code class="language-go">view.New(&quot;about/about&quot;).Base(&quot;alternate&quot;).Render(w, r)
-</code></pre>
+import (
+    &quot;net/http&quot;
+    &quot;strings&quot;
 
-<h2 id="view-package">View Package</h2>
-
-<p>The optional <strong>lib/view</strong> package is a wrapper for the Go <a href="https://golang.org/pkg/html/template/">html/template</a> package
-and provides the following:</p>
-
-<ul>
-<li>thread-safe template caching</li>
-<li>easy way to extend the list of functions available in templates</li>
-<li>easy way to modify the variables available in templates</li>
-</ul>
-
-<p>The set up of the <strong>view</strong> package is handled by the <strong>bootstrap</strong> package:</p>
-
-<pre><code class="language-go">// import &quot;github.com/blue-jay/blueprint/lib/view&quot;
-// Set up the views
-view.SetConfig(config.View)
-view.SetTemplates(config.Template.Root, config.Template.Children)
-
-// Set up the functions for the views
-view.SetFunctions(
-	extend.Assets(config.View),
-	extend.Link(config.View),
-	extend.NoEscape(),
-	extend.PrettyTime(),
+    &quot;github.com/blue-jay/blueprint/lib/router&quot;
 )
 
-// Set up the variables for the views
-view.SetVariables(
-	modify.AuthLevel,
-	modify.BaseURI,
-	modify.Token,
-	flash.Modify,
+func LoadStatic() {
+    // Required so the trailing slash is not redirected
+    router.Instance().RedirectTrailingSlash = false
+
+    // Serve static files, no directory browsing
+    router.Get(&quot;/static/*filepath&quot;, Static)
+}
+
+// Static maps static files
+func Static(w http.ResponseWriter, r *http.Request) {
+    // Disable listing directories
+    if strings.HasSuffix(r.URL.Path, &quot;/&quot;) {
+        Error404(w, r)
+        return
+    }
+    http.ServeFile(w, r, r.URL.Path[1:])
+}
+</code></pre>
+
+<h2 id="error-pages">Error Pages</h2>
+
+<p>You can specify the <strong>404</strong> (Page Not Found) and <strong>405</strong> (Method Not Allowed)
+behaviors.</p>
+
+<p><a href="https://github.com/blue-jay/blueprint/blob/master/controller/core/error.go">Source</a></p>
+
+<pre><code class="language-go">package core
+
+import (
+    &quot;fmt&quot;
+    &quot;net/http&quot;
+
+    &quot;github.com/blue-jay/blueprint/lib/router&quot;
 )
-</code></pre>
 
-<h2 id="organization">Organization</h2>
+func LoadError() {
+    router.MethodNotAllowed(Error405)
+    router.NotFound(Error404)
+}
 
-<p>The HTML templates are organized into folders under the <strong>view</strong> folder:</p>
+// Error404 - Page Not Found
+func Error404(w http.ResponseWriter, r *http.Request) {
+    w.WriteHeader(http.StatusNotFound)
+    fmt.Fprint(w, &quot;Not Found 404&quot;)
+}
 
-<pre><code class="language-text">about/about.tmpl	- quick blurb about the app
-auth/login.tmpl		- login page
-auth/register.tmpl	- register page
-index/anon.tmpl		- public home page
-index/auth.tmpl		- home page once you login
-note/create.tmpl	- create a note
-note/edit.tmpl		- edit a note
-note/index.tmpl		- view all notes
-note/show.tmpl		- view a note
-partial/footer.tmpl	- footer at the bottom of all pages
-partial/menu.tmpl	- menu at the top of all pages
-base.tmpl			- base template for all pages
-</code></pre>
-
-<h2 id="included-functions">Included Functions</h2>
-
-<p>There are a few functions that are included to make working with the templates
-and static files easier:</p>
-
-<pre><code class="language-html">&lt;!-- CSS files with timestamps --&gt;
-{{CSS &quot;static/css/normalize3.0.0.min.css&quot;}}
-parses to
-&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;/static/css/normalize3.0.0.min.css?1435528339&quot; /&gt;
-
-&lt;!-- JS files with timestamps --&gt;
-{{JS &quot;static/js/jquery1.11.0.min.js&quot;}}
-parses to
-&lt;script type=&quot;text/javascript&quot; src=&quot;/static/js/jquery1.11.0.min.js?1435528404&quot;&gt;&lt;/script&gt;
-
-&lt;!-- Hyperlinks --&gt;
-{{LINK &quot;register&quot; &quot;Create a new account.&quot;}}
-parses to
-&lt;a href=&quot;/register&quot;&gt;Create a new account.&lt;/a&gt;
-
-&lt;!-- Output an unescaped variable (not a safe idea, but it is useful when troubleshooting) --&gt;
-{{.SomeVariable | NOESCAPE}}
-
-&lt;!-- Time format --&gt;
-{{.SomeTime | PRETTYTIME}}
-parses to format
-3:04 PM 01/02/2006
-</code></pre>
-
-<h2 id="included-variables">Included Variables</h2>
-
-<p>There are a few variables you can use in templates as well:</p>
-
-<pre><code class="language-html">&lt;!-- Use AuthLevel=auth to determine if a user is logged in (if session.Values[&quot;id&quot;] != nil) --&gt;
-{{if eq .AuthLevel &quot;auth&quot;}}
-You are logged in.
-{{else}}
-You are not logged in.
-{{end}}
-
-&lt;!-- Use BaseURI to print the base URL specified in the env.json file --&gt;
-&lt;li&gt;&lt;a href=&quot;{{.BaseURI}}about&quot;&gt;About&lt;/a&gt;&lt;/li&gt;
-
-&lt;!-- Use token to output the CSRF token in a form --&gt;
-&lt;input type=&quot;hidden&quot; name=&quot;token&quot; value=&quot;{{.token}}&quot;&gt;
-</code></pre>
-
-<h2 id="header-and-footer">Header and Footer</h2>
-
-<p>It&rsquo;s also easy to add template-specific code before the closing </head> and </body> tags:</p>
-
-<pre><code class="language-html">&lt;!-- Code is added before the closing &lt;/head&gt; tag --&gt;
-{{define &quot;head&quot;}}&lt;meta name=&quot;robots&quot; content=&quot;noindex&quot;&gt;{{end}}
-
-...
-
-&lt;!-- Code is added before the closing &lt;/body&gt; tag --&gt;
-{{define &quot;foot&quot;}}{{JS &quot;//www.google.com/recaptcha/api.js&quot;}}{{end}}
-</code></pre>
-
-<h2 id="javascript">JavaScript</h2>
-
-<p>There are a few built-in functions that you can use to trigger a flash notification using JavaScript.</p>
-
-<pre><code class="language-javascript">flashError(&quot;An error occurred on the server.&quot;);
-
-flashSuccess(&quot;Item added!&quot;);
-
-flashNotice(&quot;Item deleted.&quot;);
-
-flashWarning(&quot;Field missing: email&quot;);
+// Error405 - Method Not Allowed
+func Error405(w http.ResponseWriter, r *http.Request) {
+    w.WriteHeader(http.StatusMethodNotAllowed)
+    fmt.Fprint(w, &quot;Method Not Allowed 405&quot;)
+}
 </code></pre>
 
 			
@@ -522,7 +475,7 @@ flashWarning(&quot;Field missing: email&quot;);
 <nav class="pagination" aria-label="Footer">
   <div class="previous">
   
-      <a href="http://blue-jay.github.io/models/" title="Models">
+      <a href="http://blue-jay.github.io/configuration/" title="Configuration">
         <span class="direction">
           Previous
         </span>
@@ -532,7 +485,7 @@ flashWarning(&quot;Field missing: email&quot;);
           </div>
           <div class="stretch">
             <div class="title">
-              Models
+              Configuration
             </div>
           </div>
         </div>
@@ -541,6 +494,22 @@ flashWarning(&quot;Field missing: email&quot;);
   </div>
 
   <div class="next">
+  
+      <a href="http://blue-jay.github.io/middleware/" title="Middleware">
+        <span class="direction">
+          Next
+        </span>
+        <div class="page">
+          <div class="stretch">
+            <div class="title">
+              Middleware
+            </div>
+          </div>
+          <div class="button button-next" role="button" aria-label="Next">
+            <i class="icon icon-forward"></i>
+          </div>
+        </div>
+      </a>
   
   </div>
 </nav>

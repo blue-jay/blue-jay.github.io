@@ -20,25 +20,31 @@
 &lt;p&gt;&lt;a href=&#34;https://goreportcard.com/report/github.com/blue-jay/blueprint&#34;&gt;&lt;img src=&#34;https://goreportcard.com/badge/github.com/blue-jay/blueprint&#34; alt=&#34;Go Report Card&#34; /&gt;&lt;/a&gt;
 &lt;a href=&#34;https://godoc.org/github.com/blue-jay/blueprint&#34;&gt;&lt;img src=&#34;https://godoc.org/github.com/blue-jay/blueprint?status.svg&#34; alt=&#34;GoDoc&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;Blue Jay is a toolkit designed to get your web application off the ground. It&amp;rsquo;s a collection of command line tools along with a web blueprint that is flexible enough to fit any project, yet provides a foundation so you can focus on the task instead of designing your own tools. You can easily change the structure and there is no rigid framework to which you have to conform. Even the command line tools like code generation and database migration are portable so they can be used outside your project.&lt;/p&gt;
+&lt;p&gt;Blue Jay is a web toolkit for &lt;a href=&#34;https://golang.org/&#34;&gt;Go&lt;/a&gt;. It&amp;rsquo;s a collection of command-line tools and a web blueprint that allows you to easily structure your web application. There is no rigid framework to which you have to conform.&lt;/p&gt;
 
 &lt;p&gt;There are a few components:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Blueprint&lt;/strong&gt; is a model-view-controller (MVC) style web skeleton&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint&#34;&gt;&lt;strong&gt;Blueprint&lt;/strong&gt;&lt;/a&gt; is a model-view-controller (MVC) style web skeleton.&lt;/p&gt;&lt;/li&gt;
 
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Jay&lt;/strong&gt; is a command line tool with modules for find/replace, database migrations, and code generation&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/blue-jay/jay&#34;&gt;&lt;strong&gt;Jay&lt;/strong&gt;&lt;/a&gt; is a command line tool with modules for find/replace, database migrations, and code generation.&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&#34;why-blue-jay&#34;&gt;Why Blue Jay?&lt;/h2&gt;
 
-&lt;p&gt;There are a few web frameworks for Go, but we support the Go mentality that you should keep
-your application dependency lean. Less dependencies means less bugs.
-It&amp;rsquo;s also great to start developing your application right away instead of learning
-all the features of a framework and then developing once you are proficient enough.
-Blue Jay provides a lean web skeleton called Blueprint to demonstrate how to structure
-a web application without locking developers to a framework. Blueprint includes well thought out
-example code that demonstrates a typical web workflow.&lt;/p&gt;
+&lt;h3 id=&#34;fun-answer&#34;&gt;Fun Answer&lt;/h3&gt;
+
+&lt;p&gt;After 300 stars on GitHub, I realized people really liked the boilerplate
+Model-View-Controller (MVC) web application in Go called
+&lt;a href=&#34;https://github.com/josephspurrier/gowebapp&#34;&gt;gowebapp&lt;/a&gt; so I gave it a better
+name and improved the documentation.&lt;/p&gt;
+
+&lt;h3 id=&#34;real-answer&#34;&gt;Real Answer&lt;/h3&gt;
+
+&lt;p&gt;Go is a blast to code in and it&amp;rsquo;s great being part of a helpful community.
+Blue Jay provides a quickstart for developers with a lean web skeleton called
+&lt;strong&gt;Blueprint&lt;/strong&gt; that demonstrates how to structure a web application with sample
+code.&lt;/p&gt;
 
 &lt;p&gt;One of the things you&amp;rsquo;ll notice while using Blueprint is how to abstract out
 external packages to make it easy to swap out components. Ultimately, you should
@@ -48,11 +54,10 @@ folder is a great place for all these packages with very few dependencies.&lt;/p
 &lt;p&gt;You&amp;rsquo;ll also notice certain packages need to be thread-safe when building web applications.
 An example is the &lt;strong&gt;lib/view&lt;/strong&gt; package which provides thread-safe template caching.&lt;/p&gt;
 
-&lt;p&gt;The other reason for Blue Jay is the command line tools in &lt;strong&gt;jay&lt;/strong&gt;. jay provides an easy way
+&lt;p&gt;The other reason for Blue Jay is the command-line tool, &lt;strong&gt;jay&lt;/strong&gt;, which provides an easy way
 to find/replace in a project when refactoring, migrate your database forwards or backwards, and
 generate a file or sets or files using the Go &lt;a href=&#34;https://golang.org/pkg/html/template/&#34;&gt;html/template&lt;/a&gt;
-package. Code generation can help you build faster and more efficiently which is a perfect compliment
-to Blueprint.&lt;/p&gt;
+package. Code generation can help you build faster and more efficiently with less mistakes.&lt;/p&gt;
 
 &lt;h2 id=&#34;why-go&#34;&gt;Why Go?&lt;/h2&gt;
 
@@ -62,11 +67,10 @@ many other tools necessary to build a web application. Any features missing from
 written by other Go developers who are happy to contribute to the thriving community.&lt;/p&gt;
 
 &lt;p&gt;Go allows you to write code that compiles to the majority of the architectures we use today so all your
-code is pretty much portable. Go accels when you want to write command line apps instead of just scripts,
+code is pretty much portable. Go excels when you want to write command line apps instead of just scripts,
 but that&amp;rsquo;s not the language&amp;rsquo;s only niche.
 The designers of Go wanted to build a language that solved problems between the Google development teams.
-It&amp;rsquo;s a modern language that allows you to easily multi-thread your applications safely so you can use the
-power of the hardware.&lt;/p&gt;
+It&amp;rsquo;s a modern language that allows you to easily multi-thread your applications.&lt;/p&gt;
 
 &lt;h2 id=&#34;high-level&#34;&gt;High Level&lt;/h2&gt;
 
@@ -133,62 +137,6 @@ github.com/justinas/alice				- middleware chaining
 golang.org/x/crypto/bcrypt 				- password hashing algorithm
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&#34;javascript&#34;&gt;JavaScript&lt;/h2&gt;
-
-&lt;p&gt;You can trigger a flash notification using JavaScript.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;flashError(&amp;quot;You must type in a username.&amp;quot;);
-
-flashSuccess(&amp;quot;Record created!&amp;quot;);
-
-flashNotice(&amp;quot;There seems to be a piece missing.&amp;quot;);
-
-flashWarning(&amp;quot;Something does not seem right...&amp;quot;);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;database&#34;&gt;Database&lt;/h2&gt;
-
-&lt;p&gt;It&amp;rsquo;s a good idea to abstract the database layer out so if you need to make
-changes, you don&amp;rsquo;t have to look through business logic to find the queries. All
-the queries are stored in the models folder.&lt;/p&gt;
-
-&lt;p&gt;This project supports BoltDB, MongoDB, and MySQL. All the queries are stored in
-the same files so you can easily change the database without modifying anything
-but the config file.&lt;/p&gt;
-
-&lt;p&gt;The user.go and note.go files are at the root of the model directory and are a
-compliation of all the queries for each database type. There are a few hacks in
-the models to get the structs to work with all the supported databases.&lt;/p&gt;
-
-&lt;p&gt;Connect to the database (only once needed in your application):&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Connect to database
-database.Connect(config.Database)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Read from the database:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;result := User{}
-err := database.DB.Get(&amp;amp;result, &amp;quot;SELECT id, password, status_id, first_name FROM user WHERE email = ? LIMIT 1&amp;quot;, email)
-return result, err
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Write to the database:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;_, err := database.DB.Exec(&amp;quot;INSERT INTO user (first_name, last_name, email, password) VALUES (?,?,?,?)&amp;quot;, firstName, lastName, email, password)
-return err
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;middleware&#34;&gt;Middleware&lt;/h2&gt;
-
-&lt;p&gt;There are a few pieces of middleware included. The package called csrfbanana
-protects against Cross-Site Request Forgery attacks and prevents double submits.
-The package httprouterwrapper provides helper functions to make funcs compatible
-with httprouter. The package logrequest will log every request made against the
-website to the console. The package pprofhandler enables pprof so it will work
-with httprouter. In route.go, all the individual routes use alice to make
-chaining very easy.&lt;/p&gt;
-
 &lt;h2 id=&#34;screenshots&#34;&gt;Screenshots&lt;/h2&gt;
 
 &lt;p&gt;Public Home:&lt;/p&gt;
@@ -243,8 +191,8 @@ If something is not idiomatic to Go, please let me know know so we can make it b
 &lt;p&gt;Throughout this documentation, keep in mind everything in Blueprint is configurable.
 You are not using a framework so you don&amp;rsquo;t have to follow rules. You don&amp;rsquo;t need to
 use any of the components with Blueprint, but it does give you a nice foundation to
-start from. If you want to use YAML instead of JSON, I recommend creating a wrapper
-library in the &lt;strong&gt;lib&lt;/strong&gt; folder and then loading your env.yaml file via the &lt;strong&gt;bootstrap&lt;/strong&gt;
+start from. If you want to use YAML instead of JSON, it&amp;rsquo;s recommended to create a wrapper
+library in the &lt;strong&gt;lib&lt;/strong&gt; folder and then load your env.yaml file via the &lt;strong&gt;bootstrap&lt;/strong&gt;
 package.&lt;/p&gt;
 
 &lt;p&gt;One of the first steps before using Blueprint is to create &lt;strong&gt;env.json&lt;/strong&gt;. You can make
@@ -314,9 +262,9 @@ in the &lt;strong&gt;bootstrap&lt;/strong&gt; package. Here is an example &lt;st
 
 &lt;p&gt;The &lt;strong&gt;env.json&lt;/strong&gt; file contains the configuration for Blueprint. It removes the need
 to hardcode any of these values and makes it easy to move Blueprint to another system
-with a different set up.&lt;/p&gt;
+with a different setup.&lt;/p&gt;
 
-&lt;p&gt;The &lt;strong&gt;env.json&lt;/strong&gt; file is parsed and the result is stored in the &lt;strong&gt;Info&lt;/strong&gt; struct from the
+&lt;p&gt;The &lt;strong&gt;env.json&lt;/strong&gt; file is parsed and the result is organized in the &lt;strong&gt;Info&lt;/strong&gt; struct from the
 &lt;strong&gt;bootstrap&lt;/strong&gt; package:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Info contains the application settings
@@ -346,7 +294,7 @@ View		- View struct in lib/view
 &lt;p&gt;To enable HTTPS:&lt;/p&gt;
 
 &lt;ol&gt;
-&lt;li&gt;Set &lt;strong&gt;UseHTTPS&lt;/strong&gt; to true&lt;/li&gt;
+&lt;li&gt;Set &lt;strong&gt;UseHTTPS&lt;/strong&gt; to &lt;strong&gt;true&lt;/strong&gt;&lt;/li&gt;
 &lt;li&gt;Create a folder called &lt;strong&gt;tls&lt;/strong&gt; in the project root folder&lt;/li&gt;
 &lt;li&gt;Place your own certificate and key files in the &lt;strong&gt;tls&lt;/strong&gt; folder&lt;/li&gt;
 &lt;/ol&gt;
@@ -381,6 +329,308 @@ then delete the imports and referencing code&lt;/li&gt;
     </item>
     
     <item>
+      <title>Routing</title>
+      <link>http://blue-jay.github.io/routing/</link>
+      <pubDate>Tue, 08 Mar 2016 21:07:13 +0100</pubDate>
+      
+      <guid>http://blue-jay.github.io/routing/</guid>
+      <description>
+
+&lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
+
+&lt;p&gt;When a user requests a page from your application, the routes determine which
+page is shown. The URL is mapped to a controller function. For that reason,
+the routes are stored in the controller file. The controller files are all
+organized under the &lt;strong&gt;controller&lt;/strong&gt; folder.&lt;/p&gt;
+
+&lt;h2 id=&#34;routing&#34;&gt;Routing&lt;/h2&gt;
+
+&lt;p&gt;In the &lt;strong&gt;bootstrap&lt;/strong&gt; package, the &lt;strong&gt;RegisterServices()&lt;/strong&gt; function
+calls the &lt;strong&gt;controller.LoadRoutes()&lt;/strong&gt; function.&lt;/p&gt;
+
+&lt;p&gt;The &lt;strong&gt;LoadRoutes()&lt;/strong&gt; function in the &lt;strong&gt;controller&lt;/strong&gt; package loads the routes
+for each of the individual controllers:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// LoadRoutes loads the routes for each of the controllers
+func LoadRoutes() {
+    about.Load()
+    debug.Load()
+    auth.LoadRegister()
+    auth.LoadLogin()
+    core.LoadIndex()
+    core.LoadError()
+    core.LoadStatic()
+    notepad.Load()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here is the &lt;strong&gt;Load()&lt;/strong&gt; function from the &lt;strong&gt;controller/notepad&lt;/strong&gt; package:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func Load() {
+    // Add middleware that disallows anonymous access
+    c := router.Chain(acl.DisallowAnon)
+
+    // Map HTTP methods and URLs to functions wrapped in the middleware chain
+    router.Get(&amp;quot;/notepad&amp;quot;, Index, c...)
+    router.Get(&amp;quot;/notepad/create&amp;quot;, Create, c...)
+    router.Post(&amp;quot;/notepad&amp;quot;, Store, c...)
+    router.Get(&amp;quot;/notepad/view/:id&amp;quot;, Show, c...)
+    router.Get(&amp;quot;/notepad/edit/:id&amp;quot;, Edit, c...)
+    router.Patch(&amp;quot;/notepad/edit/:id&amp;quot;, Update, c...)
+    router.Delete(&amp;quot;/notepad/:id&amp;quot;, Destroy, c...)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;There are a few things to note here. The &lt;strong&gt;router&lt;/strong&gt; references the
+&lt;strong&gt;lib/router&lt;/strong&gt; package which is a wrapper for the
+&lt;a href=&#34;http://github.com/julienschmidt/httprouter&#34;&gt;julienschmidt/httprouter&lt;/a&gt; package.
+The &lt;strong&gt;router.Chain()&lt;/strong&gt; function uses the
+&lt;a href=&#34;http://github.com/justinas/alice&#34;&gt;justinas/alice&lt;/a&gt; package
+to help with middleware chaining.&lt;/p&gt;
+
+&lt;p&gt;This is one way to build your wrapper packages that live in the &lt;strong&gt;lib&lt;/strong&gt; folder.
+If you want to use a different router, you can modify the &lt;strong&gt;lib/router&lt;/strong&gt;
+package easily and will only have to change a few lines of code in your
+controllers.&lt;/p&gt;
+
+&lt;h2 id=&#34;static-assets&#34;&gt;Static Assets&lt;/h2&gt;
+
+&lt;p&gt;You can serve your &lt;strong&gt;static&lt;/strong&gt; folder with your CSS, JavaScript, and images so
+they are accessible. You would access an asset like this:
+&lt;code&gt;http://example.com/static/favicon.ico&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/controller/core/static.go&#34;&gt;Source&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package core
+
+import (
+    &amp;quot;net/http&amp;quot;
+    &amp;quot;strings&amp;quot;
+
+    &amp;quot;github.com/blue-jay/blueprint/lib/router&amp;quot;
+)
+
+func LoadStatic() {
+    // Required so the trailing slash is not redirected
+    router.Instance().RedirectTrailingSlash = false
+
+    // Serve static files, no directory browsing
+    router.Get(&amp;quot;/static/*filepath&amp;quot;, Static)
+}
+
+// Static maps static files
+func Static(w http.ResponseWriter, r *http.Request) {
+    // Disable listing directories
+    if strings.HasSuffix(r.URL.Path, &amp;quot;/&amp;quot;) {
+        Error404(w, r)
+        return
+    }
+    http.ServeFile(w, r, r.URL.Path[1:])
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;error-pages&#34;&gt;Error Pages&lt;/h2&gt;
+
+&lt;p&gt;You can specify the &lt;strong&gt;404&lt;/strong&gt; (Page Not Found) and &lt;strong&gt;405&lt;/strong&gt; (Method Not Allowed)
+behaviors.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/controller/core/error.go&#34;&gt;Source&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package core
+
+import (
+    &amp;quot;fmt&amp;quot;
+    &amp;quot;net/http&amp;quot;
+
+    &amp;quot;github.com/blue-jay/blueprint/lib/router&amp;quot;
+)
+
+func LoadError() {
+    router.MethodNotAllowed(Error405)
+    router.NotFound(Error404)
+}
+
+// Error404 - Page Not Found
+func Error404(w http.ResponseWriter, r *http.Request) {
+    w.WriteHeader(http.StatusNotFound)
+    fmt.Fprint(w, &amp;quot;Not Found 404&amp;quot;)
+}
+
+// Error405 - Method Not Allowed
+func Error405(w http.ResponseWriter, r *http.Request) {
+    w.WriteHeader(http.StatusMethodNotAllowed)
+    fmt.Fprint(w, &amp;quot;Method Not Allowed 405&amp;quot;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Middleware</title>
+      <link>http://blue-jay.github.io/middleware/</link>
+      <pubDate>Mon, 20 Jun 2016 21:07:13 +0100</pubDate>
+      
+      <guid>http://blue-jay.github.io/middleware/</guid>
+      <description>
+
+&lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
+
+&lt;p&gt;Middleware, in the context of Go, is applied during routing to provide
+features like request/response logging, access controls lists (ACLs), and
+header modification. Middleware is either applied to every request (for request
+logging) or specified routes (for ACLs).&lt;/p&gt;
+
+&lt;p&gt;There are a few pieces of middleware included. The package called csrfbanana
+protects against Cross-Site Request Forgery attacks and prevents double submits.
+The package httprouterwrapper provides helper functions to make funcs compatible
+with httprouter. The package logrequest will log every request made against the
+website to the console. The package pprofhandler enables pprof so it will work
+with httprouter.&lt;/p&gt;
+
+&lt;h2 id=&#34;creating-middleware&#34;&gt;Creating Middleware&lt;/h2&gt;
+
+&lt;p&gt;An example of a piece of middleware that is applied to every request is
+&lt;strong&gt;lib/middleware/logrequest&lt;/strong&gt;. When a page is requested, the middleware will
+print to the console the time of the request, remote IP address, HTTP method,
+and the URL requested.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/lib/middleware/logrequest/logrequest.go&#34;&gt;Source&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package logrequest
+
+import (
+    &amp;quot;fmt&amp;quot;
+    &amp;quot;net/http&amp;quot;
+    &amp;quot;time&amp;quot;
+)
+
+// Handler will log the HTTP requests
+func Handler(next http.Handler) http.Handler {
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        // Log the request
+        fmt.Println(time.Now().Format(&amp;quot;2006-01-02 03:04:05 PM&amp;quot;), r.RemoteAddr, r.Method, r.URL)
+        next.ServeHTTP(w, r)
+    })
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can use this template for writing your own middleware:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Handler will log the HTTP requests
+func Handler(next http.Handler) http.Handler {
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        // Logic BEFORE the other handlers and function goes here
+        next.ServeHTTP(w, r)
+        // Logic AFTER the other handlers and function goes here
+    })
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;chaining&#34;&gt;Chaining&lt;/h2&gt;
+
+&lt;p&gt;Chaining prevents middleware from stacking up which is hard to read.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;return context.ClearHandler(rest.Handler(logrequest.Handler(setUpBanana)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Before &lt;a href=&#34;https://github.com/justinas/alice&#34;&gt;justinas/alice&lt;/a&gt;, a workaround was to
+use the variable and reassign it multiple times like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;h = setUpBanana(h)
+h = logrequest.Handler(h)
+h = rest.Handler(h)
+return context.ClearHandler(h)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In &lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/controller/notepad/notepad.go&#34;&gt;controller/notepad&lt;/a&gt;,
+the application uses the &lt;strong&gt;router.ChainHandler()&lt;/strong&gt; function. The function is a wrapper for
+the &lt;a href=&#34;https://github.com/justinas/alice&#34;&gt;justinas/alice&lt;/a&gt; package which makes
+using middleware more scalable and a little &amp;ldquo;prettier&amp;rdquo;. If you look at the
+&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/bootstrap/bootstrap.go&#34;&gt;bootstrap&lt;/a&gt;
+package, you&amp;rsquo;ll see the &lt;strong&gt;ChainHandler()&lt;/strong&gt; function.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Middleware contains the middleware that applies to every request
+func SetUpMiddleware(h http.Handler) http.Handler {
+    return router.ChainHandler( // Chain middleware, bottom runs first
+        context.ClearHandler, // Clear handler for Gorilla Context
+        rest.Handler,         // Support changing HTTP method sent via form input
+        logrequest.Handler,   // Log every request
+        setUpBanana)          // Prevent CSRF and double submits
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;There is also a &lt;strong&gt;Chain()&lt;/strong&gt; function that can be used to chain middleware for routes
+or to pass to &lt;strong&gt;ChainHandler()&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Apply middleware to routes individually
+router.Get(&amp;quot;/notepad&amp;quot;, Index, acl.DisallowAnon, logrequest.Handler)
+router.Get(&amp;quot;/notepad/create&amp;quot;, Create, acl.DisallowAnon, logrequest.Handler)
+
+// Use Chain() to apply middleware
+c := router.Chain(acl.DisallowAnon, logrequest.Handler)
+router.Get(&amp;quot;/notepad&amp;quot;, Index, c...)
+router.Get(&amp;quot;/notepad/create&amp;quot;, Create, c...)
+
+// Pass Chain() to ChainHandler()
+c := router.Chain( // Chain middleware, bottom runs first
+    context.ClearHandler, // Clear handler for Gorilla Context
+    rest.Handler,         // Support changing HTTP method sent via form input
+    logrequest.Handler,   // Log every request
+    setUpBanana)          // Prevent CSRF and double submits
+return router.ChainHandler(c...)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;ChainHandler()&lt;/strong&gt; accepts one or more of the http.Handler type and returns a
+http.Handler.
+&lt;strong&gt;Chain()&lt;/strong&gt; accepts one or more of the http.Handler type and returns an array of
+the alice.Constructor type.&lt;/p&gt;
+
+&lt;h2 id=&#34;apply-to-every-request&#34;&gt;Apply to Every Request&lt;/h2&gt;
+
+&lt;p&gt;In &lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/blueprint.go&#34;&gt;blueprint.go&lt;/a&gt;,
+the application calls &lt;strong&gt;bootstrap.SetUpMiddleware(router.Instance())&lt;/strong&gt; which
+applies the middleware to the router. The middleware is called on every
+request.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/bootstrap/bootstrap.go&#34;&gt;Source&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Middleware contains the middleware that applies to every request
+func SetUpMiddleware(h http.Handler) http.Handler {
+    return router.ChainHandler( // Chain middleware, bottom runs first
+        context.ClearHandler, // Clear handler for Gorilla Context
+        rest.Handler,         // Support changing HTTP method sent via form input
+        logrequest.Handler,   // Log every request
+        setUpBanana)          // Prevent CSRF and double submits
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;apply-to-specific-routes&#34;&gt;Apply to Specific Routes&lt;/h2&gt;
+
+&lt;p&gt;In &lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/controller/notepad/notepad.go&#34;&gt;controller/notepad&lt;/a&gt;,
+the application creates a chain of middleware and then
+applies it to only certain routes. In this scenario, the pages are only
+accessible if the user is authenticated.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/controller/notepad/notepad.go&#34;&gt;Source&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func Load() {
+    // Add middleware that disallows anonymous access
+    c := router.Chain(acl.DisallowAnon)
+
+    // Map HTTP methods and URLs to functions wrapped in the middleware chain
+    router.Get(&amp;quot;/notepad&amp;quot;, Index, c...)
+    router.Get(&amp;quot;/notepad/create&amp;quot;, Create, c...)
+    router.Post(&amp;quot;/notepad&amp;quot;, Store, c...)
+    router.Get(&amp;quot;/notepad/view/:id&amp;quot;, Show, c...)
+    router.Get(&amp;quot;/notepad/edit/:id&amp;quot;, Edit, c...)
+    router.Patch(&amp;quot;/notepad/edit/:id&amp;quot;, Update, c...)
+    router.Delete(&amp;quot;/notepad/:id&amp;quot;, Destroy, c...)
+}
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Controllers</title>
       <link>http://blue-jay.github.io/controllers/</link>
       <pubDate>Tue, 08 Mar 2016 21:07:13 +0100</pubDate>
@@ -390,105 +640,144 @@ then delete the imports and referencing code&lt;/li&gt;
 
 &lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
 
-&lt;p&gt;The controller files are all organized under the &lt;strong&gt;controller&lt;/strong&gt; folder. The controllers
-handle much of the interactions between the models and the views as well as specify
-which routes map to which functions.&lt;/p&gt;
+&lt;p&gt;The controller files are all organized under the &lt;strong&gt;controller&lt;/strong&gt; folder. The
+controllers handle the interactions between the models and the views as well as
+specify which routes to map to which functions.&lt;/p&gt;
 
-&lt;h2 id=&#34;routing&#34;&gt;Routing&lt;/h2&gt;
+&lt;p&gt;It&amp;rsquo;s a good idea to follow a naming convention for the different pieces.
+Laravel developers will notice it&amp;rsquo;s the same convention Taylor Orwell uses.&lt;/p&gt;
 
-&lt;p&gt;In the &lt;strong&gt;bootstrap&lt;/strong&gt; package, the &lt;strong&gt;RegisterServices()&lt;/strong&gt; function calls: &lt;code&gt;controller.LoadRoutes()&lt;/code&gt;
-The &lt;strong&gt;LoadRoutes()&lt;/strong&gt; function in the &lt;strong&gt;controller&lt;/strong&gt; package loads the routes for each of the individual controllers:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;center&#34;&gt;Method&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;Path&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;Function&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;View&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// LoadRoutes loads the routes for each of the controllers
-func LoadRoutes() {
-	about.Load()
-	debug.Load()
-	auth.LoadRegister()
-	auth.LoadLogin()
-	core.LoadIndex()
-	core.LoadError()
-	core.LoadStatic()
-	notepad.Load()
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;GET&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;/notepad&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;Index&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;index.tmpl&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;GET&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;/notepad/create&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;Create&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;create.tmpl&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;POST&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;/notepad&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;Store&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;GET&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;/notepad/view/:id&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;Show&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;show.tmpl&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;GET&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;/notepad/edit/:id&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;Edit&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;edit.tmpl&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;PATCH&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;/notepad/edit/:id&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;Update&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;DELETE&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;/notepad/:id&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;index&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;For example, below is a controller that follows the naming convention. Notice
+the model name (&amp;ldquo;note&amp;rdquo;) matches the view folder (&amp;ldquo;note/index&amp;rdquo;). The model does
+not need to match the controller because you&amp;rsquo;ll be working with many different
+models in your controllers.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func Load() {
+	...
+	// &amp;quot;Get&amp;quot; is the Method
+	// &amp;quot;/notepad&amp;quot; is the Path
+	router.Get(&amp;quot;/notepad&amp;quot;, Index, acl.DisallowAnon)
+	...
+}
+
+// &amp;quot;Index&amp;quot; is the Function
+func Index(w http.ResponseWriter, r *http.Request) {
+	c := flight.Context(w, r)
+
+	items, err := note.ByUserID(c.UserID)
+	if err != nil {
+		c.FlashError(err)
+		items = []note.Item{}
+	}
+
+	// &amp;quot;index&amp;quot; is the View
+	v := view.New(&amp;quot;note/index&amp;quot;)
+	v.Vars[&amp;quot;first_name&amp;quot;] = c.Sess.Values[&amp;quot;first_name&amp;quot;]
+	v.Vars[&amp;quot;items&amp;quot;] = items
+	v.Render(w, r)
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Here is the &lt;strong&gt;Load()&lt;/strong&gt; function from the &lt;strong&gt;controller/notepad&lt;/strong&gt; package:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;var (
-	uri = &amp;quot;/notepad&amp;quot;
-)
-
-func Load() {
-	c := router.Chain(acl.DisallowAnon)
-	router.Get(uri, Index, c...)
-	router.Get(uri+&amp;quot;/create&amp;quot;, Create, c...)
-	router.Post(uri, Store, c...)
-	router.Get(uri+&amp;quot;/view/:id&amp;quot;, Show, c...)
-	router.Get(uri+&amp;quot;/edit/:id&amp;quot;, Edit, c...)
-	router.Patch(uri+&amp;quot;/edit/:id&amp;quot;, Update, c...)
-	router.Delete(uri+&amp;quot;/:id&amp;quot;, Destroy, c...)
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;There are a few things to note here. The &lt;strong&gt;router&lt;/strong&gt; references the &lt;strong&gt;lib/router&lt;/strong&gt; package
-which is a wrapper for the &lt;a href=&#34;http://github.com/julienschmidt/httprouter&#34;&gt;julienschmidt/httprouter&lt;/a&gt; package.
-The &lt;strong&gt;router.Chain()&lt;/strong&gt; function uses the &lt;a href=&#34;http://github.com/justinas/alice&#34;&gt;justinas/alice&lt;/a&gt; package
-to help with middleware chaining.&lt;/p&gt;
-
-&lt;p&gt;This may start to sound like a framework, but it&amp;rsquo;s actually a good way to build your wrapper
-packages that live in the &lt;strong&gt;lib&lt;/strong&gt; folder. If you want to use a different router, you can modify
-the &lt;strong&gt;lib/router&lt;/strong&gt; package easily and you won&amp;rsquo;t have to change any code in your controllers.&lt;/p&gt;
-
-&lt;p&gt;It&amp;rsquo;s a good idea to follow a naming convention for the controller functions (Laravel developers
-will notice it&amp;rsquo;s the same convention Taylor Orwell uses).&lt;/p&gt;
-
-&lt;h3 id=&#34;these-are-a-few-things-you-can-do-with-controllers&#34;&gt;These are a few things you can do with controllers.&lt;/h3&gt;
-
-&lt;p&gt;Access a gorilla session:&lt;/p&gt;
+&lt;h2 id=&#34;access-a-session&#34;&gt;Access a Session&lt;/h2&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Get the current session
 sess := session.Instance(r)
 ...
-// Close the session after you are finished making changes
+// Save the session after you are finished making changes
 sess.Save(r, w)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Trigger 1 of 4 different types of flash messages on the next page load (no other code needed):&lt;/p&gt;
+&lt;h2 id=&#34;trigger-flash-message&#34;&gt;Trigger Flash Message&lt;/h2&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;sess.AddFlash(view.Flash{&amp;quot;Sorry, no brute force :-)&amp;quot;, view.FlashNotice})
 sess.Save(r, w) // Ensure you save the session after making a change to it
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Validate form fields are not empty:&lt;/p&gt;
+&lt;h2 id=&#34;validate-a-form&#34;&gt;Validate a Form&lt;/h2&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Ensure a user submitted all the required form fields
-if validate, missingField := view.Validate(r, []string{&amp;quot;email&amp;quot;, &amp;quot;password&amp;quot;}); !validate {
-	sess.AddFlash(view.Flash{&amp;quot;Field missing: &amp;quot; + missingField, view.FlashError})
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;if validate, missingField := form.Required(r, &amp;quot;email&amp;quot;, &amp;quot;password&amp;quot;); !validate {
+	sess.AddFlash(flash.Info{&amp;quot;Field missing: &amp;quot; + missingField, flash.Error})
 	sess.Save(r, w)
 	LoginGET(w, r)
 	return
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Render a template:&lt;/p&gt;
+&lt;h2 id=&#34;render-a-template&#34;&gt;Render a Template&lt;/h2&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Create a new view
-v := view.New(r)
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Set the template name
+v := view.New(&amp;quot;auth/login&amp;quot;)
 
-// Set the template name
-v.Name = &amp;quot;login/login&amp;quot;
-
-// Assign a variable that is accessible in the form
-v.Vars[&amp;quot;token&amp;quot;] = csrfbanana.Token(w, r, sess)
-
-// Refill any form fields from a POST operation
-view.Repopulate([]string{&amp;quot;email&amp;quot;}, r.Form, v.Vars)
+// Refill form fields from a POST operation
+form.Repopulate(r.Form, v.Vars, &amp;quot;email&amp;quot;)
 
 // Render the template
-v.Render(w)
+v.Render(w, r)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Return the flash messages during an Ajax request:&lt;/p&gt;
+&lt;h2 id=&#34;return-flash-over-ajax&#34;&gt;Return Flash over Ajax&lt;/h2&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Get session
 sess := session.Instance(r)
@@ -502,12 +791,12 @@ v := view.New(r)
 v.SendFlashes(w)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Handle the database query:&lt;/p&gt;
+&lt;h2 id=&#34;interact-with-a-model&#34;&gt;Interact with a Model&lt;/h2&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Get database result
-result, err := model.UserByEmail(email)
+result, err := user.ByEmail(email)
 
-if err == sql.ErrNoRows {
+if err == model.ErrNoResult {
 	// User does not exist
 } else if err != nil {
 	// Display error message
@@ -518,26 +807,272 @@ if err == sql.ErrNoRows {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Send an email:&lt;/p&gt;
+&lt;h2 id=&#34;send-an-email&#34;&gt;Send an Email&lt;/h2&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Email a user
-err := email.SendEmail(email.ReadConfig().From, &amp;quot;This is the subject&amp;quot;, &amp;quot;This is the body!&amp;quot;)
+err := email.Send(email.ReadConfig().From, &amp;quot;This is the subject&amp;quot;, &amp;quot;This is the body!&amp;quot;)
 if err != nil {
-	log.Println(err)
-	sess.AddFlash(view.Flash{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, view.FlashError})
-	sess.Save(r, w)
-	return
+    log.Println(err)
+    sess.AddFlash(view.Flash{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, view.FlashError})
+    sess.Save(r, w)
+    return
+}
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Models</title>
+      <link>http://blue-jay.github.io/models/</link>
+      <pubDate>Tue, 08 Mar 2016 21:07:13 +0100</pubDate>
+      
+      <guid>http://blue-jay.github.io/models/</guid>
+      <description>
+
+&lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
+
+&lt;p&gt;It&amp;rsquo;s a good idea to abstract the database layer out so if you need to make
+changes, you don&amp;rsquo;t have to look through business logic to find the queries. All
+the queries are stored in the &lt;strong&gt;model&lt;/strong&gt; folder.&lt;/p&gt;
+
+&lt;p&gt;Blue Jay supports MySQL by default, but can easily be expanded to use other
+database systems.&lt;/p&gt;
+
+&lt;h2 id=&#34;connect-to-the-database&#34;&gt;Connect to the database&lt;/h2&gt;
+
+&lt;p&gt;You only need to connect to the database once. The connection pool is
+automatically handled by the &lt;a href=&#34;https://github.com/go-sql-driver/mysql&#34;&gt;go-sql-driver/mysql&lt;/a&gt;
+package.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Connect to database
+database.Connect(config.Database)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;create-an-item&#34;&gt;Create an Item&lt;/h2&gt;
+
+&lt;p&gt;Use &lt;strong&gt;database.SQL.Exec()&lt;/strong&gt; to create an item or a table.&lt;/p&gt;
+
+&lt;h3 id=&#34;controller&#34;&gt;Controller&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;_, err := note.Create(r.FormValue(&amp;quot;note&amp;quot;), userID)
+if err != nil {
+    log.Println(err)
+    sess.AddFlash(flash.Info{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, flash.Error})
+    sess.Save(r, w)
+    Create(w, r)
+    return
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Validate a form if the Google reCAPTCHA is enabled in the config:&lt;/p&gt;
+&lt;h3 id=&#34;model&#34;&gt;Model&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Validate with Google reCAPTCHA
-if !recaptcha.Verified(r) {
-    sess.AddFlash(view.Flash{&amp;quot;reCAPTCHA invalid!&amp;quot;, view.FlashError})
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Create adds an item
+func Create(content string, userID string) (sql.Result, error) {
+    result, err := database.SQL.Exec(fmt.Sprintf(`
+        INSERT INTO %v
+        (content, user_id)
+        VALUES
+        (?,?)
+        `, table),
+        content, userID)
+    return result, model.StandardError(err)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;get-an-item-by-item-id&#34;&gt;Get an Item by Item ID&lt;/h2&gt;
+
+&lt;p&gt;Use &lt;strong&gt;database.SQL.Get()&lt;/strong&gt; to get a single item.&lt;/p&gt;
+
+&lt;h3 id=&#34;controller-1&#34;&gt;Controller&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;item, err := note.ByID(params.ByName(&amp;quot;id&amp;quot;), userID)
+if err != nil { // If the note doesn&#39;t exist
+    log.Println(err)
+    sess.AddFlash(flash.Info{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, flash.Error})
     sess.Save(r, w)
-    RegisterGET(w, r)
+    http.Redirect(w, r, uri, http.StatusFound)
     return
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;model-1&#34;&gt;Model&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// ByID gets item by ID
+func ByID(ID string, userID string) (Item, error) {
+    result := Item{}
+    err := database.SQL.Get(&amp;amp;result, fmt.Sprintf(`
+        SELECT id, content, user_id, created_at, updated_at, deleted_at
+        FROM %v
+        WHERE id = ?
+            AND user_id = ?
+            AND deleted_at IS NULL
+        LIMIT 1
+        `, table),
+        ID, userID)
+    return result, model.StandardError(err)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;get-items-by-user-id&#34;&gt;Get Items by User ID&lt;/h2&gt;
+
+&lt;p&gt;Use &lt;strong&gt;database.SQL.Select()&lt;/strong&gt; to get multiple items.&lt;/p&gt;
+
+&lt;h3 id=&#34;controller-2&#34;&gt;Controller&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;items, err := note.ByUserID(userID)
+if err != nil {
+    log.Println(err)
+    sess.AddFlash(flash.Info{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, flash.Error})
+    sess.Save(r, w)
+    items = []note.Item{}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;model-2&#34;&gt;Model&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// ByUserID gets all items for a user
+func ByUserID(userID string) ([]Item, error) {
+    var result []Item
+    err := database.SQL.Select(&amp;amp;result, fmt.Sprintf(`
+        SELECT id, content, user_id, created_at, updated_at, deleted_at
+        FROM %v
+        WHERE user_id = ?
+            AND deleted_at IS NULL
+        `, table),
+        userID)
+    return result, model.StandardError(err)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;update-an-item&#34;&gt;Update an Item&lt;/h2&gt;
+
+&lt;p&gt;Use &lt;strong&gt;database.SQL.Exec()&lt;/strong&gt; to update one or more items.&lt;/p&gt;
+
+&lt;h3 id=&#34;controller-3&#34;&gt;Controller&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;_, err := note.Update(r.FormValue(&amp;quot;note&amp;quot;), params.ByName(&amp;quot;id&amp;quot;), userID)
+if err != nil {
+    log.Println(err)
+    sess.AddFlash(flash.Info{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, flash.Error})
+    sess.Save(r, w)
+    Edit(w, r)
+    return
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;model-3&#34;&gt;Model&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Update makes changes to an existing item
+func Update(content string, ID string, userID string) (sql.Result, error) {
+    result, err := database.SQL.Exec(fmt.Sprintf(`
+        UPDATE %v
+        SET content = ?
+        WHERE id = ?
+            AND user_id = ?
+            AND deleted_at IS NULL
+        LIMIT 1
+        `, table),
+        content, ID, userID)
+    return result, model.StandardError(err)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;soft-delete-an-item&#34;&gt;Soft Delete an Item&lt;/h2&gt;
+
+&lt;p&gt;A soft delete leaves the item in the database, but marks it as deleted with a
+timestamp.&lt;/p&gt;
+
+&lt;h3 id=&#34;controller-4&#34;&gt;Controller&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;_, err := note.Delete(params.ByName(&amp;quot;id&amp;quot;), userID)
+if err != nil {
+    log.Println(err)
+    sess.AddFlash(flash.Info{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, flash.Error})
+    sess.Save(r, w)
+} else {
+    sess.AddFlash(flash.Info{&amp;quot;Item deleted.&amp;quot;, flash.Notice})
+    sess.Save(r, w)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;model-4&#34;&gt;Model&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Delete marks an item as removed
+func Delete(ID string, userID string) (sql.Result, error) {
+    result, err := database.SQL.Exec(fmt.Sprintf(`
+        UPDATE %v
+        SET deleted_at = NOW()
+        WHERE id = ?
+            AND user_id = ?
+            AND deleted_at IS NULL
+        LIMIT 1
+        `, table),
+        ID, userID)
+    return result, model.StandardError(err)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;hard-delete-an-item&#34;&gt;Hard Delete an Item&lt;/h2&gt;
+
+&lt;p&gt;A hard delete removes the item from the database.&lt;/p&gt;
+
+&lt;h3 id=&#34;controller-5&#34;&gt;Controller&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;_, err := note.DeleteHard(params.ByName(&amp;quot;id&amp;quot;), userID)
+if err != nil {
+    log.Println(err)
+    sess.AddFlash(flash.Info{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, flash.Error})
+    sess.Save(r, w)
+} else {
+    sess.AddFlash(flash.Info{&amp;quot;Item deleted.&amp;quot;, flash.Notice})
+    sess.Save(r, w)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;model-5&#34;&gt;Model&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Delete removes an item
+func DeleteHard(ID string, userID string) (sql.Result, error) {
+    result, err := database.SQL.Exec(fmt.Sprintf(`
+        DELETE FROM %v
+        WHERE id = ?
+            AND user_id = ?
+            AND deleted_at IS NULL
+        `, table),
+        ID, userID)
+    return result, model.StandardError(err)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;handling-errors&#34;&gt;Handling Errors&lt;/h2&gt;
+
+&lt;p&gt;You can define your own errors for your models in the
+&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/model/model.go&#34;&gt;model&lt;/a&gt;
+package. This is another abstraction that makes it easy to change out database
+systems without having to rewrite code in your controllers.&lt;/p&gt;
+
+&lt;p&gt;You can manage the errors like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;var (
+    // ErrNoResult is when no results are found
+    ErrNoResult = errors.New(&amp;quot;Result not found.&amp;quot;)
+)
+
+// StrandardError returns a model defined error
+func StandardError(err error) error {
+    if err == sql.ErrNoRows {
+        return ErrNoResult
+    }
+
+    return err
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In your controller, you can check the error like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;if err == model.ErrNoResult {
+    sess.AddFlash(flash.Info{&amp;quot;Password is incorrect&amp;quot;, flash.Warning})
+    sess.Save(r, w)
 }
 &lt;/code&gt;&lt;/pre&gt;
 </description>
@@ -710,6 +1245,19 @@ You are not logged in.
 
 &amp;lt;!-- Code is added before the closing &amp;lt;/body&amp;gt; tag --&amp;gt;
 {{define &amp;quot;foot&amp;quot;}}{{JS &amp;quot;//www.google.com/recaptcha/api.js&amp;quot;}}{{end}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;javascript&#34;&gt;JavaScript&lt;/h2&gt;
+
+&lt;p&gt;There are a few built-in functions that you can use to trigger a flash notification using JavaScript.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;flashError(&amp;quot;An error occurred on the server.&amp;quot;);
+
+flashSuccess(&amp;quot;Item added!&amp;quot;);
+
+flashNotice(&amp;quot;Item deleted.&amp;quot;);
+
+flashWarning(&amp;quot;Field missing: email&amp;quot;);
 &lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>

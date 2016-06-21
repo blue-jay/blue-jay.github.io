@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Models on Blue Jay</title>
+    <link>http://blue-jay.github.io/models/</link>
+    <description>Recent content in Models on Blue Jay</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 08 Mar 2016 21:07:13 +0100</lastBuildDate>
+    <atom:link href="http://blue-jay.github.io/models/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Models</title>
+      <link>http://blue-jay.github.io/models/</link>
+      <pubDate>Tue, 08 Mar 2016 21:07:13 +0100</pubDate>
+      
+      <guid>http://blue-jay.github.io/models/</guid>
+      <description>
+
+&lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
+
+&lt;p&gt;It&amp;rsquo;s a good idea to abstract the database layer out so if you need to make
+changes, you don&amp;rsquo;t have to look through business logic to find the queries. All
+the queries are stored in the &lt;strong&gt;model&lt;/strong&gt; folder.&lt;/p&gt;
+
+&lt;p&gt;Blue Jay supports MySQL by default, but can easily be expanded to use other
+database systems.&lt;/p&gt;
+
+&lt;h2 id=&#34;connect-to-the-database&#34;&gt;Connect to the database&lt;/h2&gt;
+
+&lt;p&gt;You only need to connect to the database once. The connection pool is
+automatically handled by the &lt;a href=&#34;https://github.com/go-sql-driver/mysql&#34;&gt;go-sql-driver/mysql&lt;/a&gt;
+package.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Connect to database
+database.Connect(config.Database)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;create-an-item&#34;&gt;Create an Item&lt;/h2&gt;
+
+&lt;p&gt;Use &lt;strong&gt;database.SQL.Exec()&lt;/strong&gt; to create an item or a table.&lt;/p&gt;
+
+&lt;h3 id=&#34;controller&#34;&gt;Controller&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;_, err := note.Create(r.FormValue(&amp;quot;note&amp;quot;), userID)
+if err != nil {
+    log.Println(err)
+    sess.AddFlash(flash.Info{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, flash.Error})
+    sess.Save(r, w)
+    Create(w, r)
+    return
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;model&#34;&gt;Model&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Create adds an item
+func Create(content string, userID string) (sql.Result, error) {
+    result, err := database.SQL.Exec(fmt.Sprintf(`
+        INSERT INTO %v
+        (content, user_id)
+        VALUES
+        (?,?)
+        `, table),
+        content, userID)
+    return result, model.StandardError(err)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;get-an-item-by-item-id&#34;&gt;Get an Item by Item ID&lt;/h2&gt;
+
+&lt;p&gt;Use &lt;strong&gt;database.SQL.Get()&lt;/strong&gt; to get a single item.&lt;/p&gt;
+
+&lt;h3 id=&#34;controller-1&#34;&gt;Controller&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;item, err := note.ByID(params.ByName(&amp;quot;id&amp;quot;), userID)
+if err != nil { // If the note doesn&#39;t exist
+    log.Println(err)
+    sess.AddFlash(flash.Info{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, flash.Error})
+    sess.Save(r, w)
+    http.Redirect(w, r, uri, http.StatusFound)
+    return
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;model-1&#34;&gt;Model&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// ByID gets item by ID
+func ByID(ID string, userID string) (Item, error) {
+    result := Item{}
+    err := database.SQL.Get(&amp;amp;result, fmt.Sprintf(`
+        SELECT id, content, user_id, created_at, updated_at, deleted_at
+        FROM %v
+        WHERE id = ?
+            AND user_id = ?
+            AND deleted_at IS NULL
+        LIMIT 1
+        `, table),
+        ID, userID)
+    return result, model.StandardError(err)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;get-items-by-user-id&#34;&gt;Get Items by User ID&lt;/h2&gt;
+
+&lt;p&gt;Use &lt;strong&gt;database.SQL.Select()&lt;/strong&gt; to get multiple items.&lt;/p&gt;
+
+&lt;h3 id=&#34;controller-2&#34;&gt;Controller&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;items, err := note.ByUserID(userID)
+if err != nil {
+    log.Println(err)
+    sess.AddFlash(flash.Info{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, flash.Error})
+    sess.Save(r, w)
+    items = []note.Item{}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;model-2&#34;&gt;Model&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// ByUserID gets all items for a user
+func ByUserID(userID string) ([]Item, error) {
+    var result []Item
+    err := database.SQL.Select(&amp;amp;result, fmt.Sprintf(`
+        SELECT id, content, user_id, created_at, updated_at, deleted_at
+        FROM %v
+        WHERE user_id = ?
+            AND deleted_at IS NULL
+        `, table),
+        userID)
+    return result, model.StandardError(err)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;update-an-item&#34;&gt;Update an Item&lt;/h2&gt;
+
+&lt;p&gt;Use &lt;strong&gt;database.SQL.Exec()&lt;/strong&gt; to update one or more items.&lt;/p&gt;
+
+&lt;h3 id=&#34;controller-3&#34;&gt;Controller&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;_, err := note.Update(r.FormValue(&amp;quot;note&amp;quot;), params.ByName(&amp;quot;id&amp;quot;), userID)
+if err != nil {
+    log.Println(err)
+    sess.AddFlash(flash.Info{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, flash.Error})
+    sess.Save(r, w)
+    Edit(w, r)
+    return
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;model-3&#34;&gt;Model&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Update makes changes to an existing item
+func Update(content string, ID string, userID string) (sql.Result, error) {
+    result, err := database.SQL.Exec(fmt.Sprintf(`
+        UPDATE %v
+        SET content = ?
+        WHERE id = ?
+            AND user_id = ?
+            AND deleted_at IS NULL
+        LIMIT 1
+        `, table),
+        content, ID, userID)
+    return result, model.StandardError(err)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;soft-delete-an-item&#34;&gt;Soft Delete an Item&lt;/h2&gt;
+
+&lt;p&gt;A soft delete leaves the item in the database, but marks it as deleted with a
+timestamp.&lt;/p&gt;
+
+&lt;h3 id=&#34;controller-4&#34;&gt;Controller&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;_, err := note.Delete(params.ByName(&amp;quot;id&amp;quot;), userID)
+if err != nil {
+    log.Println(err)
+    sess.AddFlash(flash.Info{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, flash.Error})
+    sess.Save(r, w)
+} else {
+    sess.AddFlash(flash.Info{&amp;quot;Item deleted.&amp;quot;, flash.Notice})
+    sess.Save(r, w)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;model-4&#34;&gt;Model&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Delete marks an item as removed
+func Delete(ID string, userID string) (sql.Result, error) {
+    result, err := database.SQL.Exec(fmt.Sprintf(`
+        UPDATE %v
+        SET deleted_at = NOW()
+        WHERE id = ?
+            AND user_id = ?
+            AND deleted_at IS NULL
+        LIMIT 1
+        `, table),
+        ID, userID)
+    return result, model.StandardError(err)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;hard-delete-an-item&#34;&gt;Hard Delete an Item&lt;/h2&gt;
+
+&lt;p&gt;A hard delete removes the item from the database.&lt;/p&gt;
+
+&lt;h3 id=&#34;controller-5&#34;&gt;Controller&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;_, err := note.DeleteHard(params.ByName(&amp;quot;id&amp;quot;), userID)
+if err != nil {
+    log.Println(err)
+    sess.AddFlash(flash.Info{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, flash.Error})
+    sess.Save(r, w)
+} else {
+    sess.AddFlash(flash.Info{&amp;quot;Item deleted.&amp;quot;, flash.Notice})
+    sess.Save(r, w)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;model-5&#34;&gt;Model&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Delete removes an item
+func DeleteHard(ID string, userID string) (sql.Result, error) {
+    result, err := database.SQL.Exec(fmt.Sprintf(`
+        DELETE FROM %v
+        WHERE id = ?
+            AND user_id = ?
+            AND deleted_at IS NULL
+        `, table),
+        ID, userID)
+    return result, model.StandardError(err)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;handling-errors&#34;&gt;Handling Errors&lt;/h2&gt;
+
+&lt;p&gt;You can define your own errors for your models in the
+&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/model/model.go&#34;&gt;model&lt;/a&gt;
+package. This is another abstraction that makes it easy to change out database
+systems without having to rewrite code in your controllers.&lt;/p&gt;
+
+&lt;p&gt;You can manage the errors like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;var (
+    // ErrNoResult is when no results are found
+    ErrNoResult = errors.New(&amp;quot;Result not found.&amp;quot;)
+)
+
+// StrandardError returns a model defined error
+func StandardError(err error) error {
+    if err == sql.ErrNoRows {
+        return ErrNoResult
+    }
+
+    return err
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In your controller, you can check the error like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;if err == model.ErrNoResult {
+    sess.AddFlash(flash.Info{&amp;quot;Password is incorrect&amp;quot;, flash.Warning})
+    sess.Save(r, w)
+}
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

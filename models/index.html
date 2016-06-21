@@ -8,18 +8,18 @@
   <head lang="en-us">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
-    <title>Views - Blue Jay</title>
+    <title>Models - Blue Jay</title>
     <meta name="generator" content="Hugo 0.15" />
 
     
     <meta name="description" content="Blue Jay is a toolkit written in Go for the web.">
     
-    <link rel="canonical" href="http://blue-jay.github.io/views/">
+    <link rel="canonical" href="http://blue-jay.github.io/models/">
     
     <meta name="author" content="Joseph Spurrier">
     
 
-    <meta property="og:url" content="http://blue-jay.github.io/views/">
+    <meta property="og:url" content="http://blue-jay.github.io/models/">
     <meta property="og:title" content="Blue Jay">
     <meta property="og:image" content="http://blue-jay.github.io/images/bluejaylogo.png">
     <meta name="apple-mobile-web-app-title" content="Blue Jay">
@@ -99,7 +99,7 @@
     </div>
     <div class="stretch">
       <div class="title">
-        View
+        Model
       </div>
     </div>
 
@@ -267,11 +267,14 @@
 
 
 
-<a  title="Models" href="http://blue-jay.github.io/models/">
+<a class="current" title="Models" href="http://blue-jay.github.io/models/">
 	
 	Models
 </a>
 
+
+<ul id="scrollspy">
+</ul>
 
   
 </li>
@@ -284,14 +287,11 @@
 
 
 
-<a class="current" title="Views" href="http://blue-jay.github.io/views/">
+<a  title="Views" href="http://blue-jay.github.io/views/">
 	
 	Views
 </a>
 
-
-<ul id="scrollspy">
-</ul>
 
   
 </li>
@@ -325,182 +325,255 @@
 
 	<article class="article">
 		<div class="wrapper">
-			<h1>Views </h1>
+			<h1>Models </h1>
 
 			
 
 <h2 id="basic-usage">Basic Usage</h2>
 
-<p>Views contain the HTML served by your application and separate your controller / application logic from your presentation logic. The views are parsed by the <a href="https://golang.org/pkg/html/template/">html/template</a> package.</p>
+<p>It&rsquo;s a good idea to abstract the database layer out so if you need to make
+changes, you don&rsquo;t have to look through business logic to find the queries. All
+the queries are stored in the <strong>model</strong> folder.</p>
 
-<p>A view should include the four <strong>define</strong> blocks (<strong>title</strong>, <strong>head</strong>, <strong>content</strong>, and <strong>foot</strong>) and may look like this:</p>
+<p>Blue Jay supports MySQL by default, but can easily be expanded to use other
+database systems.</p>
 
-<pre><code class="language-html">{{define &quot;title&quot;}}Welcome{{end}}
-{{define &quot;head&quot;}}{{end}}
-{{define &quot;content&quot;}}
-&lt;div class=&quot;container&quot;&gt;
-	&lt;div class=&quot;page-header&quot;&gt;
-		&lt;h1&gt;Hello, {{.first_name}}&lt;/h1&gt;
-	&lt;/div&gt;
-	&lt;p&gt;You have arrived. Click {{LINK &quot;notepad&quot; &quot;here&quot;}} to view your notepad.&lt;/p&gt;
-	{{template &quot;footer&quot; .}}
-&lt;/div&gt;
-{{end}}
-{{define &quot;foot&quot;}}{{end}}
+<h2 id="connect-to-the-database">Connect to the database</h2>
+
+<p>You only need to connect to the database once. The connection pool is
+automatically handled by the <a href="https://github.com/go-sql-driver/mysql">go-sql-driver/mysql</a>
+package.</p>
+
+<pre><code class="language-go">// Connect to database
+database.Connect(config.Database)
 </code></pre>
 
-<p>Since this view is stored at <strong>view/index/auth.tmpl</strong>, we may render it using the <strong>view</strong> helper package like so:</p>
+<h2 id="create-an-item">Create an Item</h2>
 
-<pre><code class="language-go">// import &quot;github.com/blue-jay/blueprint/lib/view&quot;
-v := view.New(&quot;index/auth&quot;)
-v.Vars[&quot;first_name&quot;] = session.Values[&quot;first_name&quot;]
-v.Render(w, r)
+<p>Use <strong>database.SQL.Exec()</strong> to create an item or a table.</p>
+
+<h3 id="controller">Controller</h3>
+
+<pre><code class="language-go">_, err := note.Create(r.FormValue(&quot;note&quot;), userID)
+if err != nil {
+    log.Println(err)
+    sess.AddFlash(flash.Info{&quot;An error occurred on the server. Please try again later.&quot;, flash.Error})
+    sess.Save(r, w)
+    Create(w, r)
+    return
+}
 </code></pre>
 
-<p>If you don&rsquo;t have to pass any variables to the template, you could shorten it like this:</p>
+<h3 id="model">Model</h3>
 
-<pre><code class="language-go">// import &quot;github.com/blue-jay/blueprint/lib/view&quot;
-view.New(&quot;index/auth&quot;).Render(w, r)
+<pre><code class="language-go">// Create adds an item
+func Create(content string, userID string) (sql.Result, error) {
+    result, err := database.SQL.Exec(fmt.Sprintf(`
+        INSERT INTO %v
+        (content, user_id)
+        VALUES
+        (?,?)
+        `, table),
+        content, userID)
+    return result, model.StandardError(err)
+}
 </code></pre>
 
-<h2 id="base-template">Base Template</h2>
+<h2 id="get-an-item-by-item-id">Get an Item by Item ID</h2>
 
-<p>By default, the <strong>view/base.tmpl</strong> template is used as the base template (as specified in env.json). If you want to
-change the base template for a template, you can try this:</p>
+<p>Use <strong>database.SQL.Get()</strong> to get a single item.</p>
 
-<pre><code class="language-go">v := view.New(&quot;index/auth&quot;).Base(&quot;alternate&quot;)
-v.Render(w, r)
+<h3 id="controller-1">Controller</h3>
+
+<pre><code class="language-go">item, err := note.ByID(params.ByName(&quot;id&quot;), userID)
+if err != nil { // If the note doesn't exist
+    log.Println(err)
+    sess.AddFlash(flash.Info{&quot;An error occurred on the server. Please try again later.&quot;, flash.Error})
+    sess.Save(r, w)
+    http.Redirect(w, r, uri, http.StatusFound)
+    return
+}
 </code></pre>
 
-<p>A shorter way to specify the view with a different base template and then render is like this:</p>
+<h3 id="model-1">Model</h3>
 
-<pre><code class="language-go">view.New(&quot;about/about&quot;).Base(&quot;alternate&quot;).Render(w, r)
+<pre><code class="language-go">// ByID gets item by ID
+func ByID(ID string, userID string) (Item, error) {
+    result := Item{}
+    err := database.SQL.Get(&amp;result, fmt.Sprintf(`
+        SELECT id, content, user_id, created_at, updated_at, deleted_at
+        FROM %v
+        WHERE id = ?
+            AND user_id = ?
+            AND deleted_at IS NULL
+        LIMIT 1
+        `, table),
+        ID, userID)
+    return result, model.StandardError(err)
+}
 </code></pre>
 
-<h2 id="view-package">View Package</h2>
+<h2 id="get-items-by-user-id">Get Items by User ID</h2>
 
-<p>The optional <strong>lib/view</strong> package is a wrapper for the Go <a href="https://golang.org/pkg/html/template/">html/template</a> package
-and provides the following:</p>
+<p>Use <strong>database.SQL.Select()</strong> to get multiple items.</p>
 
-<ul>
-<li>thread-safe template caching</li>
-<li>easy way to extend the list of functions available in templates</li>
-<li>easy way to modify the variables available in templates</li>
-</ul>
+<h3 id="controller-2">Controller</h3>
 
-<p>The set up of the <strong>view</strong> package is handled by the <strong>bootstrap</strong> package:</p>
+<pre><code class="language-go">items, err := note.ByUserID(userID)
+if err != nil {
+    log.Println(err)
+    sess.AddFlash(flash.Info{&quot;An error occurred on the server. Please try again later.&quot;, flash.Error})
+    sess.Save(r, w)
+    items = []note.Item{}
+}
+</code></pre>
 
-<pre><code class="language-go">// import &quot;github.com/blue-jay/blueprint/lib/view&quot;
-// Set up the views
-view.SetConfig(config.View)
-view.SetTemplates(config.Template.Root, config.Template.Children)
+<h3 id="model-2">Model</h3>
 
-// Set up the functions for the views
-view.SetFunctions(
-	extend.Assets(config.View),
-	extend.Link(config.View),
-	extend.NoEscape(),
-	extend.PrettyTime(),
+<pre><code class="language-go">// ByUserID gets all items for a user
+func ByUserID(userID string) ([]Item, error) {
+    var result []Item
+    err := database.SQL.Select(&amp;result, fmt.Sprintf(`
+        SELECT id, content, user_id, created_at, updated_at, deleted_at
+        FROM %v
+        WHERE user_id = ?
+            AND deleted_at IS NULL
+        `, table),
+        userID)
+    return result, model.StandardError(err)
+}
+</code></pre>
+
+<h2 id="update-an-item">Update an Item</h2>
+
+<p>Use <strong>database.SQL.Exec()</strong> to update one or more items.</p>
+
+<h3 id="controller-3">Controller</h3>
+
+<pre><code class="language-go">_, err := note.Update(r.FormValue(&quot;note&quot;), params.ByName(&quot;id&quot;), userID)
+if err != nil {
+    log.Println(err)
+    sess.AddFlash(flash.Info{&quot;An error occurred on the server. Please try again later.&quot;, flash.Error})
+    sess.Save(r, w)
+    Edit(w, r)
+    return
+}
+</code></pre>
+
+<h3 id="model-3">Model</h3>
+
+<pre><code class="language-go">// Update makes changes to an existing item
+func Update(content string, ID string, userID string) (sql.Result, error) {
+    result, err := database.SQL.Exec(fmt.Sprintf(`
+        UPDATE %v
+        SET content = ?
+        WHERE id = ?
+            AND user_id = ?
+            AND deleted_at IS NULL
+        LIMIT 1
+        `, table),
+        content, ID, userID)
+    return result, model.StandardError(err)
+}
+</code></pre>
+
+<h2 id="soft-delete-an-item">Soft Delete an Item</h2>
+
+<p>A soft delete leaves the item in the database, but marks it as deleted with a
+timestamp.</p>
+
+<h3 id="controller-4">Controller</h3>
+
+<pre><code class="language-go">_, err := note.Delete(params.ByName(&quot;id&quot;), userID)
+if err != nil {
+    log.Println(err)
+    sess.AddFlash(flash.Info{&quot;An error occurred on the server. Please try again later.&quot;, flash.Error})
+    sess.Save(r, w)
+} else {
+    sess.AddFlash(flash.Info{&quot;Item deleted.&quot;, flash.Notice})
+    sess.Save(r, w)
+}
+</code></pre>
+
+<h3 id="model-4">Model</h3>
+
+<pre><code class="language-go">// Delete marks an item as removed
+func Delete(ID string, userID string) (sql.Result, error) {
+    result, err := database.SQL.Exec(fmt.Sprintf(`
+        UPDATE %v
+        SET deleted_at = NOW()
+        WHERE id = ?
+            AND user_id = ?
+            AND deleted_at IS NULL
+        LIMIT 1
+        `, table),
+        ID, userID)
+    return result, model.StandardError(err)
+}
+</code></pre>
+
+<h2 id="hard-delete-an-item">Hard Delete an Item</h2>
+
+<p>A hard delete removes the item from the database.</p>
+
+<h3 id="controller-5">Controller</h3>
+
+<pre><code class="language-go">_, err := note.DeleteHard(params.ByName(&quot;id&quot;), userID)
+if err != nil {
+    log.Println(err)
+    sess.AddFlash(flash.Info{&quot;An error occurred on the server. Please try again later.&quot;, flash.Error})
+    sess.Save(r, w)
+} else {
+    sess.AddFlash(flash.Info{&quot;Item deleted.&quot;, flash.Notice})
+    sess.Save(r, w)
+}
+</code></pre>
+
+<h3 id="model-5">Model</h3>
+
+<pre><code class="language-go">// Delete removes an item
+func DeleteHard(ID string, userID string) (sql.Result, error) {
+    result, err := database.SQL.Exec(fmt.Sprintf(`
+        DELETE FROM %v
+        WHERE id = ?
+            AND user_id = ?
+            AND deleted_at IS NULL
+        `, table),
+        ID, userID)
+    return result, model.StandardError(err)
+}
+</code></pre>
+
+<h2 id="handling-errors">Handling Errors</h2>
+
+<p>You can define your own errors for your models in the
+<a href="https://github.com/blue-jay/blueprint/blob/master/model/model.go">model</a>
+package. This is another abstraction that makes it easy to change out database
+systems without having to rewrite code in your controllers.</p>
+
+<p>You can manage the errors like this:</p>
+
+<pre><code class="language-go">var (
+    // ErrNoResult is when no results are found
+    ErrNoResult = errors.New(&quot;Result not found.&quot;)
 )
 
-// Set up the variables for the views
-view.SetVariables(
-	modify.AuthLevel,
-	modify.BaseURI,
-	modify.Token,
-	flash.Modify,
-)
+// StrandardError returns a model defined error
+func StandardError(err error) error {
+    if err == sql.ErrNoRows {
+        return ErrNoResult
+    }
+
+    return err
+}
 </code></pre>
 
-<h2 id="organization">Organization</h2>
+<p>In your controller, you can check the error like this:</p>
 
-<p>The HTML templates are organized into folders under the <strong>view</strong> folder:</p>
-
-<pre><code class="language-text">about/about.tmpl	- quick blurb about the app
-auth/login.tmpl		- login page
-auth/register.tmpl	- register page
-index/anon.tmpl		- public home page
-index/auth.tmpl		- home page once you login
-note/create.tmpl	- create a note
-note/edit.tmpl		- edit a note
-note/index.tmpl		- view all notes
-note/show.tmpl		- view a note
-partial/footer.tmpl	- footer at the bottom of all pages
-partial/menu.tmpl	- menu at the top of all pages
-base.tmpl			- base template for all pages
-</code></pre>
-
-<h2 id="included-functions">Included Functions</h2>
-
-<p>There are a few functions that are included to make working with the templates
-and static files easier:</p>
-
-<pre><code class="language-html">&lt;!-- CSS files with timestamps --&gt;
-{{CSS &quot;static/css/normalize3.0.0.min.css&quot;}}
-parses to
-&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;/static/css/normalize3.0.0.min.css?1435528339&quot; /&gt;
-
-&lt;!-- JS files with timestamps --&gt;
-{{JS &quot;static/js/jquery1.11.0.min.js&quot;}}
-parses to
-&lt;script type=&quot;text/javascript&quot; src=&quot;/static/js/jquery1.11.0.min.js?1435528404&quot;&gt;&lt;/script&gt;
-
-&lt;!-- Hyperlinks --&gt;
-{{LINK &quot;register&quot; &quot;Create a new account.&quot;}}
-parses to
-&lt;a href=&quot;/register&quot;&gt;Create a new account.&lt;/a&gt;
-
-&lt;!-- Output an unescaped variable (not a safe idea, but it is useful when troubleshooting) --&gt;
-{{.SomeVariable | NOESCAPE}}
-
-&lt;!-- Time format --&gt;
-{{.SomeTime | PRETTYTIME}}
-parses to format
-3:04 PM 01/02/2006
-</code></pre>
-
-<h2 id="included-variables">Included Variables</h2>
-
-<p>There are a few variables you can use in templates as well:</p>
-
-<pre><code class="language-html">&lt;!-- Use AuthLevel=auth to determine if a user is logged in (if session.Values[&quot;id&quot;] != nil) --&gt;
-{{if eq .AuthLevel &quot;auth&quot;}}
-You are logged in.
-{{else}}
-You are not logged in.
-{{end}}
-
-&lt;!-- Use BaseURI to print the base URL specified in the env.json file --&gt;
-&lt;li&gt;&lt;a href=&quot;{{.BaseURI}}about&quot;&gt;About&lt;/a&gt;&lt;/li&gt;
-
-&lt;!-- Use token to output the CSRF token in a form --&gt;
-&lt;input type=&quot;hidden&quot; name=&quot;token&quot; value=&quot;{{.token}}&quot;&gt;
-</code></pre>
-
-<h2 id="header-and-footer">Header and Footer</h2>
-
-<p>It&rsquo;s also easy to add template-specific code before the closing </head> and </body> tags:</p>
-
-<pre><code class="language-html">&lt;!-- Code is added before the closing &lt;/head&gt; tag --&gt;
-{{define &quot;head&quot;}}&lt;meta name=&quot;robots&quot; content=&quot;noindex&quot;&gt;{{end}}
-
-...
-
-&lt;!-- Code is added before the closing &lt;/body&gt; tag --&gt;
-{{define &quot;foot&quot;}}{{JS &quot;//www.google.com/recaptcha/api.js&quot;}}{{end}}
-</code></pre>
-
-<h2 id="javascript">JavaScript</h2>
-
-<p>There are a few built-in functions that you can use to trigger a flash notification using JavaScript.</p>
-
-<pre><code class="language-javascript">flashError(&quot;An error occurred on the server.&quot;);
-
-flashSuccess(&quot;Item added!&quot;);
-
-flashNotice(&quot;Item deleted.&quot;);
-
-flashWarning(&quot;Field missing: email&quot;);
+<pre><code class="language-go">if err == model.ErrNoResult {
+    sess.AddFlash(flash.Info{&quot;Password is incorrect&quot;, flash.Warning})
+    sess.Save(r, w)
+}
 </code></pre>
 
 			
@@ -522,7 +595,7 @@ flashWarning(&quot;Field missing: email&quot;);
 <nav class="pagination" aria-label="Footer">
   <div class="previous">
   
-      <a href="http://blue-jay.github.io/models/" title="Models">
+      <a href="http://blue-jay.github.io/controllers/" title="Controllers">
         <span class="direction">
           Previous
         </span>
@@ -532,7 +605,7 @@ flashWarning(&quot;Field missing: email&quot;);
           </div>
           <div class="stretch">
             <div class="title">
-              Models
+              Controllers
             </div>
           </div>
         </div>
@@ -541,6 +614,22 @@ flashWarning(&quot;Field missing: email&quot;);
   </div>
 
   <div class="next">
+  
+      <a href="http://blue-jay.github.io/views/" title="Views">
+        <span class="direction">
+          Next
+        </span>
+        <div class="page">
+          <div class="stretch">
+            <div class="title">
+              Views
+            </div>
+          </div>
+          <div class="button button-next" role="button" aria-label="Next">
+            <i class="icon icon-forward"></i>
+          </div>
+        </div>
+      </a>
   
   </div>
 </nav>

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Middlewares on Blue Jay</title>
+    <link>http://blue-jay.github.io/middleware/</link>
+    <description>Recent content in Middlewares on Blue Jay</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 20 Jun 2016 21:07:13 +0100</lastBuildDate>
+    <atom:link href="http://blue-jay.github.io/middleware/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Middleware</title>
+      <link>http://blue-jay.github.io/middleware/</link>
+      <pubDate>Mon, 20 Jun 2016 21:07:13 +0100</pubDate>
+      
+      <guid>http://blue-jay.github.io/middleware/</guid>
+      <description>
+
+&lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
+
+&lt;p&gt;Middleware, in the context of Go, is applied during routing to provide
+features like request/response logging, access controls lists (ACLs), and
+header modification. Middleware is either applied to every request (for request
+logging) or specified routes (for ACLs).&lt;/p&gt;
+
+&lt;p&gt;There are a few pieces of middleware included. The package called csrfbanana
+protects against Cross-Site Request Forgery attacks and prevents double submits.
+The package httprouterwrapper provides helper functions to make funcs compatible
+with httprouter. The package logrequest will log every request made against the
+website to the console. The package pprofhandler enables pprof so it will work
+with httprouter.&lt;/p&gt;
+
+&lt;h2 id=&#34;creating-middleware&#34;&gt;Creating Middleware&lt;/h2&gt;
+
+&lt;p&gt;An example of a piece of middleware that is applied to every request is
+&lt;strong&gt;lib/middleware/logrequest&lt;/strong&gt;. When a page is requested, the middleware will
+print to the console the time of the request, remote IP address, HTTP method,
+and the URL requested.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/lib/middleware/logrequest/logrequest.go&#34;&gt;Source&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package logrequest
+
+import (
+    &amp;quot;fmt&amp;quot;
+    &amp;quot;net/http&amp;quot;
+    &amp;quot;time&amp;quot;
+)
+
+// Handler will log the HTTP requests
+func Handler(next http.Handler) http.Handler {
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        // Log the request
+        fmt.Println(time.Now().Format(&amp;quot;2006-01-02 03:04:05 PM&amp;quot;), r.RemoteAddr, r.Method, r.URL)
+        next.ServeHTTP(w, r)
+    })
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can use this template for writing your own middleware:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Handler will log the HTTP requests
+func Handler(next http.Handler) http.Handler {
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        // Logic BEFORE the other handlers and function goes here
+        next.ServeHTTP(w, r)
+        // Logic AFTER the other handlers and function goes here
+    })
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;chaining&#34;&gt;Chaining&lt;/h2&gt;
+
+&lt;p&gt;Chaining prevents middleware from stacking up which is hard to read.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;return context.ClearHandler(rest.Handler(logrequest.Handler(setUpBanana)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Before &lt;a href=&#34;https://github.com/justinas/alice&#34;&gt;justinas/alice&lt;/a&gt;, a workaround was to
+use the variable and reassign it multiple times like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;h = setUpBanana(h)
+h = logrequest.Handler(h)
+h = rest.Handler(h)
+return context.ClearHandler(h)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In &lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/controller/notepad/notepad.go&#34;&gt;controller/notepad&lt;/a&gt;,
+the application uses the &lt;strong&gt;router.ChainHandler()&lt;/strong&gt; function. The function is a wrapper for
+the &lt;a href=&#34;https://github.com/justinas/alice&#34;&gt;justinas/alice&lt;/a&gt; package which makes
+using middleware more scalable and a little &amp;ldquo;prettier&amp;rdquo;. If you look at the
+&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/bootstrap/bootstrap.go&#34;&gt;bootstrap&lt;/a&gt;
+package, you&amp;rsquo;ll see the &lt;strong&gt;ChainHandler()&lt;/strong&gt; function.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Middleware contains the middleware that applies to every request
+func SetUpMiddleware(h http.Handler) http.Handler {
+    return router.ChainHandler( // Chain middleware, bottom runs first
+        context.ClearHandler, // Clear handler for Gorilla Context
+        rest.Handler,         // Support changing HTTP method sent via form input
+        logrequest.Handler,   // Log every request
+        setUpBanana)          // Prevent CSRF and double submits
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;There is also a &lt;strong&gt;Chain()&lt;/strong&gt; function that can be used to chain middleware for routes
+or to pass to &lt;strong&gt;ChainHandler()&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Apply middleware to routes individually
+router.Get(&amp;quot;/notepad&amp;quot;, Index, acl.DisallowAnon, logrequest.Handler)
+router.Get(&amp;quot;/notepad/create&amp;quot;, Create, acl.DisallowAnon, logrequest.Handler)
+
+// Use Chain() to apply middleware
+c := router.Chain(acl.DisallowAnon, logrequest.Handler)
+router.Get(&amp;quot;/notepad&amp;quot;, Index, c...)
+router.Get(&amp;quot;/notepad/create&amp;quot;, Create, c...)
+
+// Pass Chain() to ChainHandler()
+c := router.Chain( // Chain middleware, bottom runs first
+    context.ClearHandler, // Clear handler for Gorilla Context
+    rest.Handler,         // Support changing HTTP method sent via form input
+    logrequest.Handler,   // Log every request
+    setUpBanana)          // Prevent CSRF and double submits
+return router.ChainHandler(c...)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;ChainHandler()&lt;/strong&gt; accepts one or more of the http.Handler type and returns a
+http.Handler.
+&lt;strong&gt;Chain()&lt;/strong&gt; accepts one or more of the http.Handler type and returns an array of
+the alice.Constructor type.&lt;/p&gt;
+
+&lt;h2 id=&#34;apply-to-every-request&#34;&gt;Apply to Every Request&lt;/h2&gt;
+
+&lt;p&gt;In &lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/blueprint.go&#34;&gt;blueprint.go&lt;/a&gt;,
+the application calls &lt;strong&gt;bootstrap.SetUpMiddleware(router.Instance())&lt;/strong&gt; which
+applies the middleware to the router. The middleware is called on every
+request.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/bootstrap/bootstrap.go&#34;&gt;Source&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Middleware contains the middleware that applies to every request
+func SetUpMiddleware(h http.Handler) http.Handler {
+    return router.ChainHandler( // Chain middleware, bottom runs first
+        context.ClearHandler, // Clear handler for Gorilla Context
+        rest.Handler,         // Support changing HTTP method sent via form input
+        logrequest.Handler,   // Log every request
+        setUpBanana)          // Prevent CSRF and double submits
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;apply-to-specific-routes&#34;&gt;Apply to Specific Routes&lt;/h2&gt;
+
+&lt;p&gt;In &lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/controller/notepad/notepad.go&#34;&gt;controller/notepad&lt;/a&gt;,
+the application creates a chain of middleware and then
+applies it to only certain routes. In this scenario, the pages are only
+accessible if the user is authenticated.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/controller/notepad/notepad.go&#34;&gt;Source&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func Load() {
+    // Add middleware that disallows anonymous access
+    c := router.Chain(acl.DisallowAnon)
+
+    // Map HTTP methods and URLs to functions wrapped in the middleware chain
+    router.Get(&amp;quot;/notepad&amp;quot;, Index, c...)
+    router.Get(&amp;quot;/notepad/create&amp;quot;, Create, c...)
+    router.Post(&amp;quot;/notepad&amp;quot;, Store, c...)
+    router.Get(&amp;quot;/notepad/view/:id&amp;quot;, Show, c...)
+    router.Get(&amp;quot;/notepad/edit/:id&amp;quot;, Edit, c...)
+    router.Patch(&amp;quot;/notepad/edit/:id&amp;quot;, Update, c...)
+    router.Delete(&amp;quot;/notepad/:id&amp;quot;, Destroy, c...)
+}
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

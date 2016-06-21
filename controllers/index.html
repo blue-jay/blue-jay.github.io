@@ -216,6 +216,40 @@
 
 
 
+<a  title="Routing" href="http://blue-jay.github.io/routing/">
+	
+	Routing
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Middleware" href="http://blue-jay.github.io/middleware/">
+	
+	Middleware
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
 <a class="current" title="Controllers" href="http://blue-jay.github.io/controllers/">
 	
 	Controllers
@@ -224,6 +258,23 @@
 
 <ul id="scrollspy">
 </ul>
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Models" href="http://blue-jay.github.io/models/">
+	
+	Models
+</a>
+
 
   
 </li>
@@ -280,105 +331,144 @@
 
 <h2 id="basic-usage">Basic Usage</h2>
 
-<p>The controller files are all organized under the <strong>controller</strong> folder. The controllers
-handle much of the interactions between the models and the views as well as specify
-which routes map to which functions.</p>
+<p>The controller files are all organized under the <strong>controller</strong> folder. The
+controllers handle the interactions between the models and the views as well as
+specify which routes to map to which functions.</p>
 
-<h2 id="routing">Routing</h2>
+<p>It&rsquo;s a good idea to follow a naming convention for the different pieces.
+Laravel developers will notice it&rsquo;s the same convention Taylor Orwell uses.</p>
 
-<p>In the <strong>bootstrap</strong> package, the <strong>RegisterServices()</strong> function calls: <code>controller.LoadRoutes()</code>
-The <strong>LoadRoutes()</strong> function in the <strong>controller</strong> package loads the routes for each of the individual controllers:</p>
+<table>
+<thead>
+<tr>
+<th align="center">Method</th>
+<th align="center">Path</th>
+<th align="center">Function</th>
+<th align="center">View</th>
+</tr>
+</thead>
 
-<pre><code class="language-go">// LoadRoutes loads the routes for each of the controllers
-func LoadRoutes() {
-	about.Load()
-	debug.Load()
-	auth.LoadRegister()
-	auth.LoadLogin()
-	core.LoadIndex()
-	core.LoadError()
-	core.LoadStatic()
-	notepad.Load()
+<tbody>
+<tr>
+<td align="center">GET</td>
+<td align="center">/notepad</td>
+<td align="center">Index</td>
+<td align="center">index.tmpl</td>
+</tr>
+
+<tr>
+<td align="center">GET</td>
+<td align="center">/notepad/create</td>
+<td align="center">Create</td>
+<td align="center">create.tmpl</td>
+</tr>
+
+<tr>
+<td align="center">POST</td>
+<td align="center">/notepad</td>
+<td align="center">Store</td>
+<td align="center"></td>
+</tr>
+
+<tr>
+<td align="center">GET</td>
+<td align="center">/notepad/view/:id</td>
+<td align="center">Show</td>
+<td align="center">show.tmpl</td>
+</tr>
+
+<tr>
+<td align="center">GET</td>
+<td align="center">/notepad/edit/:id</td>
+<td align="center">Edit</td>
+<td align="center">edit.tmpl</td>
+</tr>
+
+<tr>
+<td align="center">PATCH</td>
+<td align="center">/notepad/edit/:id</td>
+<td align="center">Update</td>
+<td align="center"></td>
+</tr>
+
+<tr>
+<td align="center">DELETE</td>
+<td align="center">/notepad/:id</td>
+<td align="center">index</td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+
+<p>For example, below is a controller that follows the naming convention. Notice
+the model name (&ldquo;note&rdquo;) matches the view folder (&ldquo;note/index&rdquo;). The model does
+not need to match the controller because you&rsquo;ll be working with many different
+models in your controllers.</p>
+
+<pre><code class="language-go">func Load() {
+	...
+	// &quot;Get&quot; is the Method
+	// &quot;/notepad&quot; is the Path
+	router.Get(&quot;/notepad&quot;, Index, acl.DisallowAnon)
+	...
+}
+
+// &quot;Index&quot; is the Function
+func Index(w http.ResponseWriter, r *http.Request) {
+	c := flight.Context(w, r)
+
+	items, err := note.ByUserID(c.UserID)
+	if err != nil {
+		c.FlashError(err)
+		items = []note.Item{}
+	}
+
+	// &quot;index&quot; is the View
+	v := view.New(&quot;note/index&quot;)
+	v.Vars[&quot;first_name&quot;] = c.Sess.Values[&quot;first_name&quot;]
+	v.Vars[&quot;items&quot;] = items
+	v.Render(w, r)
 }
 </code></pre>
 
-<p>Here is the <strong>Load()</strong> function from the <strong>controller/notepad</strong> package:</p>
-
-<pre><code class="language-go">var (
-	uri = &quot;/notepad&quot;
-)
-
-func Load() {
-	c := router.Chain(acl.DisallowAnon)
-	router.Get(uri, Index, c...)
-	router.Get(uri+&quot;/create&quot;, Create, c...)
-	router.Post(uri, Store, c...)
-	router.Get(uri+&quot;/view/:id&quot;, Show, c...)
-	router.Get(uri+&quot;/edit/:id&quot;, Edit, c...)
-	router.Patch(uri+&quot;/edit/:id&quot;, Update, c...)
-	router.Delete(uri+&quot;/:id&quot;, Destroy, c...)
-}
-</code></pre>
-
-<p>There are a few things to note here. The <strong>router</strong> references the <strong>lib/router</strong> package
-which is a wrapper for the <a href="http://github.com/julienschmidt/httprouter">julienschmidt/httprouter</a> package.
-The <strong>router.Chain()</strong> function uses the <a href="http://github.com/justinas/alice">justinas/alice</a> package
-to help with middleware chaining.</p>
-
-<p>This may start to sound like a framework, but it&rsquo;s actually a good way to build your wrapper
-packages that live in the <strong>lib</strong> folder. If you want to use a different router, you can modify
-the <strong>lib/router</strong> package easily and you won&rsquo;t have to change any code in your controllers.</p>
-
-<p>It&rsquo;s a good idea to follow a naming convention for the controller functions (Laravel developers
-will notice it&rsquo;s the same convention Taylor Orwell uses).</p>
-
-<h3 id="these-are-a-few-things-you-can-do-with-controllers">These are a few things you can do with controllers.</h3>
-
-<p>Access a gorilla session:</p>
+<h2 id="access-a-session">Access a Session</h2>
 
 <pre><code class="language-go">// Get the current session
 sess := session.Instance(r)
 ...
-// Close the session after you are finished making changes
+// Save the session after you are finished making changes
 sess.Save(r, w)
 </code></pre>
 
-<p>Trigger 1 of 4 different types of flash messages on the next page load (no other code needed):</p>
+<h2 id="trigger-flash-message">Trigger Flash Message</h2>
 
 <pre><code class="language-go">sess.AddFlash(view.Flash{&quot;Sorry, no brute force :-)&quot;, view.FlashNotice})
 sess.Save(r, w) // Ensure you save the session after making a change to it
 </code></pre>
 
-<p>Validate form fields are not empty:</p>
+<h2 id="validate-a-form">Validate a Form</h2>
 
-<pre><code class="language-go">// Ensure a user submitted all the required form fields
-if validate, missingField := view.Validate(r, []string{&quot;email&quot;, &quot;password&quot;}); !validate {
-	sess.AddFlash(view.Flash{&quot;Field missing: &quot; + missingField, view.FlashError})
+<pre><code class="language-go">if validate, missingField := form.Required(r, &quot;email&quot;, &quot;password&quot;); !validate {
+	sess.AddFlash(flash.Info{&quot;Field missing: &quot; + missingField, flash.Error})
 	sess.Save(r, w)
 	LoginGET(w, r)
 	return
 }
 </code></pre>
 
-<p>Render a template:</p>
+<h2 id="render-a-template">Render a Template</h2>
 
-<pre><code class="language-go">// Create a new view
-v := view.New(r)
+<pre><code class="language-go">// Set the template name
+v := view.New(&quot;auth/login&quot;)
 
-// Set the template name
-v.Name = &quot;login/login&quot;
-
-// Assign a variable that is accessible in the form
-v.Vars[&quot;token&quot;] = csrfbanana.Token(w, r, sess)
-
-// Refill any form fields from a POST operation
-view.Repopulate([]string{&quot;email&quot;}, r.Form, v.Vars)
+// Refill form fields from a POST operation
+form.Repopulate(r.Form, v.Vars, &quot;email&quot;)
 
 // Render the template
-v.Render(w)
+v.Render(w, r)
 </code></pre>
 
-<p>Return the flash messages during an Ajax request:</p>
+<h2 id="return-flash-over-ajax">Return Flash over Ajax</h2>
 
 <pre><code class="language-go">// Get session
 sess := session.Instance(r)
@@ -392,12 +482,12 @@ v := view.New(r)
 v.SendFlashes(w)
 </code></pre>
 
-<p>Handle the database query:</p>
+<h2 id="interact-with-a-model">Interact with a Model</h2>
 
 <pre><code class="language-go">// Get database result
-result, err := model.UserByEmail(email)
+result, err := user.ByEmail(email)
 
-if err == sql.ErrNoRows {
+if err == model.ErrNoResult {
 	// User does not exist
 } else if err != nil {
 	// Display error message
@@ -408,25 +498,14 @@ if err == sql.ErrNoRows {
 }
 </code></pre>
 
-<p>Send an email:</p>
+<h2 id="send-an-email">Send an Email</h2>
 
 <pre><code class="language-go">// Email a user
-err := email.SendEmail(email.ReadConfig().From, &quot;This is the subject&quot;, &quot;This is the body!&quot;)
+err := email.Send(email.ReadConfig().From, &quot;This is the subject&quot;, &quot;This is the body!&quot;)
 if err != nil {
-	log.Println(err)
-	sess.AddFlash(view.Flash{&quot;An error occurred on the server. Please try again later.&quot;, view.FlashError})
-	sess.Save(r, w)
-	return
-}
-</code></pre>
-
-<p>Validate a form if the Google reCAPTCHA is enabled in the config:</p>
-
-<pre><code class="language-go">// Validate with Google reCAPTCHA
-if !recaptcha.Verified(r) {
-    sess.AddFlash(view.Flash{&quot;reCAPTCHA invalid!&quot;, view.FlashError})
+    log.Println(err)
+    sess.AddFlash(view.Flash{&quot;An error occurred on the server. Please try again later.&quot;, view.FlashError})
     sess.Save(r, w)
-    RegisterGET(w, r)
     return
 }
 </code></pre>
@@ -450,7 +529,7 @@ if !recaptcha.Verified(r) {
 <nav class="pagination" aria-label="Footer">
   <div class="previous">
   
-      <a href="http://blue-jay.github.io/configuration/" title="Configuration">
+      <a href="http://blue-jay.github.io/middleware/" title="Middleware">
         <span class="direction">
           Previous
         </span>
@@ -460,7 +539,7 @@ if !recaptcha.Verified(r) {
           </div>
           <div class="stretch">
             <div class="title">
-              Configuration
+              Middleware
             </div>
           </div>
         </div>
@@ -470,14 +549,14 @@ if !recaptcha.Verified(r) {
 
   <div class="next">
   
-      <a href="http://blue-jay.github.io/views/" title="Views">
+      <a href="http://blue-jay.github.io/models/" title="Models">
         <span class="direction">
           Next
         </span>
         <div class="page">
           <div class="stretch">
             <div class="title">
-              Views
+              Models
             </div>
           </div>
           <div class="button button-next" role="button" aria-label="Next">

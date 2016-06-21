@@ -219,9 +219,60 @@
 
 
 
+<a  title="Routing" href="http://blue-jay.github.io/routing/">
+	
+	Routing
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Middleware" href="http://blue-jay.github.io/middleware/">
+	
+	Middleware
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
 <a  title="Controllers" href="http://blue-jay.github.io/controllers/">
 	
 	Controllers
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Models" href="http://blue-jay.github.io/models/">
+	
+	Models
 </a>
 
 
@@ -283,8 +334,8 @@
 <p>Throughout this documentation, keep in mind everything in Blueprint is configurable.
 You are not using a framework so you don&rsquo;t have to follow rules. You don&rsquo;t need to
 use any of the components with Blueprint, but it does give you a nice foundation to
-start from. If you want to use YAML instead of JSON, I recommend creating a wrapper
-library in the <strong>lib</strong> folder and then loading your env.yaml file via the <strong>bootstrap</strong>
+start from. If you want to use YAML instead of JSON, it&rsquo;s recommended to create a wrapper
+library in the <strong>lib</strong> folder and then load your env.yaml file via the <strong>bootstrap</strong>
 package.</p>
 
 <p>One of the first steps before using Blueprint is to create <strong>env.json</strong>. You can make
@@ -354,9 +405,9 @@ in the <strong>bootstrap</strong> package. Here is an example <strong>env.json</
 
 <p>The <strong>env.json</strong> file contains the configuration for Blueprint. It removes the need
 to hardcode any of these values and makes it easy to move Blueprint to another system
-with a different set up.</p>
+with a different setup.</p>
 
-<p>The <strong>env.json</strong> file is parsed and the result is stored in the <strong>Info</strong> struct from the
+<p>The <strong>env.json</strong> file is parsed and the result is organized in the <strong>Info</strong> struct from the
 <strong>bootstrap</strong> package:</p>
 
 <pre><code class="language-go">// Info contains the application settings
@@ -386,7 +437,7 @@ View		- View struct in lib/view
 <p>To enable HTTPS:</p>
 
 <ol>
-<li>Set <strong>UseHTTPS</strong> to true</li>
+<li>Set <strong>UseHTTPS</strong> to <strong>true</strong></li>
 <li>Create a folder called <strong>tls</strong> in the project root folder</li>
 <li>Place your own certificate and key files in the <strong>tls</strong> folder</li>
 </ol>
@@ -457,14 +508,14 @@ then delete the imports and referencing code</li>
 
   <div class="next">
   
-      <a href="http://blue-jay.github.io/controllers/" title="Controllers">
+      <a href="http://blue-jay.github.io/routing/" title="Routing">
         <span class="direction">
           Next
         </span>
         <div class="page">
           <div class="stretch">
             <div class="title">
-              Controllers
+              Routing
             </div>
           </div>
           <div class="button button-next" role="button" aria-label="Next">

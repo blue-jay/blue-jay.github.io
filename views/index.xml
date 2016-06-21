@@ -177,6 +177,19 @@ You are not logged in.
 &amp;lt;!-- Code is added before the closing &amp;lt;/body&amp;gt; tag --&amp;gt;
 {{define &amp;quot;foot&amp;quot;}}{{JS &amp;quot;//www.google.com/recaptcha/api.js&amp;quot;}}{{end}}
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;javascript&#34;&gt;JavaScript&lt;/h2&gt;
+
+&lt;p&gt;There are a few built-in functions that you can use to trigger a flash notification using JavaScript.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;flashError(&amp;quot;An error occurred on the server.&amp;quot;);
+
+flashSuccess(&amp;quot;Item added!&amp;quot;);
+
+flashNotice(&amp;quot;Item deleted.&amp;quot;);
+
+flashWarning(&amp;quot;Field missing: email&amp;quot;);
+&lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>
     

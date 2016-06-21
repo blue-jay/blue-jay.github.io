@@ -8,18 +8,18 @@
   <head lang="en-us">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
-    <title>Views - Blue Jay</title>
+    <title>Middleware - Blue Jay</title>
     <meta name="generator" content="Hugo 0.15" />
 
     
     <meta name="description" content="Blue Jay is a toolkit written in Go for the web.">
     
-    <link rel="canonical" href="http://blue-jay.github.io/views/">
+    <link rel="canonical" href="http://blue-jay.github.io/middleware/">
     
     <meta name="author" content="Joseph Spurrier">
     
 
-    <meta property="og:url" content="http://blue-jay.github.io/views/">
+    <meta property="og:url" content="http://blue-jay.github.io/middleware/">
     <meta property="og:title" content="Blue Jay">
     <meta property="og:image" content="http://blue-jay.github.io/images/bluejaylogo.png">
     <meta name="apple-mobile-web-app-title" content="Blue Jay">
@@ -99,7 +99,7 @@
     </div>
     <div class="stretch">
       <div class="title">
-        View
+        Middleware
       </div>
     </div>
 
@@ -233,11 +233,14 @@
 
 
 
-<a  title="Middleware" href="http://blue-jay.github.io/middleware/">
+<a class="current" title="Middleware" href="http://blue-jay.github.io/middleware/">
 	
 	Middleware
 </a>
 
+
+<ul id="scrollspy">
+</ul>
 
   
 </li>
@@ -284,14 +287,11 @@
 
 
 
-<a class="current" title="Views" href="http://blue-jay.github.io/views/">
+<a  title="Views" href="http://blue-jay.github.io/views/">
 	
 	Views
 </a>
 
-
-<ul id="scrollspy">
-</ul>
 
   
 </li>
@@ -325,182 +325,163 @@
 
 	<article class="article">
 		<div class="wrapper">
-			<h1>Views </h1>
+			<h1>Middleware </h1>
 
 			
 
 <h2 id="basic-usage">Basic Usage</h2>
 
-<p>Views contain the HTML served by your application and separate your controller / application logic from your presentation logic. The views are parsed by the <a href="https://golang.org/pkg/html/template/">html/template</a> package.</p>
+<p>Middleware, in the context of Go, is applied during routing to provide
+features like request/response logging, access controls lists (ACLs), and
+header modification. Middleware is either applied to every request (for request
+logging) or specified routes (for ACLs).</p>
 
-<p>A view should include the four <strong>define</strong> blocks (<strong>title</strong>, <strong>head</strong>, <strong>content</strong>, and <strong>foot</strong>) and may look like this:</p>
+<p>There are a few pieces of middleware included. The package called csrfbanana
+protects against Cross-Site Request Forgery attacks and prevents double submits.
+The package httprouterwrapper provides helper functions to make funcs compatible
+with httprouter. The package logrequest will log every request made against the
+website to the console. The package pprofhandler enables pprof so it will work
+with httprouter.</p>
 
-<pre><code class="language-html">{{define &quot;title&quot;}}Welcome{{end}}
-{{define &quot;head&quot;}}{{end}}
-{{define &quot;content&quot;}}
-&lt;div class=&quot;container&quot;&gt;
-	&lt;div class=&quot;page-header&quot;&gt;
-		&lt;h1&gt;Hello, {{.first_name}}&lt;/h1&gt;
-	&lt;/div&gt;
-	&lt;p&gt;You have arrived. Click {{LINK &quot;notepad&quot; &quot;here&quot;}} to view your notepad.&lt;/p&gt;
-	{{template &quot;footer&quot; .}}
-&lt;/div&gt;
-{{end}}
-{{define &quot;foot&quot;}}{{end}}
-</code></pre>
+<h2 id="creating-middleware">Creating Middleware</h2>
 
-<p>Since this view is stored at <strong>view/index/auth.tmpl</strong>, we may render it using the <strong>view</strong> helper package like so:</p>
+<p>An example of a piece of middleware that is applied to every request is
+<strong>lib/middleware/logrequest</strong>. When a page is requested, the middleware will
+print to the console the time of the request, remote IP address, HTTP method,
+and the URL requested.</p>
 
-<pre><code class="language-go">// import &quot;github.com/blue-jay/blueprint/lib/view&quot;
-v := view.New(&quot;index/auth&quot;)
-v.Vars[&quot;first_name&quot;] = session.Values[&quot;first_name&quot;]
-v.Render(w, r)
-</code></pre>
+<p><a href="https://github.com/blue-jay/blueprint/blob/master/lib/middleware/logrequest/logrequest.go">Source</a></p>
 
-<p>If you don&rsquo;t have to pass any variables to the template, you could shorten it like this:</p>
+<pre><code class="language-go">package logrequest
 
-<pre><code class="language-go">// import &quot;github.com/blue-jay/blueprint/lib/view&quot;
-view.New(&quot;index/auth&quot;).Render(w, r)
-</code></pre>
-
-<h2 id="base-template">Base Template</h2>
-
-<p>By default, the <strong>view/base.tmpl</strong> template is used as the base template (as specified in env.json). If you want to
-change the base template for a template, you can try this:</p>
-
-<pre><code class="language-go">v := view.New(&quot;index/auth&quot;).Base(&quot;alternate&quot;)
-v.Render(w, r)
-</code></pre>
-
-<p>A shorter way to specify the view with a different base template and then render is like this:</p>
-
-<pre><code class="language-go">view.New(&quot;about/about&quot;).Base(&quot;alternate&quot;).Render(w, r)
-</code></pre>
-
-<h2 id="view-package">View Package</h2>
-
-<p>The optional <strong>lib/view</strong> package is a wrapper for the Go <a href="https://golang.org/pkg/html/template/">html/template</a> package
-and provides the following:</p>
-
-<ul>
-<li>thread-safe template caching</li>
-<li>easy way to extend the list of functions available in templates</li>
-<li>easy way to modify the variables available in templates</li>
-</ul>
-
-<p>The set up of the <strong>view</strong> package is handled by the <strong>bootstrap</strong> package:</p>
-
-<pre><code class="language-go">// import &quot;github.com/blue-jay/blueprint/lib/view&quot;
-// Set up the views
-view.SetConfig(config.View)
-view.SetTemplates(config.Template.Root, config.Template.Children)
-
-// Set up the functions for the views
-view.SetFunctions(
-	extend.Assets(config.View),
-	extend.Link(config.View),
-	extend.NoEscape(),
-	extend.PrettyTime(),
+import (
+    &quot;fmt&quot;
+    &quot;net/http&quot;
+    &quot;time&quot;
 )
 
-// Set up the variables for the views
-view.SetVariables(
-	modify.AuthLevel,
-	modify.BaseURI,
-	modify.Token,
-	flash.Modify,
-)
+// Handler will log the HTTP requests
+func Handler(next http.Handler) http.Handler {
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        // Log the request
+        fmt.Println(time.Now().Format(&quot;2006-01-02 03:04:05 PM&quot;), r.RemoteAddr, r.Method, r.URL)
+        next.ServeHTTP(w, r)
+    })
+}
 </code></pre>
 
-<h2 id="organization">Organization</h2>
+<p>You can use this template for writing your own middleware:</p>
 
-<p>The HTML templates are organized into folders under the <strong>view</strong> folder:</p>
-
-<pre><code class="language-text">about/about.tmpl	- quick blurb about the app
-auth/login.tmpl		- login page
-auth/register.tmpl	- register page
-index/anon.tmpl		- public home page
-index/auth.tmpl		- home page once you login
-note/create.tmpl	- create a note
-note/edit.tmpl		- edit a note
-note/index.tmpl		- view all notes
-note/show.tmpl		- view a note
-partial/footer.tmpl	- footer at the bottom of all pages
-partial/menu.tmpl	- menu at the top of all pages
-base.tmpl			- base template for all pages
+<pre><code class="language-go">// Handler will log the HTTP requests
+func Handler(next http.Handler) http.Handler {
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        // Logic BEFORE the other handlers and function goes here
+        next.ServeHTTP(w, r)
+        // Logic AFTER the other handlers and function goes here
+    })
+}
 </code></pre>
 
-<h2 id="included-functions">Included Functions</h2>
+<h2 id="chaining">Chaining</h2>
 
-<p>There are a few functions that are included to make working with the templates
-and static files easier:</p>
+<p>Chaining prevents middleware from stacking up which is hard to read.</p>
 
-<pre><code class="language-html">&lt;!-- CSS files with timestamps --&gt;
-{{CSS &quot;static/css/normalize3.0.0.min.css&quot;}}
-parses to
-&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;/static/css/normalize3.0.0.min.css?1435528339&quot; /&gt;
-
-&lt;!-- JS files with timestamps --&gt;
-{{JS &quot;static/js/jquery1.11.0.min.js&quot;}}
-parses to
-&lt;script type=&quot;text/javascript&quot; src=&quot;/static/js/jquery1.11.0.min.js?1435528404&quot;&gt;&lt;/script&gt;
-
-&lt;!-- Hyperlinks --&gt;
-{{LINK &quot;register&quot; &quot;Create a new account.&quot;}}
-parses to
-&lt;a href=&quot;/register&quot;&gt;Create a new account.&lt;/a&gt;
-
-&lt;!-- Output an unescaped variable (not a safe idea, but it is useful when troubleshooting) --&gt;
-{{.SomeVariable | NOESCAPE}}
-
-&lt;!-- Time format --&gt;
-{{.SomeTime | PRETTYTIME}}
-parses to format
-3:04 PM 01/02/2006
+<pre><code class="language-go">return context.ClearHandler(rest.Handler(logrequest.Handler(setUpBanana)))
 </code></pre>
 
-<h2 id="included-variables">Included Variables</h2>
+<p>Before <a href="https://github.com/justinas/alice">justinas/alice</a>, a workaround was to
+use the variable and reassign it multiple times like this:</p>
 
-<p>There are a few variables you can use in templates as well:</p>
-
-<pre><code class="language-html">&lt;!-- Use AuthLevel=auth to determine if a user is logged in (if session.Values[&quot;id&quot;] != nil) --&gt;
-{{if eq .AuthLevel &quot;auth&quot;}}
-You are logged in.
-{{else}}
-You are not logged in.
-{{end}}
-
-&lt;!-- Use BaseURI to print the base URL specified in the env.json file --&gt;
-&lt;li&gt;&lt;a href=&quot;{{.BaseURI}}about&quot;&gt;About&lt;/a&gt;&lt;/li&gt;
-
-&lt;!-- Use token to output the CSRF token in a form --&gt;
-&lt;input type=&quot;hidden&quot; name=&quot;token&quot; value=&quot;{{.token}}&quot;&gt;
+<pre><code class="language-go">h = setUpBanana(h)
+h = logrequest.Handler(h)
+h = rest.Handler(h)
+return context.ClearHandler(h)
 </code></pre>
 
-<h2 id="header-and-footer">Header and Footer</h2>
+<p>In <a href="https://github.com/blue-jay/blueprint/blob/master/controller/notepad/notepad.go">controller/notepad</a>,
+the application uses the <strong>router.ChainHandler()</strong> function. The function is a wrapper for
+the <a href="https://github.com/justinas/alice">justinas/alice</a> package which makes
+using middleware more scalable and a little &ldquo;prettier&rdquo;. If you look at the
+<a href="https://github.com/blue-jay/blueprint/blob/master/bootstrap/bootstrap.go">bootstrap</a>
+package, you&rsquo;ll see the <strong>ChainHandler()</strong> function.</p>
 
-<p>It&rsquo;s also easy to add template-specific code before the closing </head> and </body> tags:</p>
-
-<pre><code class="language-html">&lt;!-- Code is added before the closing &lt;/head&gt; tag --&gt;
-{{define &quot;head&quot;}}&lt;meta name=&quot;robots&quot; content=&quot;noindex&quot;&gt;{{end}}
-
-...
-
-&lt;!-- Code is added before the closing &lt;/body&gt; tag --&gt;
-{{define &quot;foot&quot;}}{{JS &quot;//www.google.com/recaptcha/api.js&quot;}}{{end}}
+<pre><code class="language-go">// Middleware contains the middleware that applies to every request
+func SetUpMiddleware(h http.Handler) http.Handler {
+    return router.ChainHandler( // Chain middleware, bottom runs first
+        context.ClearHandler, // Clear handler for Gorilla Context
+        rest.Handler,         // Support changing HTTP method sent via form input
+        logrequest.Handler,   // Log every request
+        setUpBanana)          // Prevent CSRF and double submits
+}
 </code></pre>
 
-<h2 id="javascript">JavaScript</h2>
+<p>There is also a <strong>Chain()</strong> function that can be used to chain middleware for routes
+or to pass to <strong>ChainHandler()</strong>.</p>
 
-<p>There are a few built-in functions that you can use to trigger a flash notification using JavaScript.</p>
+<pre><code class="language-go">// Apply middleware to routes individually
+router.Get(&quot;/notepad&quot;, Index, acl.DisallowAnon, logrequest.Handler)
+router.Get(&quot;/notepad/create&quot;, Create, acl.DisallowAnon, logrequest.Handler)
 
-<pre><code class="language-javascript">flashError(&quot;An error occurred on the server.&quot;);
+// Use Chain() to apply middleware
+c := router.Chain(acl.DisallowAnon, logrequest.Handler)
+router.Get(&quot;/notepad&quot;, Index, c...)
+router.Get(&quot;/notepad/create&quot;, Create, c...)
 
-flashSuccess(&quot;Item added!&quot;);
+// Pass Chain() to ChainHandler()
+c := router.Chain( // Chain middleware, bottom runs first
+    context.ClearHandler, // Clear handler for Gorilla Context
+    rest.Handler,         // Support changing HTTP method sent via form input
+    logrequest.Handler,   // Log every request
+    setUpBanana)          // Prevent CSRF and double submits
+return router.ChainHandler(c...)
+</code></pre>
 
-flashNotice(&quot;Item deleted.&quot;);
+<p><strong>ChainHandler()</strong> accepts one or more of the http.Handler type and returns a
+http.Handler.
+<strong>Chain()</strong> accepts one or more of the http.Handler type and returns an array of
+the alice.Constructor type.</p>
 
-flashWarning(&quot;Field missing: email&quot;);
+<h2 id="apply-to-every-request">Apply to Every Request</h2>
+
+<p>In <a href="https://github.com/blue-jay/blueprint/blob/master/blueprint.go">blueprint.go</a>,
+the application calls <strong>bootstrap.SetUpMiddleware(router.Instance())</strong> which
+applies the middleware to the router. The middleware is called on every
+request.</p>
+
+<p><a href="https://github.com/blue-jay/blueprint/blob/master/bootstrap/bootstrap.go">Source</a></p>
+
+<pre><code class="language-go">// Middleware contains the middleware that applies to every request
+func SetUpMiddleware(h http.Handler) http.Handler {
+    return router.ChainHandler( // Chain middleware, bottom runs first
+        context.ClearHandler, // Clear handler for Gorilla Context
+        rest.Handler,         // Support changing HTTP method sent via form input
+        logrequest.Handler,   // Log every request
+        setUpBanana)          // Prevent CSRF and double submits
+}
+</code></pre>
+
+<h2 id="apply-to-specific-routes">Apply to Specific Routes</h2>
+
+<p>In <a href="https://github.com/blue-jay/blueprint/blob/master/controller/notepad/notepad.go">controller/notepad</a>,
+the application creates a chain of middleware and then
+applies it to only certain routes. In this scenario, the pages are only
+accessible if the user is authenticated.</p>
+
+<p><a href="https://github.com/blue-jay/blueprint/blob/master/controller/notepad/notepad.go">Source</a></p>
+
+<pre><code class="language-go">func Load() {
+    // Add middleware that disallows anonymous access
+    c := router.Chain(acl.DisallowAnon)
+
+    // Map HTTP methods and URLs to functions wrapped in the middleware chain
+    router.Get(&quot;/notepad&quot;, Index, c...)
+    router.Get(&quot;/notepad/create&quot;, Create, c...)
+    router.Post(&quot;/notepad&quot;, Store, c...)
+    router.Get(&quot;/notepad/view/:id&quot;, Show, c...)
+    router.Get(&quot;/notepad/edit/:id&quot;, Edit, c...)
+    router.Patch(&quot;/notepad/edit/:id&quot;, Update, c...)
+    router.Delete(&quot;/notepad/:id&quot;, Destroy, c...)
+}
 </code></pre>
 
 			
@@ -522,7 +503,7 @@ flashWarning(&quot;Field missing: email&quot;);
 <nav class="pagination" aria-label="Footer">
   <div class="previous">
   
-      <a href="http://blue-jay.github.io/models/" title="Models">
+      <a href="http://blue-jay.github.io/routing/" title="Routing">
         <span class="direction">
           Previous
         </span>
@@ -532,7 +513,7 @@ flashWarning(&quot;Field missing: email&quot;);
           </div>
           <div class="stretch">
             <div class="title">
-              Models
+              Routing
             </div>
           </div>
         </div>
@@ -541,6 +522,22 @@ flashWarning(&quot;Field missing: email&quot;);
   </div>
 
   <div class="next">
+  
+      <a href="http://blue-jay.github.io/controllers/" title="Controllers">
+        <span class="direction">
+          Next
+        </span>
+        <div class="page">
+          <div class="stretch">
+            <div class="title">
+              Controllers
+            </div>
+          </div>
+          <div class="button button-next" role="button" aria-label="Next">
+            <i class="icon icon-forward"></i>
+          </div>
+        </div>
+      </a>
   
   </div>
 </nav>

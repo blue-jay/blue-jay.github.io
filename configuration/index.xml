@@ -22,8 +22,8 @@
 &lt;p&gt;Throughout this documentation, keep in mind everything in Blueprint is configurable.
 You are not using a framework so you don&amp;rsquo;t have to follow rules. You don&amp;rsquo;t need to
 use any of the components with Blueprint, but it does give you a nice foundation to
-start from. If you want to use YAML instead of JSON, I recommend creating a wrapper
-library in the &lt;strong&gt;lib&lt;/strong&gt; folder and then loading your env.yaml file via the &lt;strong&gt;bootstrap&lt;/strong&gt;
+start from. If you want to use YAML instead of JSON, it&amp;rsquo;s recommended to create a wrapper
+library in the &lt;strong&gt;lib&lt;/strong&gt; folder and then load your env.yaml file via the &lt;strong&gt;bootstrap&lt;/strong&gt;
 package.&lt;/p&gt;
 
 &lt;p&gt;One of the first steps before using Blueprint is to create &lt;strong&gt;env.json&lt;/strong&gt;. You can make
@@ -93,9 +93,9 @@ in the &lt;strong&gt;bootstrap&lt;/strong&gt; package. Here is an example &lt;st
 
 &lt;p&gt;The &lt;strong&gt;env.json&lt;/strong&gt; file contains the configuration for Blueprint. It removes the need
 to hardcode any of these values and makes it easy to move Blueprint to another system
-with a different set up.&lt;/p&gt;
+with a different setup.&lt;/p&gt;
 
-&lt;p&gt;The &lt;strong&gt;env.json&lt;/strong&gt; file is parsed and the result is stored in the &lt;strong&gt;Info&lt;/strong&gt; struct from the
+&lt;p&gt;The &lt;strong&gt;env.json&lt;/strong&gt; file is parsed and the result is organized in the &lt;strong&gt;Info&lt;/strong&gt; struct from the
 &lt;strong&gt;bootstrap&lt;/strong&gt; package:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Info contains the application settings
@@ -125,7 +125,7 @@ View		- View struct in lib/view
 &lt;p&gt;To enable HTTPS:&lt;/p&gt;
 
 &lt;ol&gt;
-&lt;li&gt;Set &lt;strong&gt;UseHTTPS&lt;/strong&gt; to true&lt;/li&gt;
+&lt;li&gt;Set &lt;strong&gt;UseHTTPS&lt;/strong&gt; to &lt;strong&gt;true&lt;/strong&gt;&lt;/li&gt;
 &lt;li&gt;Create a folder called &lt;strong&gt;tls&lt;/strong&gt; in the project root folder&lt;/li&gt;
 &lt;li&gt;Place your own certificate and key files in the &lt;strong&gt;tls&lt;/strong&gt; folder&lt;/li&gt;
 &lt;/ol&gt;

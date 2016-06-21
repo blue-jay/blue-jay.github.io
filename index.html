@@ -222,9 +222,60 @@
 
 
 
+<a  title="Routing" href="http://blue-jay.github.io/routing/">
+	
+	Routing
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Middleware" href="http://blue-jay.github.io/middleware/">
+	
+	Middleware
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
 <a  title="Controllers" href="http://blue-jay.github.io/controllers/">
 	
 	Controllers
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Models" href="http://blue-jay.github.io/models/">
+	
+	Models
 </a>
 
 
@@ -285,25 +336,31 @@
 <p><a href="https://goreportcard.com/report/github.com/blue-jay/blueprint"><img src="https://goreportcard.com/badge/github.com/blue-jay/blueprint" alt="Go Report Card" /></a>
 <a href="https://godoc.org/github.com/blue-jay/blueprint"><img src="https://godoc.org/github.com/blue-jay/blueprint?status.svg" alt="GoDoc" /></a></p>
 
-<p>Blue Jay is a toolkit designed to get your web application off the ground. It&rsquo;s a collection of command line tools along with a web blueprint that is flexible enough to fit any project, yet provides a foundation so you can focus on the task instead of designing your own tools. You can easily change the structure and there is no rigid framework to which you have to conform. Even the command line tools like code generation and database migration are portable so they can be used outside your project.</p>
+<p>Blue Jay is a web toolkit for <a href="https://golang.org/">Go</a>. It&rsquo;s a collection of command-line tools and a web blueprint that allows you to easily structure your web application. There is no rigid framework to which you have to conform.</p>
 
 <p>There are a few components:</p>
 
 <ul>
-<li><p><strong>Blueprint</strong> is a model-view-controller (MVC) style web skeleton</p></li>
+<li><p><a href="https://github.com/blue-jay/blueprint"><strong>Blueprint</strong></a> is a model-view-controller (MVC) style web skeleton.</p></li>
 
-<li><p><strong>Jay</strong> is a command line tool with modules for find/replace, database migrations, and code generation</p></li>
+<li><p><a href="https://github.com/blue-jay/jay"><strong>Jay</strong></a> is a command line tool with modules for find/replace, database migrations, and code generation.</p></li>
 </ul>
 
 <h2 id="why-blue-jay">Why Blue Jay?</h2>
 
-<p>There are a few web frameworks for Go, but we support the Go mentality that you should keep
-your application dependency lean. Less dependencies means less bugs.
-It&rsquo;s also great to start developing your application right away instead of learning
-all the features of a framework and then developing once you are proficient enough.
-Blue Jay provides a lean web skeleton called Blueprint to demonstrate how to structure
-a web application without locking developers to a framework. Blueprint includes well thought out
-example code that demonstrates a typical web workflow.</p>
+<h3 id="fun-answer">Fun Answer</h3>
+
+<p>After 300 stars on GitHub, I realized people really liked the boilerplate
+Model-View-Controller (MVC) web application in Go called
+<a href="https://github.com/josephspurrier/gowebapp">gowebapp</a> so I gave it a better
+name and improved the documentation.</p>
+
+<h3 id="real-answer">Real Answer</h3>
+
+<p>Go is a blast to code in and it&rsquo;s great being part of a helpful community.
+Blue Jay provides a quickstart for developers with a lean web skeleton called
+<strong>Blueprint</strong> that demonstrates how to structure a web application with sample
+code.</p>
 
 <p>One of the things you&rsquo;ll notice while using Blueprint is how to abstract out
 external packages to make it easy to swap out components. Ultimately, you should
@@ -313,11 +370,10 @@ folder is a great place for all these packages with very few dependencies.</p>
 <p>You&rsquo;ll also notice certain packages need to be thread-safe when building web applications.
 An example is the <strong>lib/view</strong> package which provides thread-safe template caching.</p>
 
-<p>The other reason for Blue Jay is the command line tools in <strong>jay</strong>. jay provides an easy way
+<p>The other reason for Blue Jay is the command-line tool, <strong>jay</strong>, which provides an easy way
 to find/replace in a project when refactoring, migrate your database forwards or backwards, and
 generate a file or sets or files using the Go <a href="https://golang.org/pkg/html/template/">html/template</a>
-package. Code generation can help you build faster and more efficiently which is a perfect compliment
-to Blueprint.</p>
+package. Code generation can help you build faster and more efficiently with less mistakes.</p>
 
 <h2 id="why-go">Why Go?</h2>
 
@@ -327,11 +383,10 @@ many other tools necessary to build a web application. Any features missing from
 written by other Go developers who are happy to contribute to the thriving community.</p>
 
 <p>Go allows you to write code that compiles to the majority of the architectures we use today so all your
-code is pretty much portable. Go accels when you want to write command line apps instead of just scripts,
+code is pretty much portable. Go excels when you want to write command line apps instead of just scripts,
 but that&rsquo;s not the language&rsquo;s only niche.
 The designers of Go wanted to build a language that solved problems between the Google development teams.
-It&rsquo;s a modern language that allows you to easily multi-thread your applications safely so you can use the
-power of the hardware.</p>
+It&rsquo;s a modern language that allows you to easily multi-thread your applications.</p>
 
 <h2 id="high-level">High Level</h2>
 
@@ -397,62 +452,6 @@ github.com/julienschmidt/httprouter 	- high performance HTTP request router
 github.com/justinas/alice				- middleware chaining
 golang.org/x/crypto/bcrypt 				- password hashing algorithm
 </code></pre>
-
-<h2 id="javascript">JavaScript</h2>
-
-<p>You can trigger a flash notification using JavaScript.</p>
-
-<pre><code class="language-javascript">flashError(&quot;You must type in a username.&quot;);
-
-flashSuccess(&quot;Record created!&quot;);
-
-flashNotice(&quot;There seems to be a piece missing.&quot;);
-
-flashWarning(&quot;Something does not seem right...&quot;);
-</code></pre>
-
-<h2 id="database">Database</h2>
-
-<p>It&rsquo;s a good idea to abstract the database layer out so if you need to make
-changes, you don&rsquo;t have to look through business logic to find the queries. All
-the queries are stored in the models folder.</p>
-
-<p>This project supports BoltDB, MongoDB, and MySQL. All the queries are stored in
-the same files so you can easily change the database without modifying anything
-but the config file.</p>
-
-<p>The user.go and note.go files are at the root of the model directory and are a
-compliation of all the queries for each database type. There are a few hacks in
-the models to get the structs to work with all the supported databases.</p>
-
-<p>Connect to the database (only once needed in your application):</p>
-
-<pre><code class="language-go">// Connect to database
-database.Connect(config.Database)
-</code></pre>
-
-<p>Read from the database:</p>
-
-<pre><code class="language-go">result := User{}
-err := database.DB.Get(&amp;result, &quot;SELECT id, password, status_id, first_name FROM user WHERE email = ? LIMIT 1&quot;, email)
-return result, err
-</code></pre>
-
-<p>Write to the database:</p>
-
-<pre><code class="language-go">_, err := database.DB.Exec(&quot;INSERT INTO user (first_name, last_name, email, password) VALUES (?,?,?,?)&quot;, firstName, lastName, email, password)
-return err
-</code></pre>
-
-<h2 id="middleware">Middleware</h2>
-
-<p>There are a few pieces of middleware included. The package called csrfbanana
-protects against Cross-Site Request Forgery attacks and prevents double submits.
-The package httprouterwrapper provides helper functions to make funcs compatible
-with httprouter. The package logrequest will log every request made against the
-website to the console. The package pprofhandler enables pprof so it will work
-with httprouter. In route.go, all the individual routes use alice to make
-chaining very easy.</p>
 
 <h2 id="screenshots">Screenshots</h2>
 
