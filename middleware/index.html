@@ -216,6 +216,23 @@
 
 
 
+<a  title="Assets" href="http://blue-jay.github.io/assets/">
+	
+	Assets
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
 <a  title="Routing" href="http://blue-jay.github.io/routing/">
 	
 	Routing
@@ -336,23 +353,25 @@ features like request/response logging, access controls lists (ACLs), and
 header modification. Middleware is either applied to every request (for request
 logging) or specified routes (for ACLs).</p>
 
-<p>There are a few pieces of middleware included. The package called csrfbanana
+<p>There are a few pieces of middleware included. The package called <strong>csrfbanana</strong>
 protects against Cross-Site Request Forgery attacks and prevents double submits.
-The package httprouterwrapper provides helper functions to make funcs compatible
-with httprouter. The package logrequest will log every request made against the
-website to the console. The package pprofhandler enables pprof so it will work
-with httprouter.</p>
+The <strong>logrequest</strong> package will log every request made against the
+website to the console. The <strong>rest</strong> package allows the HTTP method to be
+changed during a form submission to DELETE or PATCH instead of POST.</p>
 
 <h2 id="creating-middleware">Creating Middleware</h2>
 
 <p>An example of a piece of middleware that is applied to every request is
-<strong>lib/middleware/logrequest</strong>. When a page is requested, the middleware will
-print to the console the time of the request, remote IP address, HTTP method,
+<strong>middleware/logrequest</strong>. When a page is requested, the middleware will
+print to the console: the time of the request, remote IP address, HTTP method,
 and the URL requested.</p>
 
-<p><a href="https://github.com/blue-jay/blueprint/blob/master/lib/middleware/logrequest/logrequest.go">Source</a></p>
+<p><a href="https://github.com/blue-jay/blueprint/blob/master/middleware/logrequest/logrequest.go">Source</a></p>
 
-<pre><code class="language-go">package logrequest
+<pre><code class="language-go">// Package logrequest provides an http.Handler that logs when a request is
+// made to the application and lists the remote address, the HTTP method,
+// and the URL.
+package logrequest
 
 import (
     &quot;fmt&quot;
@@ -360,19 +379,18 @@ import (
     &quot;time&quot;
 )
 
-// Handler will log the HTTP requests
+// Handler will log the HTTP requests.
 func Handler(next http.Handler) http.Handler {
     return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        // Log the request
         fmt.Println(time.Now().Format(&quot;2006-01-02 03:04:05 PM&quot;), r.RemoteAddr, r.Method, r.URL)
         next.ServeHTTP(w, r)
     })
 }
 </code></pre>
 
-<p>You can use this template for writing your own middleware:</p>
+<p>This is an example of the minimum requirements for middleware:</p>
 
-<pre><code class="language-go">// Handler will log the HTTP requests
+<pre><code class="language-go">// Handler
 func Handler(next http.Handler) http.Handler {
     return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
         // Logic BEFORE the other handlers and function goes here
@@ -384,7 +402,7 @@ func Handler(next http.Handler) http.Handler {
 
 <h2 id="chaining">Chaining</h2>
 
-<p>Chaining prevents middleware from stacking up which is hard to read.</p>
+<p>Chaining prevents middleware from stacking up which is hard to read like this:</p>
 
 <pre><code class="language-go">return context.ClearHandler(rest.Handler(logrequest.Handler(setUpBanana)))
 </code></pre>
@@ -403,20 +421,9 @@ the application uses the <strong>router.ChainHandler()</strong> function. The fu
 the <a href="https://github.com/justinas/alice">justinas/alice</a> package which makes
 using middleware more scalable and a little &ldquo;prettier&rdquo;. If you look at the
 <a href="https://github.com/blue-jay/blueprint/blob/master/bootstrap/bootstrap.go">bootstrap</a>
-package, you&rsquo;ll see the <strong>ChainHandler()</strong> function.</p>
-
-<pre><code class="language-go">// Middleware contains the middleware that applies to every request
-func SetUpMiddleware(h http.Handler) http.Handler {
-    return router.ChainHandler( // Chain middleware, bottom runs first
-        context.ClearHandler, // Clear handler for Gorilla Context
-        rest.Handler,         // Support changing HTTP method sent via form input
-        logrequest.Handler,   // Log every request
-        setUpBanana)          // Prevent CSRF and double submits
-}
-</code></pre>
-
-<p>There is also a <strong>Chain()</strong> function that can be used to chain middleware for routes
-or to pass to <strong>ChainHandler()</strong>.</p>
+package, you&rsquo;ll see the <strong>ChainHandler()</strong> function. There is also a <strong>Chain()</strong>
+function that can be used to chain middleware for routes or to pass to
+<strong>ChainHandler()</strong>.</p>
 
 <pre><code class="language-go">// Apply middleware to routes individually
 router.Get(&quot;/notepad&quot;, Index, acl.DisallowAnon, logrequest.Handler)
@@ -429,6 +436,7 @@ router.Get(&quot;/notepad/create&quot;, Create, c...)
 
 // Pass Chain() to ChainHandler()
 c := router.Chain( // Chain middleware, bottom runs first
+    h,                    // Handler to wrap
     context.ClearHandler, // Clear handler for Gorilla Context
     rest.Handler,         // Support changing HTTP method sent via form input
     logrequest.Handler,   // Log every request
@@ -437,8 +445,9 @@ return router.ChainHandler(c...)
 </code></pre>
 
 <p><strong>ChainHandler()</strong> accepts one or more of the http.Handler type and returns a
-http.Handler.
-<strong>Chain()</strong> accepts one or more of the http.Handler type and returns an array of
+http.Handler.</p>
+
+<p><strong>Chain()</strong> accepts one or more of the http.Handler type and returns an array of
 the alice.Constructor type.</p>
 
 <h2 id="apply-to-every-request">Apply to Every Request</h2>
@@ -450,9 +459,10 @@ request.</p>
 
 <p><a href="https://github.com/blue-jay/blueprint/blob/master/bootstrap/bootstrap.go">Source</a></p>
 
-<pre><code class="language-go">// Middleware contains the middleware that applies to every request
+<pre><code class="language-go">// SetUpMiddleware contains the middleware that applies to every request.
 func SetUpMiddleware(h http.Handler) http.Handler {
     return router.ChainHandler( // Chain middleware, bottom runs first
+        h,                    // Handler to wrap
         context.ClearHandler, // Clear handler for Gorilla Context
         rest.Handler,         // Support changing HTTP method sent via form input
         logrequest.Handler,   // Log every request

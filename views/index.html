@@ -216,6 +216,23 @@
 
 
 
+<a  title="Assets" href="http://blue-jay.github.io/assets/">
+	
+	Assets
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
 <a  title="Routing" href="http://blue-jay.github.io/routing/">
 	
 	Routing
@@ -335,32 +352,32 @@
 
 <p>A view should include the four <strong>define</strong> blocks (<strong>title</strong>, <strong>head</strong>, <strong>content</strong>, and <strong>foot</strong>) and may look like this:</p>
 
-<pre><code class="language-html">{{define &quot;title&quot;}}Welcome{{end}}
+<pre><code class="language-html">{{define &quot;title&quot;}}About Blueprint{{end}}
 {{define &quot;head&quot;}}{{end}}
 {{define &quot;content&quot;}}
 &lt;div class=&quot;container&quot;&gt;
 	&lt;div class=&quot;page-header&quot;&gt;
-		&lt;h1&gt;Hello, {{.first_name}}&lt;/h1&gt;
+		&lt;h1&gt;{{template &quot;title&quot; .}}&lt;/h1&gt;
 	&lt;/div&gt;
-	&lt;p&gt;You have arrived. Click {{LINK &quot;notepad&quot; &quot;here&quot;}} to view your notepad.&lt;/p&gt;
+	&lt;p&gt;Blueprint lays the foundation for your web application using the Go language.&lt;/p&gt;
 	{{template &quot;footer&quot; .}}
 &lt;/div&gt;
 {{end}}
 {{define &quot;foot&quot;}}{{end}}
 </code></pre>
 
-<p>Since this view is stored at <strong>view/index/auth.tmpl</strong>, we may render it using the <strong>view</strong> helper package like so:</p>
+<p>Since this view is stored at <strong>view/about/index.tmpl</strong>, we may render it using the <strong>view</strong> helper package like so:</p>
 
 <pre><code class="language-go">// import &quot;github.com/blue-jay/blueprint/lib/view&quot;
-v := view.New(&quot;index/auth&quot;)
-v.Vars[&quot;first_name&quot;] = session.Values[&quot;first_name&quot;]
+v := view.New(&quot;about/index&quot;)
+// Variables would go here like this: v.Vars[&quot;first_name&quot;] = session.Values[&quot;first_name&quot;]
 v.Render(w, r)
 </code></pre>
 
 <p>If you don&rsquo;t have to pass any variables to the template, you could shorten it like this:</p>
 
 <pre><code class="language-go">// import &quot;github.com/blue-jay/blueprint/lib/view&quot;
-view.New(&quot;index/auth&quot;).Render(w, r)
+view.New(&quot;about/index&quot;).Render(w, r)
 </code></pre>
 
 <h2 id="base-template">Base Template</h2>
@@ -368,7 +385,7 @@ view.New(&quot;index/auth&quot;).Render(w, r)
 <p>By default, the <strong>view/base.tmpl</strong> template is used as the base template (as specified in env.json). If you want to
 change the base template for a template, you can try this:</p>
 
-<pre><code class="language-go">v := view.New(&quot;index/auth&quot;).Base(&quot;alternate&quot;)
+<pre><code class="language-go">v := view.New(&quot;about/index&quot;).Base(&quot;alternate&quot;)
 v.Render(w, r)
 </code></pre>
 
@@ -384,50 +401,50 @@ and provides the following:</p>
 
 <ul>
 <li>thread-safe template caching</li>
-<li>easy way to extend the list of functions available in templates</li>
-<li>easy way to modify the variables available in templates</li>
+<li>ability to extend the list of functions available in templates</li>
+<li>ability to modify the variables available in templates</li>
 </ul>
 
 <p>The set up of the <strong>view</strong> package is handled by the <strong>bootstrap</strong> package:</p>
 
-<pre><code class="language-go">// import &quot;github.com/blue-jay/blueprint/lib/view&quot;
-// Set up the views
+<pre><code class="language-go">// Set up the views
 view.SetConfig(config.View)
 view.SetTemplates(config.Template.Root, config.Template.Children)
 
 // Set up the functions for the views
-view.SetFunctions(
-	extend.Assets(config.View),
-	extend.Link(config.View),
-	extend.NoEscape(),
-	extend.PrettyTime(),
+view.SetFuncMaps(
+	asset.Map(config.View.BaseURI),
+	link.Map(config.View.BaseURI),
+	noescape.Map(),
+	prettytime.Map(),
+	form.Map(),
 )
 
 // Set up the variables for the views
-view.SetVariables(
-	modify.AuthLevel,
-	modify.BaseURI,
-	modify.Token,
+view.SetModifiers(
+	authlevel.Modify,
+	uri.Modify,
+	token.Modify,
 	flash.Modify,
 )
 </code></pre>
 
 <h2 id="organization">Organization</h2>
 
-<p>The HTML templates are organized into folders under the <strong>view</strong> folder:</p>
+<p>The HTML templates are organized in folders under the <strong>view</strong> folder:</p>
 
-<pre><code class="language-text">about/about.tmpl	- quick blurb about the app
-auth/login.tmpl		- login page
-auth/register.tmpl	- register page
-index/anon.tmpl		- public home page
-index/auth.tmpl		- home page once you login
-note/create.tmpl	- create a note
-note/edit.tmpl		- edit a note
-note/index.tmpl		- view all notes
-note/show.tmpl		- view a note
-partial/footer.tmpl	- footer at the bottom of all pages
-partial/menu.tmpl	- menu at the top of all pages
-base.tmpl			- base template for all pages
+<pre><code class="language-text">about/index.tmpl	 - quick blurb about the app
+home/index.tmpl      - public and authenticated home page
+login/index.tmpl     - login page
+note/create.tmpl	 - create a note
+note/edit.tmpl		 - edit a note
+note/index.tmpl		 - view all notes
+note/show.tmpl		 - view a note
+partial/favicon.tmpl - favicon metadata generated by gulpfile.js
+partial/footer.tmpl	 - footer at the bottom of all pages
+partial/menu.tmpl	 - menu at the top of all pages
+register/index.tmpl	 - register page
+base.tmpl            - base template for all pages
 </code></pre>
 
 <h2 id="included-functions">Included Functions</h2>
@@ -437,17 +454,17 @@ and static files easier:</p>
 
 <pre><code class="language-html">&lt;!-- CSS files with timestamps --&gt;
 {{CSS &quot;static/css/normalize3.0.0.min.css&quot;}}
-parses to
+&lt;!-- parses to --&gt;
 &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;/static/css/normalize3.0.0.min.css?1435528339&quot; /&gt;
 
 &lt;!-- JS files with timestamps --&gt;
 {{JS &quot;static/js/jquery1.11.0.min.js&quot;}}
-parses to
+&lt;!-- parses to --&gt;
 &lt;script type=&quot;text/javascript&quot; src=&quot;/static/js/jquery1.11.0.min.js?1435528404&quot;&gt;&lt;/script&gt;
 
 &lt;!-- Hyperlinks --&gt;
 {{LINK &quot;register&quot; &quot;Create a new account.&quot;}}
-parses to
+&lt;!-- parses to --&gt;
 &lt;a href=&quot;/register&quot;&gt;Create a new account.&lt;/a&gt;
 
 &lt;!-- Output an unescaped variable (not a safe idea, but it is useful when troubleshooting) --&gt;
@@ -455,7 +472,7 @@ parses to
 
 &lt;!-- Time format --&gt;
 {{.SomeTime | PRETTYTIME}}
-parses to format
+&lt;!-- parses to format
 3:04 PM 01/02/2006
 </code></pre>
 
@@ -470,11 +487,166 @@ You are logged in.
 You are not logged in.
 {{end}}
 
-&lt;!-- Use BaseURI to print the base URL specified in the env.json file --&gt;
+&lt;!-- Use BaseURI to print the base URL specified in the env.json file, ends in slash --&gt;
 &lt;li&gt;&lt;a href=&quot;{{.BaseURI}}about&quot;&gt;About&lt;/a&gt;&lt;/li&gt;
+&lt;!-- Use CurrentURI to print the current URL, does not end in slash --&gt;
+&lt;li&gt;&lt;a href=&quot;{{.CurrentURI}}&quot;&gt;Current Page&lt;/a&gt;&lt;/li&gt;
+&lt;!-- Use ParentURI to print the URL up one level, does not end in slash --&gt;
+&lt;li&gt;&lt;a href=&quot;{{.ParentURI}}&quot;&gt;Parent Page&lt;/a&gt;&lt;/li&gt;
+&lt;!-- Use GrandparentURI to print the URL up two levels, does not end in slash --&gt;
+&lt;li&gt;&lt;a href=&quot;{{.GrandparentURI}}&quot;&gt;Grandparent Page&lt;/a&gt;&lt;/li&gt;
 
 &lt;!-- Use token to output the CSRF token in a form --&gt;
 &lt;input type=&quot;hidden&quot; name=&quot;token&quot; value=&quot;{{.token}}&quot;&gt;
+</code></pre>
+
+<h2 id="forms">Forms</h2>
+
+<p>When a form is submitted and there are errors like a required field is missing,
+the same web page should reload. Unfortunately, forms are not refilled so there
+are a few helpers from the <strong>form</strong> package that will help you refill, select,
+and check.</p>
+
+<p>First, check out the <a href="http://blue-jay.github.io/controllers/#repopulate-form-fields">Repopulate Form Fields</a>
+section on the Controllers page. It will show you the single line of code needed
+in your controller.</p>
+
+<p>Then, use the blocks below in your templates. Notice that some of the HTML
+attributes are missing like <strong>name</strong>, <strong>value</strong>, and <strong>type</strong> from the elements.
+The blocks will automatically fill these in for you so you don&rsquo;t have the write
+the name of the element multiple times. By the way, it took very little code to
+add this functionality so check out the
+<a href="https://github.com/blue-jay/blueprint/blob/master/lib/form/form.go">form</a>
+package to see how it was accomplished.</p>
+
+<pre><code class="language-html">
+&lt;!-- TEXT accepts the element name and then a period --&gt;
+&lt;input {{TEXT &quot;email&quot; .}} type=&quot;email&quot; class=&quot;form-control&quot; id=&quot;email&quot; /&gt;
+&lt;!-- then parses to a name attribute when no repopulation value is passed --&gt;
+&lt;input name=&quot;email&quot; type=&quot;email&quot; class=&quot;form-control&quot; id=&quot;email&quot; /&gt;
+&lt;!-- and parses to a name and a value when a repopulation value is passed --&gt;
+&lt;input name=&quot;email&quot; value=&quot;me@example.com&quot; type=&quot;email&quot; class=&quot;form-control&quot; id=&quot;email&quot; /&gt;
+
+&lt;!-- TEXTAREA accepts the element name and then a period --&gt;
+&lt;textarea rows=&quot;5&quot; class=&quot;form-control&quot; id=&quot;name&quot; name=&quot;name&quot; /&gt;{{TEXTAREA &quot;name&quot; .}}&lt;/textarea&gt;
+&lt;!-- then parses to nothing when no repopulation value is passed --&gt;
+&lt;textarea rows=&quot;5&quot; class=&quot;form-control&quot; id=&quot;name&quot; name=&quot;name&quot; /&gt;&lt;/textarea&gt;
+&lt;!-- and parses to a value when a repopulation value is passed --&gt;
+&lt;textarea rows=&quot;5&quot; class=&quot;form-control&quot; id=&quot;name&quot; name=&quot;name&quot; /&gt;Sample text&lt;/textarea&gt;
+
+&lt;!-- CHECKBOX accepts the element name, value, and then a period --&gt;
+&lt;label&gt;&lt;input {{CHECKBOX &quot;rememberme&quot; &quot;r1&quot; .}}&gt; Remember me&lt;/label&gt;
+&lt;!-- then parses to a type, name, and value attribute when no repopulation value is passed --&gt;
+&lt;label&gt;&lt;input type=&quot;checkbox&quot; name=&quot;rememberme&quot; value=&quot;r1&quot;&gt; Remember me&lt;/label&gt;
+&lt;!-- and parses to a type, name, value, and the word 'checked' when a repopulation value is passed --&gt;
+&lt;label&gt;&lt;input type=&quot;checkbox&quot; name=&quot;rememberme&quot; value=&quot;r1&quot; checked&gt; Remember me&lt;/label&gt;
+
+&lt;!-- RADIO accepts the element name, value, and then a period --&gt;
+&lt;label&gt;&lt;input {{RADIO &quot;options&quot; &quot;burger&quot; .}}&gt; Burger&lt;/label&gt;
+&lt;!-- then parses to a type, name, and value attribute when no repopulation value is passed --&gt;
+&lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;options&quot; value=&quot;burger&quot;&gt; Burger&lt;/label&gt;
+&lt;!-- and parses to a type, name, value attribute, and the word 'checked' when a repopulation value is passed --&gt;
+&lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;options&quot; value=&quot;burger&quot; checked&gt; Burger&lt;/label&gt;
+
+&lt;!-- OPTION accepts the element name, value, and then a period --&gt;
+&lt;select name=&quot;select&quot;&gt;&lt;option {{OPTION &quot;select&quot; &quot;Apple&quot; .}}&gt;Apple&lt;/option&gt;&lt;/select&gt;
+&lt;!-- then parses to a value attribute when no repopulation value is passed --&gt;
+&lt;select name=&quot;select&quot;&gt;&lt;option value=&quot;Apple&quot;&gt;Apple&lt;/option&gt;&lt;/select&gt;
+&lt;!-- and parses to a value attribute and the word 'selected' when a repopulation value is passed --&gt;
+&lt;select name=&quot;select&quot;&gt;&lt;option value=&quot;Apple&quot; selected&gt;Apple&lt;/option&gt;&lt;/select&gt;
+
+</code></pre>
+
+<p>Here are examples of all the fields with the Bootrap structure and classes:</p>
+
+<pre><code class="language-html">&lt;div class=&quot;form-group&quot;&gt;
+	&lt;label for=&quot;email&quot;&gt;Email Address&lt;/label&gt;
+	&lt;div&gt;&lt;input {{TEXT &quot;email&quot; .}} type=&quot;email&quot; class=&quot;form-control&quot; id=&quot;email&quot; maxlength=&quot;48&quot; placeholder=&quot;Email&quot; /&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;form-group&quot;&gt;
+	&lt;label for=&quot;name&quot;&gt;Item&lt;/label&gt;
+	&lt;div&gt;&lt;textarea rows=&quot;5&quot; class=&quot;form-control&quot; id=&quot;name&quot; name=&quot;name&quot; placeholder=&quot;Type your text here...&quot; /&gt;{{TEXTAREA &quot;name&quot; .}}&lt;/textarea&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;checkbox&quot;&gt;
+    &lt;label&gt;
+        &lt;input {{CHECKBOX &quot;rememberme&quot; &quot;r1&quot; .}}&gt; Remember me
+    &lt;/label&gt;
+&lt;/div&gt;
+&lt;div class=&quot;checkbox&quot;&gt;
+    &lt;label&gt;
+        &lt;input {{CHECKBOX &quot;rememberme&quot; &quot;r2&quot; .}}&gt; Remember me
+    &lt;/label&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;radio&quot;&gt;
+    &lt;label&gt;
+        &lt;input {{RADIO &quot;options&quot; &quot;burger&quot; .}}&gt; Burger
+    &lt;/label&gt;
+&lt;/div&gt;
+&lt;div class=&quot;radio&quot;&gt;
+    &lt;label&gt;
+        &lt;input {{RADIO &quot;options&quot; &quot;taco&quot; .}}&gt; Taco
+    &lt;/label&gt;
+&lt;/div&gt;
+
+&lt;select class=&quot;form-control&quot; name=&quot;select&quot;&gt;
+    &lt;option {{OPTION &quot;select&quot; &quot;Apple&quot; .}}&gt;Apple&lt;/option&gt;
+    &lt;option {{OPTION &quot;select&quot; &quot;Banana&quot; .}}&gt;Banana&lt;/option&gt;
+    &lt;option {{OPTION &quot;select&quot; &quot;cherry&quot; .}}&gt;Cherry&lt;/option&gt;
+&lt;/select&gt;
+
+&lt;select multiple class=&quot;form-control&quot; name=&quot;mselect&quot;&gt;
+    &lt;option {{OPTION &quot;mselect&quot; &quot;red&quot; .}}&gt;Red&lt;/option&gt;
+    &lt;option {{OPTION &quot;mselect&quot; &quot;green&quot; .}}&gt;Green&lt;/option&gt;
+    &lt;option {{OPTION &quot;mselect&quot; &quot;blue&quot; .}}&gt;Blue&lt;/option&gt;
+&lt;/select&gt;
+</code></pre>
+
+<h2 id="change-http-methods">Change HTTP Methods</h2>
+
+<p>When you submit a form a a website, the site most likely it sends a POST
+request to the server. In order for us to make our application more RESTful, we
+can use utilize the simple
+<a href="https://github.com/blue-jay/blueprint/blob/master/middleware/rest/rest.go"><strong>rest</strong></a>
+package to change the HTTP method from a form field. The <strong>rest</strong> middleware is
+already applied to every request in the <strong>bootstrap</strong> package.</p>
+
+<p>To change the method, add this line to your form and change <strong>value</strong> to match
+ a method like <strong>DELETE</strong> or <strong>PATCH</strong>.</p>
+
+<pre><code class="language-html">&lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;POST&quot;&gt;
+</code></pre>
+
+<p>This is an example of a form that is updating and email and a password using the
+PATCH HTTP method:</p>
+
+<pre><code class="language-html">&lt;form method=&quot;post&quot;&gt;
+	&lt;div class=&quot;form-group&quot;&gt;
+		&lt;label for=&quot;email&quot;&gt;Email Address&lt;/label&gt;
+		&lt;div&gt;&lt;input {{TEXT &quot;email&quot; .}} type=&quot;email&quot; class=&quot;form-control&quot; id=&quot;email&quot; /&gt;&lt;/div&gt;
+	&lt;/div&gt;
+	
+	&lt;div class=&quot;form-group&quot;&gt;
+		&lt;label for=&quot;password&quot;&gt;Password&lt;/label&gt;
+		&lt;div&gt;&lt;input {{TEXT &quot;password&quot; .}} type=&quot;password&quot; class=&quot;form-control&quot; id=&quot;password&quot; /&gt;&lt;/div&gt;
+	&lt;/div&gt;
+	
+	&lt;input type=&quot;submit&quot; class=&quot;btn btn-primary&quot; value=&quot;Change&quot; class=&quot;button&quot; /&gt;
+	
+	&lt;input type=&quot;hidden&quot; name=&quot;_token&quot; value=&quot;{{$.token}}&quot;&gt;
+	&lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;PATCH&quot;&gt;
+&lt;/form&gt;
+</code></pre>
+
+<p>The routes for this page would look something like this:</p>
+
+<pre><code class="language-go">// Display the Update Page - typical GET HTTP method
+router.Get(&quot;/user/edit/:id&quot;, Edit, c...)
+
+// Handle the Update Page Form Submissions - PATCH HTTP method
+router.Patch(&quot;user/edit/:id&quot;, Update, c...)
 </code></pre>
 
 <h2 id="header-and-footer">Header and Footer</h2>

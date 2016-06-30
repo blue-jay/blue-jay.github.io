@@ -216,6 +216,23 @@
 
 
 
+<a  title="Assets" href="http://blue-jay.github.io/assets/">
+	
+	Assets
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
 <a  title="Routing" href="http://blue-jay.github.io/routing/">
 	
 	Routing
@@ -336,7 +353,7 @@ controllers handle the interactions between the models and the views as well as
 specify which routes to map to which functions.</p>
 
 <p>It&rsquo;s a good idea to follow a naming convention for the different pieces.
-Laravel developers will notice it&rsquo;s the same convention Taylor Orwell uses.</p>
+Laravel developers will notice it&rsquo;s very similar, but with a few changes.</p>
 
 <table>
 <thead>
@@ -365,7 +382,7 @@ Laravel developers will notice it&rsquo;s the same convention Taylor Orwell uses
 
 <tr>
 <td align="center">POST</td>
-<td align="center">/notepad</td>
+<td align="center">/notepad/create</td>
 <td align="center">Store</td>
 <td align="center"></td>
 </tr>
@@ -394,14 +411,14 @@ Laravel developers will notice it&rsquo;s the same convention Taylor Orwell uses
 <tr>
 <td align="center">DELETE</td>
 <td align="center">/notepad/:id</td>
-<td align="center">index</td>
+<td align="center">Destroy</td>
 <td align="center"></td>
 </tr>
 </tbody>
 </table>
 
-<p>For example, below is a controller that follows the naming convention. Notice
-the model name (&ldquo;note&rdquo;) matches the view folder (&ldquo;note/index&rdquo;). The model does
+<p>Here is a controller that follows the naming convention. Notice
+the model name (<strong>note</strong>) matches the view folder (<strong>note/index</strong>). The model does
 not need to match the controller because you&rsquo;ll be working with many different
 models in your controllers.</p>
 
@@ -433,6 +450,10 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 <h2 id="access-a-session">Access a Session</h2>
 
+<p>Sessions provide access to variables that are set at login as well as flash
+messages. You <strong>must</strong> remember to save the sessions once you make a change to
+// them.</p>
+
 <pre><code class="language-go">// Get the current session
 sess := session.Instance(r)
 ...
@@ -442,13 +463,28 @@ sess.Save(r, w)
 
 <h2 id="trigger-flash-message">Trigger Flash Message</h2>
 
-<pre><code class="language-go">sess.AddFlash(view.Flash{&quot;Sorry, no brute force :-)&quot;, view.FlashNotice})
+<p>Flash messages will appear to the user on next page load. They only display
+once. The built-in messages are tied to Bootstrap classes:</p>
+
+<ul>
+<li>flash.Success is green (alert-success)</li>
+<li>flash.Warning is yellow (alert-warning)</li>
+<li>flash.Notice is blue (alert-info)</li>
+<li>flash.Error is red (alert-danger)</li>
+</ul>
+
+<pre><code class="language-go">sess.AddFlash(flash.Info{&quot;Welcome to Blueprint!&quot;, flash.Success})
 sess.Save(r, w) // Ensure you save the session after making a change to it
 </code></pre>
 
 <h2 id="validate-a-form">Validate a Form</h2>
 
-<pre><code class="language-go">if validate, missingField := form.Required(r, &quot;email&quot;, &quot;password&quot;); !validate {
+<p>The <strong>form</strong> package makes it easy to validate required fields. It works on the
+inputs: text, textarea, checkbox, radio, and select. The function,
+<strong>form.Required()</strong>, requires the request &reg; and then any number of fields
+because it is a variadic function.</p>
+
+<pre><code class="language-go">if valid, missingField := form.Required(r, &quot;email&quot;, &quot;password&quot;); !valid {
 	sess.AddFlash(flash.Info{&quot;Field missing: &quot; + missingField, flash.Error})
 	sess.Save(r, w)
 	LoginGET(w, r)
@@ -456,33 +492,81 @@ sess.Save(r, w) // Ensure you save the session after making a change to it
 }
 </code></pre>
 
+<h2 id="repopulate-form-fields">Repopulate Form Fields</h2>
+
+<p>The <strong>form</strong> package can also repopulate the form fields after a submission that
+is missing information. It is also a
+variadic function so it can accepts more than one field. You&rsquo;ll need to use
+blocks from the <strong>form</strong> package in your view as well. Check out the <a href="http://blue-jay.github.io/views">Views</a>
+page to see how to use them.</p>
+
+<pre><code class="language-go">// Index displays the login page.
+func Index(w http.ResponseWriter, r *http.Request) {
+	v := view.New(&quot;login/index&quot;)
+	form.Repopulate(r.Form, v.Vars, &quot;email&quot;)
+	v.Render(w, r)
+}
+</code></pre>
+
 <h2 id="render-a-template">Render a Template</h2>
 
-<pre><code class="language-go">// Set the template name
-v := view.New(&quot;auth/login&quot;)
+<p>You can render a template a few ways (check out the <a href="http://blue-jay.github.io/views">Views</a>
+page for more clarification):</p>
 
-// Refill form fields from a POST operation
-form.Repopulate(r.Form, v.Vars, &quot;email&quot;)
+<pre><code class="language-go">// Render without adding any variables
+view.New(&quot;about/index&quot;).Render(w, r)
 
-// Render the template
+// Render with variables
+session := session.Instance(r)
+v := view.New(&quot;home/index&quot;)
+v.Vars[&quot;first_name&quot;] = session.Values[&quot;first_name&quot;]
+v.Render(w, r)
+
+// Render with different base template (base.tmpl is used by default)
+v := view.New(&quot;home/index&quot;).Base(&quot;single&quot;)
 v.Render(w, r)
 </code></pre>
 
 <h2 id="return-flash-over-ajax">Return Flash over Ajax</h2>
 
-<pre><code class="language-go">// Get session
-sess := session.Instance(r)
+<p>If you&rsquo;re using Ajax to retrieve content, you can also retrieve the flash
+messages this way so they can be displayed without refreshing the page. There is
+JavaScript that is already designed to show a Flash message and it&rsquo;s called:
+<strong>ShowFlash()</strong>. You&rsquo;ll just need to make a call to the page and then pass the
+output to <strong>ShowFlash()</strong>. The code is below.</p>
 
-// Set the flash message
-sess.AddFlash(view.Flash{&quot;An error occurred on the server. Please try again later.&quot;, view.FlashError})
-sess.Save(r, w)
+<p>Code for the controller:</p>
 
-// Display the flash messages as JSON
-v := view.New(r)
-v.SendFlashes(w)
+<pre><code class="language-go">// Load the routes.
+func Load() {
+	router.Get(&quot;/flashes&quot;, Index)
+}
+
+// Index displays the flash messages in JSON.
+func Index(w http.ResponseWriter, r *http.Request) {
+	// Get session
+	sess := session.Instance(r)
+
+	// Set the flash message
+	sess.AddFlash(flash.Info{&quot;An error occurred on the server. Please try again later.&quot;, flash.Error})
+	sess.Save(r, w)
+
+	// Display the flash messages as JSON
+	flash.SendFlashes(w, r)
+}
+</code></pre>
+
+<p>Code in JavaScript:</p>
+
+<pre><code class="language-javascript">$.get(&quot;/flashes&quot;, function(data) {
+	showFlash(data);
+});
 </code></pre>
 
 <h2 id="interact-with-a-model">Interact with a Model</h2>
+
+<p>The models contain all the SQL code so the controllers just call the model
+functions to interact with the data.</p>
 
 <pre><code class="language-go">// Get database result
 result, err := user.ByEmail(email)
@@ -500,11 +584,14 @@ if err == model.ErrNoResult {
 
 <h2 id="send-an-email">Send an Email</h2>
 
+<p>There is also a simple package that sends emails once the SMTP settings in
+env.json point to your SMTP server.</p>
+
 <pre><code class="language-go">// Email a user
-err := email.Send(email.ReadConfig().From, &quot;This is the subject&quot;, &quot;This is the body!&quot;)
+err := email.Send(email.Config().From, &quot;This is the subject&quot;, &quot;This is the body!&quot;)
 if err != nil {
     log.Println(err)
-    sess.AddFlash(view.Flash{&quot;An error occurred on the server. Please try again later.&quot;, view.FlashError})
+    sess.AddFlash(flash.Info{&quot;An error occurred on the server. Please try again later.&quot;, flash.Error})
     sess.Save(r, w)
     return
 }

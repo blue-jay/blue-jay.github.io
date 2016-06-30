@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Assets on Blue Jay</title>
+    <link>http://blue-jay.github.io/assets/</link>
+    <description>Recent content in Assets on Blue Jay</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 30 Jun 2016 21:07:13 +0100</lastBuildDate>
+    <atom:link href="http://blue-jay.github.io/assets/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Assets</title>
+      <link>http://blue-jay.github.io/assets/</link>
+      <pubDate>Thu, 30 Jun 2016 21:07:13 +0100</pubDate>
+      
+      <guid>http://blue-jay.github.io/assets/</guid>
+      <description>
+
+&lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
+
+&lt;p&gt;Out of the box, all of the static assets like CSS and JavaScript are ready to
+demo. If you want to make changes to the file, it&amp;rsquo;s best to use the tools
+provided. The &lt;strong&gt;asset&lt;/strong&gt; folder contains a &lt;strong&gt;dynamic&lt;/strong&gt; folder and a &lt;strong&gt;static&lt;/strong&gt;
+folder.&lt;/p&gt;
+
+&lt;p&gt;The &lt;strong&gt;dynamic&lt;/strong&gt; folder contains the Syntactically Awesome Style Sheets (SASS),
+individual JavaScript files, and a large PNG image which is used to generate
+favicons for different platforms like Android, iPhone, etc. The dynamic folder
+holds some of the assets required to generate the assets in the &lt;strong&gt;static&lt;/strong&gt;
+folder. &lt;em&gt;This is the folder you want to make your changes.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;The &lt;strong&gt;static&lt;/strong&gt; folder contains the minified CSS and JavaScript as well as
+the generated favicons. The &lt;strong&gt;static&lt;/strong&gt; folder is designed to be served up
+so the files can be accessed like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;!-- Favicons --&amp;gt;
+&amp;lt;link rel=&amp;quot;apple-touch-icon&amp;quot; sizes=&amp;quot;57x57&amp;quot; href=&amp;quot;/static/favicon/apple-touch-icon-57x57.png?v1.0=3eepn6WlLO&amp;quot;&amp;gt;
+&amp;lt;link rel=&amp;quot;apple-touch-icon&amp;quot; sizes=&amp;quot;60x60&amp;quot; href=&amp;quot;/static/favicon/apple-touch-icon-60x60.png?v1.0=3eepn6WlLO&amp;quot;&amp;gt;
+&amp;lt;link rel=&amp;quot;apple-touch-icon&amp;quot; sizes=&amp;quot;72x72&amp;quot; href=&amp;quot;/static/favicon/apple-touch-icon-72x72.png?v1.0=3eepn6WlLO&amp;quot;&amp;gt;
+&amp;lt;!-- CSS and Fonts --&amp;gt;
+&amp;lt;link media=&amp;quot;all&amp;quot; rel=&amp;quot;stylesheet&amp;quot; type=&amp;quot;text/css&amp;quot; href=&amp;quot;/static/css/bootstrap.min.css?1466973904&amp;quot; /&amp;gt;
+&amp;lt;link media=&amp;quot;all&amp;quot; rel=&amp;quot;stylesheet&amp;quot; type=&amp;quot;text/css&amp;quot; href=&amp;quot;//fonts.googleapis.com/css?family=Open+Sans:300,400,bold,italic&amp;quot; /&amp;gt;
+&amp;lt;link media=&amp;quot;all&amp;quot; rel=&amp;quot;stylesheet&amp;quot; type=&amp;quot;text/css&amp;quot; href=&amp;quot;/static/css/all.css?1466973904&amp;quot; /&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Check out the &lt;a href=&#34;http://blue-jay.github.io/controllers&#34;&gt;Controllers&lt;/a&gt; and &lt;a href=&#34;http://blue-jay.github.io/views&#34;&gt;Views&lt;/a&gt; pages for how
+the files are served and how to append timestamps to them to manage caching.&lt;/p&gt;
+
+&lt;p&gt;If you make changes to any of the files in the &lt;strong&gt;dynamic&lt;/strong&gt; folder, you still
+need a way to compile/minify them and then move them to the &lt;strong&gt;static&lt;/strong&gt; folder
+so we&amp;rsquo;ll use Gulp to do that.&lt;/p&gt;
+
+&lt;h2 id=&#34;install-npm&#34;&gt;Install npm&lt;/h2&gt;
+
+&lt;p&gt;The Node Package Manager (npm) helps install packages that work with NodeJS.
+If you don&amp;rsquo;t have NodeJS and npm installed, you can install the latest version
+from &lt;a href=&#34;https://nodejs.org&#34;&gt;https://nodejs.org&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;install-gulp-and-dependencies&#34;&gt;Install Gulp and Dependencies&lt;/h2&gt;
+
+&lt;p&gt;Once npm is installed, you can open your terminal and CD to the root of the
+project folder. You can then run these commands:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;# Install Gulp Globally
+npm install -g gulp-cli
+
+# Install Glup Locally with Dependencies from package.json
+npm install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;gulp&#34;&gt;Gulp&lt;/h2&gt;
+
+&lt;p&gt;Once the environment is set up, you should have your terminal open to the root
+of the project folder. There are a couple commands you can use with Gulp that
+are in the &lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/gulpfile.js&#34;&gt;gulpfile.js&lt;/a&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;# Compile the SASS from asset/dynamic/sass and store CSS in asset/static/css/all.css
+gulp sass
+
+# Concat the JavaScript from asset/dynamic/js and store JS in asset/static/js/all.js
+gulp javascript
+
+# Copy the jQuery files from node_modules/jquery to asset/static/js
+gulp jquery
+
+# Copy the Bootstrap files from node_modules/bootstrap to asset/static
+gulp bootstrap
+
+# Copy the Underscore files from note_modules/underscore to asset/static/js
+gulp underscore
+
+# Run tasks favicon-generate and favicon-inject
+gulp favicon
+
+# Generate favicons from asset/dynamic/logo.png and copy to /asset/static/favicon
+gulp favicon-generate
+
+# Generate view/partial/favicon.tmpl with favicon tags
+gulp favicon-inject
+
+# Update the asset/dynamic/favicon/data.json file with the latest version from the RealFaviconGenerator website
+gulp favicon-update
+
+# Run the sass and javascript tasks when any of the files change
+gulp watch
+
+# Run all the tasks once
+gulp init
+
+# Run just the sass and javascript tasks once
+gulp default
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It best to run &lt;code&gt;gulp watch&lt;/code&gt; so when you are working in the SASS and JavaScript
+files, they will automatically update for you&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

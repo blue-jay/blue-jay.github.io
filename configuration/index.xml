@@ -20,8 +20,8 @@
 &lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
 
 &lt;p&gt;Throughout this documentation, keep in mind everything in Blueprint is configurable.
-You are not using a framework so you don&amp;rsquo;t have to follow rules. You don&amp;rsquo;t need to
-use any of the components with Blueprint, but it does give you a nice foundation to
+You are not using a framework so don&amp;rsquo;t be afraid to change code. You don&amp;rsquo;t need to
+use any of the components included with Blueprint, but it does give you a nice foundation to
 start from. If you want to use YAML instead of JSON, it&amp;rsquo;s recommended to create a wrapper
 library in the &lt;strong&gt;lib&lt;/strong&gt; folder and then load your env.yaml file via the &lt;strong&gt;bootstrap&lt;/strong&gt;
 package.&lt;/p&gt;
@@ -34,58 +34,62 @@ of your own settings, you can add them to &lt;strong&gt;env.json&lt;/strong&gt; 
 in the &lt;strong&gt;bootstrap&lt;/strong&gt; package. Here is an example &lt;strong&gt;env.json&lt;/strong&gt;:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
-	&amp;quot;Database&amp;quot;: {
-		&amp;quot;Type&amp;quot;: &amp;quot;MySQL&amp;quot;,
-		&amp;quot;MySQL&amp;quot;: {
-			&amp;quot;Username&amp;quot;: &amp;quot;root&amp;quot;,
-			&amp;quot;Password&amp;quot;: &amp;quot;&amp;quot;,
-			&amp;quot;Database&amp;quot;: &amp;quot;blueprint&amp;quot;,
-			&amp;quot;Hostname&amp;quot;: &amp;quot;127.0.0.1&amp;quot;,
-			&amp;quot;Port&amp;quot;: 3306,
-			&amp;quot;Parameter&amp;quot;: &amp;quot;?parseTime=true&amp;quot;
-		}
-	},
-	&amp;quot;Email&amp;quot;: {
-		&amp;quot;Username&amp;quot;: &amp;quot;&amp;quot;,
-		&amp;quot;Password&amp;quot;: &amp;quot;&amp;quot;,
-		&amp;quot;Hostname&amp;quot;: &amp;quot;&amp;quot;,
-		&amp;quot;Port&amp;quot;: 25,
-		&amp;quot;From&amp;quot;: &amp;quot;&amp;quot;
-	},
-	&amp;quot;Server&amp;quot;: {
-		&amp;quot;Hostname&amp;quot;: &amp;quot;&amp;quot;,
-		&amp;quot;UseHTTP&amp;quot;: true,
-		&amp;quot;UseHTTPS&amp;quot;: false,
-		&amp;quot;RedirectToHTTPS&amp;quot;: false,
-		&amp;quot;HTTPPort&amp;quot;: 80,
-		&amp;quot;HTTPSPort&amp;quot;: 443,
-		&amp;quot;CertFile&amp;quot;: &amp;quot;tls/server.crt&amp;quot;,
-		&amp;quot;KeyFile&amp;quot;: &amp;quot;tls/server.key&amp;quot;
-	},
-	&amp;quot;Session&amp;quot;: {
-		&amp;quot;SecretKey&amp;quot;: &amp;quot;@r4B?EThaSEh_drudR7P_hub=s#s2Pah&amp;quot;,
-		&amp;quot;Name&amp;quot;: &amp;quot;sess&amp;quot;,
-		&amp;quot;Options&amp;quot;: {
-			&amp;quot;Path&amp;quot;: &amp;quot;/&amp;quot;,
-			&amp;quot;Domain&amp;quot;: &amp;quot;&amp;quot;,
-			&amp;quot;MaxAge&amp;quot;: 28800,
-			&amp;quot;Secure&amp;quot;: false,
-			&amp;quot;HttpOnly&amp;quot;: true
-		}
-	},
-	&amp;quot;Template&amp;quot;: {
-		&amp;quot;Root&amp;quot;: &amp;quot;base&amp;quot;,
-		&amp;quot;Children&amp;quot;: [
-			&amp;quot;partial/menu&amp;quot;,
-			&amp;quot;partial/footer&amp;quot;
-		]
-	},
-	&amp;quot;View&amp;quot;: {
-		&amp;quot;BaseURI&amp;quot;: &amp;quot;/&amp;quot;,
-		&amp;quot;Extension&amp;quot;: &amp;quot;tmpl&amp;quot;,
-		&amp;quot;Folder&amp;quot;: &amp;quot;template&amp;quot;,
-		&amp;quot;Caching&amp;quot;: true
-	}
+  &amp;quot;Asset&amp;quot;:{
+    &amp;quot;Folder&amp;quot;:&amp;quot;asset&amp;quot;
+  },
+  &amp;quot;Database&amp;quot;:{
+    &amp;quot;Type&amp;quot;:&amp;quot;MySQL&amp;quot;,
+    &amp;quot;MySQL&amp;quot;:{  
+      &amp;quot;Username&amp;quot;:&amp;quot;root&amp;quot;,
+      &amp;quot;Password&amp;quot;:&amp;quot;&amp;quot;,
+      &amp;quot;Database&amp;quot;:&amp;quot;blueprint&amp;quot;,
+      &amp;quot;Hostname&amp;quot;:&amp;quot;127.0.0.1&amp;quot;,
+      &amp;quot;Port&amp;quot;:3306,
+      &amp;quot;Parameter&amp;quot;:&amp;quot;?parseTime=true&amp;quot;
+    }
+  },
+  &amp;quot;Email&amp;quot;:{
+    &amp;quot;Username&amp;quot;:&amp;quot;&amp;quot;,
+    &amp;quot;Password&amp;quot;:&amp;quot;&amp;quot;,
+    &amp;quot;Hostname&amp;quot;:&amp;quot;&amp;quot;,
+    &amp;quot;Port&amp;quot;:25,
+    &amp;quot;From&amp;quot;:&amp;quot;&amp;quot;
+  },
+  &amp;quot;Server&amp;quot;:{
+    &amp;quot;Hostname&amp;quot;:&amp;quot;&amp;quot;,
+    &amp;quot;UseHTTP&amp;quot;:true,
+    &amp;quot;UseHTTPS&amp;quot;:false,
+    &amp;quot;RedirectToHTTPS&amp;quot;:false,
+    &amp;quot;HTTPPort&amp;quot;:80,
+    &amp;quot;HTTPSPort&amp;quot;:443,
+    &amp;quot;CertFile&amp;quot;:&amp;quot;tls/server.crt&amp;quot;,
+    &amp;quot;KeyFile&amp;quot;:&amp;quot;tls/server.key&amp;quot;
+  },
+  &amp;quot;Session&amp;quot;:{
+    &amp;quot;SecretKey&amp;quot;:&amp;quot;@r4B?EThaSEh_drudR7P_hub=s#s2Pah&amp;quot;,
+    &amp;quot;Name&amp;quot;:&amp;quot;sess&amp;quot;,
+    &amp;quot;Options&amp;quot;:{  
+      &amp;quot;Path&amp;quot;:&amp;quot;/&amp;quot;,
+      &amp;quot;Domain&amp;quot;:&amp;quot;&amp;quot;,
+      &amp;quot;MaxAge&amp;quot;:28800,
+      &amp;quot;Secure&amp;quot;:false,
+      &amp;quot;HttpOnly&amp;quot;:true
+    }
+  },
+  &amp;quot;Template&amp;quot;:{
+    &amp;quot;Root&amp;quot;:&amp;quot;base&amp;quot;,
+    &amp;quot;Children&amp;quot;:[
+      &amp;quot;partial/favicon&amp;quot;,
+	  &amp;quot;partial/menu&amp;quot;,
+      &amp;quot;partial/footer&amp;quot;
+    ]
+  },
+  &amp;quot;View&amp;quot;:{
+    &amp;quot;BaseURI&amp;quot;:&amp;quot;/&amp;quot;,
+    &amp;quot;Extension&amp;quot;:&amp;quot;tmpl&amp;quot;,
+    &amp;quot;Folder&amp;quot;:&amp;quot;view&amp;quot;,
+    &amp;quot;Caching&amp;quot;:true
+  }
 }
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -93,31 +97,31 @@ in the &lt;strong&gt;bootstrap&lt;/strong&gt; package. Here is an example &lt;st
 
 &lt;p&gt;The &lt;strong&gt;env.json&lt;/strong&gt; file contains the configuration for Blueprint. It removes the need
 to hardcode any of these values and makes it easy to move Blueprint to another system
-with a different setup.&lt;/p&gt;
+with a different setup. The &lt;strong&gt;env.json&lt;/strong&gt; file is parsed and held in the
+&lt;strong&gt;Info&lt;/strong&gt; struct from the &lt;strong&gt;bootstrap&lt;/strong&gt; package:&lt;/p&gt;
 
-&lt;p&gt;The &lt;strong&gt;env.json&lt;/strong&gt; file is parsed and the result is organized in the &lt;strong&gt;Info&lt;/strong&gt; struct from the
-&lt;strong&gt;bootstrap&lt;/strong&gt; package:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Info contains the application settings
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Info contains the application settings.
 type Info struct {
-	Database database.Info   `json:&amp;quot;Database&amp;quot;`
-	Email    email.SMTPInfo  `json:&amp;quot;Email&amp;quot;`
-	Server   server.Server   `json:&amp;quot;Server&amp;quot;`
-	Session  session.Session `json:&amp;quot;Session&amp;quot;`
-	Template view.Template   `json:&amp;quot;Template&amp;quot;`
-	View     view.View       `json:&amp;quot;View&amp;quot;`
+	Asset    asset.Info    `json:&amp;quot;Asset&amp;quot;`
+	Database database.Info `json:&amp;quot;Database&amp;quot;`
+	Email    email.Info    `json:&amp;quot;Email&amp;quot;`
+	Server   server.Info   `json:&amp;quot;Server&amp;quot;`
+	Session  session.Info  `json:&amp;quot;Session&amp;quot;`
+	Template view.Template `json:&amp;quot;Template&amp;quot;`
+	View     view.Info     `json:&amp;quot;View&amp;quot;`
 }
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;The &lt;strong&gt;Info&lt;/strong&gt; struct is simply a container that nests structs from packages in the &lt;strong&gt;lib&lt;/strong&gt; folder
 that need variables configured. Here is a list mapping the JSON keys to structs:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;Database	- Info struct in lib/database
-Email		- SMTPInfo struct in lib/email
-Server		- Server struct in lib/server
-Session		- Session struct in lib/session
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;Asset       - Info struct in lib/asset
+Database	- Info struct in lib/database
+Email		- Info struct in lib/email
+Server		- Info struct in lib/server
+Session		- Info struct in lib/session
 Template	- Template struct in lib/view
-View		- View struct in lib/view
+View		- Info struct in lib/view
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;enable-https&#34;&gt;Enable HTTPS&lt;/h2&gt;
@@ -130,7 +134,7 @@ View		- View struct in lib/view
 &lt;li&gt;Place your own certificate and key files in the &lt;strong&gt;tls&lt;/strong&gt; folder&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; If you want to redirect HTTP to HTTPS, you can set &lt;strong&gt;RedirectToHTTPS&lt;/strong&gt; to true as well.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; If you want to redirect HTTP to HTTPS, you can set &lt;strong&gt;RedirectToHTTPS&lt;/strong&gt; to &lt;strong&gt;true&lt;/strong&gt; as well.&lt;/p&gt;
 
 &lt;h2 id=&#34;tip-add-a-section&#34;&gt;Tip: Add a Section&lt;/h2&gt;
 
@@ -140,7 +144,7 @@ View		- View struct in lib/view
 &lt;li&gt;Create a new package in the &lt;strong&gt;lib&lt;/strong&gt; folder called &lt;strong&gt;captcha&lt;/strong&gt;&lt;/li&gt;
 &lt;li&gt;Create a struct called &lt;strong&gt;Info&lt;/strong&gt; in the &lt;strong&gt;lib/captcha&lt;/strong&gt; package&lt;/li&gt;
 &lt;li&gt;Add the &lt;strong&gt;Captcha&lt;/strong&gt; key and any values to the &lt;strong&gt;env.json&lt;/strong&gt; file&lt;/li&gt;
-&lt;li&gt;Add code to the &lt;strong&gt;RegisterServices()&lt;/strong&gt; function that passes the parsed config to the &lt;strong&gt;lib/captcha&lt;/strong&gt; package&lt;/li&gt;
+&lt;li&gt;Add code to the &lt;strong&gt;RegisterServices()&lt;/strong&gt; function in the &lt;strong&gt;bootstrap&lt;/strong&gt; package to pass the config to the &lt;strong&gt;lib/captcha&lt;/strong&gt; package at start up&lt;/li&gt;
 &lt;li&gt;Add code to your controllers that references your &lt;strong&gt;lib/captcha&lt;/strong&gt; package&lt;/li&gt;
 &lt;/ol&gt;
 

@@ -24,23 +24,25 @@ features like request/response logging, access controls lists (ACLs), and
 header modification. Middleware is either applied to every request (for request
 logging) or specified routes (for ACLs).&lt;/p&gt;
 
-&lt;p&gt;There are a few pieces of middleware included. The package called csrfbanana
+&lt;p&gt;There are a few pieces of middleware included. The package called &lt;strong&gt;csrfbanana&lt;/strong&gt;
 protects against Cross-Site Request Forgery attacks and prevents double submits.
-The package httprouterwrapper provides helper functions to make funcs compatible
-with httprouter. The package logrequest will log every request made against the
-website to the console. The package pprofhandler enables pprof so it will work
-with httprouter.&lt;/p&gt;
+The &lt;strong&gt;logrequest&lt;/strong&gt; package will log every request made against the
+website to the console. The &lt;strong&gt;rest&lt;/strong&gt; package allows the HTTP method to be
+changed during a form submission to DELETE or PATCH instead of POST.&lt;/p&gt;
 
 &lt;h2 id=&#34;creating-middleware&#34;&gt;Creating Middleware&lt;/h2&gt;
 
 &lt;p&gt;An example of a piece of middleware that is applied to every request is
-&lt;strong&gt;lib/middleware/logrequest&lt;/strong&gt;. When a page is requested, the middleware will
-print to the console the time of the request, remote IP address, HTTP method,
+&lt;strong&gt;middleware/logrequest&lt;/strong&gt;. When a page is requested, the middleware will
+print to the console: the time of the request, remote IP address, HTTP method,
 and the URL requested.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/lib/middleware/logrequest/logrequest.go&#34;&gt;Source&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/middleware/logrequest/logrequest.go&#34;&gt;Source&lt;/a&gt;&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package logrequest
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Package logrequest provides an http.Handler that logs when a request is
+// made to the application and lists the remote address, the HTTP method,
+// and the URL.
+package logrequest
 
 import (
     &amp;quot;fmt&amp;quot;
@@ -48,19 +50,18 @@ import (
     &amp;quot;time&amp;quot;
 )
 
-// Handler will log the HTTP requests
+// Handler will log the HTTP requests.
 func Handler(next http.Handler) http.Handler {
     return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        // Log the request
         fmt.Println(time.Now().Format(&amp;quot;2006-01-02 03:04:05 PM&amp;quot;), r.RemoteAddr, r.Method, r.URL)
         next.ServeHTTP(w, r)
     })
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;You can use this template for writing your own middleware:&lt;/p&gt;
+&lt;p&gt;This is an example of the minimum requirements for middleware:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Handler will log the HTTP requests
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Handler
 func Handler(next http.Handler) http.Handler {
     return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
         // Logic BEFORE the other handlers and function goes here
@@ -72,7 +73,7 @@ func Handler(next http.Handler) http.Handler {
 
 &lt;h2 id=&#34;chaining&#34;&gt;Chaining&lt;/h2&gt;
 
-&lt;p&gt;Chaining prevents middleware from stacking up which is hard to read.&lt;/p&gt;
+&lt;p&gt;Chaining prevents middleware from stacking up which is hard to read like this:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;return context.ClearHandler(rest.Handler(logrequest.Handler(setUpBanana)))
 &lt;/code&gt;&lt;/pre&gt;
@@ -91,20 +92,9 @@ the application uses the &lt;strong&gt;router.ChainHandler()&lt;/strong&gt; func
 the &lt;a href=&#34;https://github.com/justinas/alice&#34;&gt;justinas/alice&lt;/a&gt; package which makes
 using middleware more scalable and a little &amp;ldquo;prettier&amp;rdquo;. If you look at the
 &lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/bootstrap/bootstrap.go&#34;&gt;bootstrap&lt;/a&gt;
-package, you&amp;rsquo;ll see the &lt;strong&gt;ChainHandler()&lt;/strong&gt; function.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Middleware contains the middleware that applies to every request
-func SetUpMiddleware(h http.Handler) http.Handler {
-    return router.ChainHandler( // Chain middleware, bottom runs first
-        context.ClearHandler, // Clear handler for Gorilla Context
-        rest.Handler,         // Support changing HTTP method sent via form input
-        logrequest.Handler,   // Log every request
-        setUpBanana)          // Prevent CSRF and double submits
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;There is also a &lt;strong&gt;Chain()&lt;/strong&gt; function that can be used to chain middleware for routes
-or to pass to &lt;strong&gt;ChainHandler()&lt;/strong&gt;.&lt;/p&gt;
+package, you&amp;rsquo;ll see the &lt;strong&gt;ChainHandler()&lt;/strong&gt; function. There is also a &lt;strong&gt;Chain()&lt;/strong&gt;
+function that can be used to chain middleware for routes or to pass to
+&lt;strong&gt;ChainHandler()&lt;/strong&gt;.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Apply middleware to routes individually
 router.Get(&amp;quot;/notepad&amp;quot;, Index, acl.DisallowAnon, logrequest.Handler)
@@ -117,6 +107,7 @@ router.Get(&amp;quot;/notepad/create&amp;quot;, Create, c...)
 
 // Pass Chain() to ChainHandler()
 c := router.Chain( // Chain middleware, bottom runs first
+    h,                    // Handler to wrap
     context.ClearHandler, // Clear handler for Gorilla Context
     rest.Handler,         // Support changing HTTP method sent via form input
     logrequest.Handler,   // Log every request
@@ -125,8 +116,9 @@ return router.ChainHandler(c...)
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;&lt;strong&gt;ChainHandler()&lt;/strong&gt; accepts one or more of the http.Handler type and returns a
-http.Handler.
-&lt;strong&gt;Chain()&lt;/strong&gt; accepts one or more of the http.Handler type and returns an array of
+http.Handler.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Chain()&lt;/strong&gt; accepts one or more of the http.Handler type and returns an array of
 the alice.Constructor type.&lt;/p&gt;
 
 &lt;h2 id=&#34;apply-to-every-request&#34;&gt;Apply to Every Request&lt;/h2&gt;
@@ -138,9 +130,10 @@ request.&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/bootstrap/bootstrap.go&#34;&gt;Source&lt;/a&gt;&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Middleware contains the middleware that applies to every request
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// SetUpMiddleware contains the middleware that applies to every request.
 func SetUpMiddleware(h http.Handler) http.Handler {
     return router.ChainHandler( // Chain middleware, bottom runs first
+        h,                    // Handler to wrap
         context.ClearHandler, // Clear handler for Gorilla Context
         rest.Handler,         // Support changing HTTP method sent via form input
         logrequest.Handler,   // Log every request

@@ -216,6 +216,23 @@
 
 
 
+<a  title="Assets" href="http://blue-jay.github.io/assets/">
+	
+	Assets
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
 <a class="current" title="Routing" href="http://blue-jay.github.io/routing/">
 	
 	Routing
@@ -332,9 +349,9 @@
 <h2 id="basic-usage">Basic Usage</h2>
 
 <p>When a user requests a page from your application, the routes determine which
-page is shown. The URL is mapped to a controller function. For that reason,
-the routes are stored in the controller file. The controller files are all
-organized under the <strong>controller</strong> folder.</p>
+page is shown. The route is a URL that is mapped to a controller function.
+To simplify the organization, the routes are stored in the controller files.
+The controller files are all organized under the <strong>controller</strong> folder.</p>
 
 <h2 id="routing">Routing</h2>
 
@@ -344,15 +361,15 @@ calls the <strong>controller.LoadRoutes()</strong> function.</p>
 <p>The <strong>LoadRoutes()</strong> function in the <strong>controller</strong> package loads the routes
 for each of the individual controllers:</p>
 
-<pre><code class="language-go">// LoadRoutes loads the routes for each of the controllers
+<pre><code class="language-go">// LoadRoutes loads the routes for each of the controllers.
 func LoadRoutes() {
     about.Load()
     debug.Load()
-    auth.LoadRegister()
-    auth.LoadLogin()
-    core.LoadIndex()
-    core.LoadError()
-    core.LoadStatic()
+    register.Load()
+    login.Load()
+    home.Load()
+    static.Load()
+    status.Load()
     notepad.Load()
 }
 </code></pre>
@@ -363,10 +380,10 @@ func LoadRoutes() {
     // Add middleware that disallows anonymous access
     c := router.Chain(acl.DisallowAnon)
 
-    // Map HTTP methods and URLs to functions wrapped in the middleware chain
+    // Map HTTP methods and URLs to functions with the middleware chain
     router.Get(&quot;/notepad&quot;, Index, c...)
     router.Get(&quot;/notepad/create&quot;, Create, c...)
-    router.Post(&quot;/notepad&quot;, Store, c...)
+    router.Post(&quot;/notepad/create&quot;, Store, c...)
     router.Get(&quot;/notepad/view/:id&quot;, Show, c...)
     router.Get(&quot;/notepad/edit/:id&quot;, Edit, c...)
     router.Patch(&quot;/notepad/edit/:id&quot;, Update, c...)
@@ -375,7 +392,7 @@ func LoadRoutes() {
 </code></pre>
 
 <p>There are a few things to note here. The <strong>router</strong> references the
-<strong>lib/router</strong> package which is a wrapper for the
+<strong>lib/router</strong> package which is a thread-safe wrapper for the
 <a href="http://github.com/julienschmidt/httprouter">julienschmidt/httprouter</a> package.
 The <strong>router.Chain()</strong> function uses the
 <a href="http://github.com/justinas/alice">justinas/alice</a> package
@@ -388,71 +405,86 @@ controllers.</p>
 
 <h2 id="static-assets">Static Assets</h2>
 
-<p>You can serve your <strong>static</strong> folder with your CSS, JavaScript, and images so
+<p>You can serve the <strong>asset/static</strong> folder with your CSS, JavaScript, and images so
 they are accessible. You would access an asset like this:
 <code>http://example.com/static/favicon.ico</code></p>
 
-<p><a href="https://github.com/blue-jay/blueprint/blob/master/controller/core/static.go">Source</a></p>
+<p><a href="https://github.com/blue-jay/blueprint/blob/master/controller/static/static.go">Source</a></p>
 
-<pre><code class="language-go">package core
+<pre><code class="language-go">// Package static serves static files like CSS, JavaScript, and images.
+package static
 
 import (
     &quot;net/http&quot;
-    &quot;strings&quot;
+    &quot;os&quot;
+    &quot;path&quot;
 
+    &quot;github.com/blue-jay/blueprint/controller/status&quot;
+    &quot;github.com/blue-jay/blueprint/lib/asset&quot;
     &quot;github.com/blue-jay/blueprint/lib/router&quot;
 )
 
-func LoadStatic() {
-    // Required so the trailing slash is not redirected
-    router.Instance().RedirectTrailingSlash = false
-
-    // Serve static files, no directory browsing
-    router.Get(&quot;/static/*filepath&quot;, Static)
+// Load the routes.
+func Load() {
+    // Serve static files
+    router.Get(&quot;/static/*filepath&quot;, Index)
 }
 
-// Static maps static files
-func Static(w http.ResponseWriter, r *http.Request) {
-    // Disable listing directories
-    if strings.HasSuffix(r.URL.Path, &quot;/&quot;) {
-        Error404(w, r)
+// Index maps static files.
+func Index(w http.ResponseWriter, r *http.Request) {
+    // File path
+    path := path.Join(asset.Config().Folder, r.URL.Path[1:])
+
+    // Only serve files
+    if fi, err := os.Stat(path); err == nil &amp;&amp; !fi.IsDir() {
+        http.ServeFile(w, r, path)
         return
     }
-    http.ServeFile(w, r, r.URL.Path[1:])
+
+    status.Error404(w, r)
 }
 </code></pre>
 
 <h2 id="error-pages">Error Pages</h2>
 
-<p>You can specify the <strong>404</strong> (Page Not Found) and <strong>405</strong> (Method Not Allowed)
-behaviors.</p>
+<p>A few errors pages are already defined for you like the <strong>404</strong> (Page Not Found)
+and <strong>405</strong> (Method Not Allowed) pages.</p>
 
-<p><a href="https://github.com/blue-jay/blueprint/blob/master/controller/core/error.go">Source</a></p>
+<p><a href="https://github.com/blue-jay/blueprint/blob/master/controller/status/status.go">Source</a></p>
 
-<pre><code class="language-go">package core
+<pre><code class="language-go">// Package status provides all the error pages like 404, 405, 500, 501,
+// and the page when a CSRF token is invalid.
+package status
 
 import (
-    &quot;fmt&quot;
     &quot;net/http&quot;
 
     &quot;github.com/blue-jay/blueprint/lib/router&quot;
+    &quot;github.com/blue-jay/blueprint/lib/view&quot;
 )
 
-func LoadError() {
+// Load the routes.
+func Load() {
     router.MethodNotAllowed(Error405)
     router.NotFound(Error404)
 }
 
-// Error404 - Page Not Found
+// Error404 - Page Not Found.
 func Error404(w http.ResponseWriter, r *http.Request) {
     w.WriteHeader(http.StatusNotFound)
-    fmt.Fprint(w, &quot;Not Found 404&quot;)
+    v := view.New(&quot;status/index&quot;)
+    v.Vars[&quot;title&quot;] = &quot;404 Not Found&quot;
+    v.Vars[&quot;message&quot;] = &quot;Page could not be found.&quot;
+    v.Render(w, r)
 }
 
-// Error405 - Method Not Allowed
+// Error405 - Method Not Allowed.
 func Error405(w http.ResponseWriter, r *http.Request) {
     w.WriteHeader(http.StatusMethodNotAllowed)
-    fmt.Fprint(w, &quot;Method Not Allowed 405&quot;)
+    v := view.New(&quot;status/index&quot;)
+    v.Vars[&quot;title&quot;] = &quot;405 Method Not Allowed&quot;
+    v.Vars[&quot;message&quot;] = &quot;Method is not allowed.&quot;
+    v.Render(w, r)
 }
 </code></pre>
 

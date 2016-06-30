@@ -222,6 +222,23 @@
 
 
 
+<a  title="Assets" href="http://blue-jay.github.io/assets/">
+	
+	Assets
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
 <a  title="Routing" href="http://blue-jay.github.io/routing/">
 	
 	Routing
@@ -336,26 +353,101 @@
 <p><a href="https://goreportcard.com/report/github.com/blue-jay/blueprint"><img src="https://goreportcard.com/badge/github.com/blue-jay/blueprint" alt="Go Report Card" /></a>
 <a href="https://godoc.org/github.com/blue-jay/blueprint"><img src="https://godoc.org/github.com/blue-jay/blueprint?status.svg" alt="GoDoc" /></a></p>
 
-<p>Blue Jay is a web toolkit for <a href="https://golang.org/">Go</a>. It&rsquo;s a collection of command-line tools and a web blueprint that allows you to easily structure your web application. There is no rigid framework to which you have to conform.</p>
+<p>Blue Jay is a web toolkit for <a href="https://golang.org/">Go</a>. It&rsquo;s a collection of command-line tools and a web blueprint that allows you to easily structure your web application. There is no rigid framework to which you have to conform and Blueprint is very easy to start using.</p>
 
 <p>There are a few components:</p>
 
 <ul>
 <li><p><a href="https://github.com/blue-jay/blueprint"><strong>Blueprint</strong></a> is a model-view-controller (MVC) style web skeleton.</p></li>
 
-<li><p><a href="https://github.com/blue-jay/jay"><strong>Jay</strong></a> is a command line tool with modules for find/replace, database migrations, and code generation.</p></li>
+<li><p><a href="https://github.com/blue-jay/jay"><strong>Jay</strong></a> is a command line tool with find/replace, database migrations, and code generation.</p></li>
 </ul>
+
+<h2 id="high-level">High Level</h2>
+
+<p>Blueprint is a complete web application with a built-in web server.
+It supports MySQL so you&rsquo;ll need to set up your own instance of the database.
+The application has a public home page, authenticated home page, login page, register page,
+about page, and a simple notepad to demonstrate GET, POST, UPDATE, and DELETE operations.</p>
+
+<p>The entrypoint for the web app is <strong>blueprint.go</strong>. The file uses the <strong>bootstrap</strong> package
+to load the application settings, create the session store, connect to the database,
+set up the view, load the routes, attach the middleware, and then start the web server.</p>
+
+<p>The front end is built using Bootstrap with a few small changes to fonts and spacing. The flash
+messages are customized so they show up at the bottom right of the screen. All of the error and
+warning messages should display to the
+user or in the console. Informational messages are displayed to the user via
+flash messages that disappear after 4 seconds.</p>
+
+<p>Blueprint also works well with <a href="https://www.npmjs.com/">npm</a> and
+<a href="http://gulpjs.com/">Gulp</a>. A Gulp script is
+included that automates the compiling of SASS, concatenation of JavaScript,
+generation of favicons, and copying of static assets like Bootstrap and jQuery
+managed by npm to the <strong>asset/static</strong> folder. They are great tools that speed up
+web development.</p>
+
+<h2 id="quick-start-with-mysql">Quick Start with MySQL</h2>
+
+<ol>
+<li>To download, run the following command: <code>go get github.com/blue-ray/blueprint</code></li>
+<li>Start a MySQL instance and import <strong>database/migration/20160630_020000_a.up.sql</strong> to create the database and tables.</li>
+<li>Make a copy of env.json.example and name it: <strong>env.json</strong></li>
+<li>Edit the <strong>Database</strong> section in <strong>env.json</strong> so the connection information matches your MySQL instance.</li>
+<li>Use <code>go run</code> from the root of the project directory.</li>
+<li>Open your web browser to <a href="http://localhost">http://localhost</a> and you should see the welcome page.</li>
+<li>Navigate to the register page at <a href="http://localhost/register">http://localhost/register</a> and create a new user.</li>
+<li>You can now login at <a href="http://localhost/login">http://localhost/login</a> to try the Notepad app.</li>
+</ol>
+
+<h2 id="structure">Structure</h2>
+
+<p>The project is organized into the following folders:</p>
+
+<pre><code class="language-text">asset/
+|----dynamic/    - private assets like SASS files, single JavaScript files, and logo.png for favicon generation
+|----static/     - public assets like CSS, JavaScript, and favicon.ico for Android, Apple, etc.
+bootstrap/	     - package for initial set up of the application
+controller/	     - packages with routes and application logic
+database/
+|----migration/  - SQL files for migration database up and down
+generate/	     - template pairs (.gen and .json) for generating code using jay
+lib/             - packages with minimum dependencies
+middleware/      - packages that return a http.Handler to wrap around routes for ACL, request logging, etc.
+model/		     - packages with database queries and structs matching tables
+view/            - HTML templates parsed using the Go html/template package
+viewfunc/        - packages that return a template.FuncMap for use in views
+viewmodify/      - packages that modify view prior to rendering to add varibles like CSRF token and auth level
+</code></pre>
+
+<p>The following files exist at the project root:</p>
+
+<pre><code class="language-text">blueprint.go     - entrypoint for the application
+env.json.example - variables for the application
+gulpfile.js      - Gulp configuration that compiles SASS, concatenates JavaScript, etc.
+package.json     - npm configuration that loads Gulp, Boostrap, Underscore.js, etc.
+</code></pre>
+
+<h2 id="external-go-packages">External Go Packages</h2>
+
+<p>There are a few external packages that must be retrieved using <code>go get</code>:</p>
+
+<pre><code class="language-text">github.com/gorilla/context				- registry for global request variables
+github.com/gorilla/sessions				- cookie and filesystem sessions
+github.com/go-sql-driver/mysql 			- MySQL driver
+github.com/jmoiron/sqlx 				- MySQL general purpose extensions
+github.com/josephspurrier/csrfbanana 	- CSRF protection for gorilla sessions
+github.com/julienschmidt/httprouter 	- high performance HTTP request router
+github.com/justinas/alice				- middleware chaining
+golang.org/x/crypto/bcrypt 				- password hashing algorithm
+</code></pre>
 
 <h2 id="why-blue-jay">Why Blue Jay?</h2>
 
-<h3 id="fun-answer">Fun Answer</h3>
-
 <p>After 300 stars on GitHub, I realized people really liked the boilerplate
 Model-View-Controller (MVC) web application in Go called
-<a href="https://github.com/josephspurrier/gowebapp">gowebapp</a> so I gave it a better
-name and improved the documentation.</p>
-
-<h3 id="real-answer">Real Answer</h3>
+<a href="https://github.com/josephspurrier/gowebapp">gowebapp</a> so I rewrote it with
+better documentation.</p>
 
 <p>Go is a blast to code in and it&rsquo;s great being part of a helpful community.
 Blue Jay provides a quickstart for developers with a lean web skeleton called
@@ -384,74 +476,10 @@ written by other Go developers who are happy to contribute to the thriving commu
 
 <p>Go allows you to write code that compiles to the majority of the architectures we use today so all your
 code is pretty much portable. Go excels when you want to write command line apps instead of just scripts,
-but that&rsquo;s not the language&rsquo;s only niche.
+but that&rsquo;s not the only niche.
 The designers of Go wanted to build a language that solved problems between the Google development teams.
-It&rsquo;s a modern language that allows you to easily multi-thread your applications.</p>
-
-<h2 id="high-level">High Level</h2>
-
-<p>Blueprint is a complete web application with built-in web server.
-It requires MySQL so you&rsquo;ll need to set up your own instance of the database.
-The application has a public home page, authenticated home page, login page, register page,
-about page, and a simple notepad to demonstrate GET, POST, UPDATE, and DELETE operations.</p>
-
-<p>The entrypoint for the web app is <strong>blueprint.go</strong>. The file calls the <strong>bootstrap</strong> package
-which loads the application settings, creates the session store, connects to the database,
-sets up the view, loads the routes, attaches the middleware, and starts the web server.</p>
-
-<p>The front end is built using Bootstrap with a few small changes to fonts and spacing. The flash
-messages are customized so they show up at the bottom right of the screen.</p>
-
-<p>All of the error and warning messages should display to the
-user or in the console. Informational messages are displayed to the user via
-flash messages that disappear after 4 seconds.</p>
-
-<h2 id="quick-start-with-mysql">Quick Start with MySQL</h2>
-
-<ol>
-<li>To download, run the following command: <code>go get github.com/blue-ray/blueprint</code></li>
-<li>Start a MySQL instance and import <strong>database/quickstart.sql</strong> to create the database and tables.</li>
-<li>Make a copy of env.json.example and name it: <strong>env.json</strong></li>
-<li>Edit the <strong>Database</strong> section in <strong>config/config.json</strong> so the connection information matches your MySQL instance.</li>
-<li>Use <code>go run</code> from the root of the project directory.</li>
-<li>Open your web browser to <a href="http://localhost">http://localhost</a> and you should see the welcome page.</li>
-<li>Navigate to the register page at <a href="http://localhost/register">http://localhost/register</a> and create a new user.</li>
-<li>You can now login at <a href="http://localhost/login">http://localhost/login</a> and try the Notepad app.</li>
-</ol>
-
-<h2 id="structure">Structure</h2>
-
-<p>The project is organized into the following root folders:</p>
-
-<pre><code class="language-text">bootstrap	- initial set up of the application
-controller	- page logic and routes
-database	- migration scripts
-generate	- templates used with code generation command line tool
-lib			- packages accessible throughout the application
-model		- database structs representing tables and queries
-static		- statically served files like CSS and JSS
-template	- HTML templates parsed using the Go html/template package
-</code></pre>
-
-<p>The following files exist at the project root:</p>
-
-<pre><code class="language-text">blueprint.go 		- entrypoint for the application
-env.json.example 	- variables for the application
-</code></pre>
-
-<h2 id="external-packages">External Packages</h2>
-
-<p>There are a few external packages that must be retrieved using <code>go get</code>:</p>
-
-<pre><code class="language-text">github.com/gorilla/context				- registry for global request variables
-github.com/gorilla/sessions				- cookie and filesystem sessions
-github.com/go-sql-driver/mysql 			- MySQL driver
-github.com/jmoiron/sqlx 				- MySQL general purpose extensions
-github.com/josephspurrier/csrfbanana 	- CSRF protection for gorilla sessions
-github.com/julienschmidt/httprouter 	- high performance HTTP request router
-github.com/justinas/alice				- middleware chaining
-golang.org/x/crypto/bcrypt 				- password hashing algorithm
-</code></pre>
+It&rsquo;s a modern language that allows you to easily multi-thread your applications. It&rsquo;s a &ldquo;get stuff done&rdquo;
+language.</p>
 
 <h2 id="screenshots">Screenshots</h2>
 
