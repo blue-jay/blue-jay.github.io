@@ -8,18 +8,18 @@
   <head lang="en-us">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
-    <title>Assets - Blue Jay</title>
+    <title>Library - Blue Jay</title>
     <meta name="generator" content="Hugo 0.15" />
 
     
     <meta name="description" content="Blue Jay is a toolkit written in Go for the web.">
     
-    <link rel="canonical" href="http://blue-jay.github.io/assets/">
+    <link rel="canonical" href="http://blue-jay.github.io/library/">
     
     <meta name="author" content="Joseph Spurrier">
     
 
-    <meta property="og:url" content="http://blue-jay.github.io/assets/">
+    <meta property="og:url" content="http://blue-jay.github.io/library/">
     <meta property="og:title" content="Blue Jay">
     <meta property="og:image" content="http://blue-jay.github.io/images/bluejaylogo.png">
     <meta name="apple-mobile-web-app-title" content="Blue Jay">
@@ -99,7 +99,7 @@
     </div>
     <div class="stretch">
       <div class="title">
-        Asset
+        Library
       </div>
     </div>
 
@@ -233,14 +233,11 @@
 
 
 
-<a class="current" title="Assets" href="http://blue-jay.github.io/assets/">
+<a  title="Assets" href="http://blue-jay.github.io/assets/">
 	
 	Assets
 </a>
 
-
-<ul id="scrollspy">
-</ul>
 
   
 </li>
@@ -338,11 +335,14 @@
 
 
 
-<a  title="Library" href="http://blue-jay.github.io/library/">
+<a class="current" title="Library" href="http://blue-jay.github.io/library/">
 	
 	Library
 </a>
 
+
+<ul id="scrollspy">
+</ul>
 
   
 </li>
@@ -444,108 +444,137 @@
 
 	<article class="article">
 		<div class="wrapper">
-			<h1>Assets </h1>
+			<h1>Library </h1>
 
 			
 
 <h2 id="basic-usage">Basic Usage</h2>
 
-<p>Out of the box, all of the static assets like CSS and JavaScript are ready to
-demo. If you want to make changes to the file, it&rsquo;s best to use the tools
-provided. The <strong>asset</strong> folder contains a <strong>dynamic</strong> folder and a <strong>static</strong>
-folder.</p>
+<p>If you look through the <strong>lib</strong> folder, you&rsquo;ll see packages that provide
+different functionality. These packages are designed to be shared and used
+through the application. Since Blueprint is a web application, the packages
+must be thread-safe to ensure they won&rsquo;t throw any errors if they are accessed
+at the same time by two separate threads.</p>
 
-<p>The <strong>dynamic</strong> folder contains the Syntactically Awesome Style Sheets (SASS),
-individual JavaScript files, and a large PNG image which is used to generate
-favicons for different platforms like Android, iPhone, etc. <em>This is the folder
-in which you want to make your changes.</em> The dynamic folder holds some of the
-assets required to generate the assets in the <strong>static</strong> folder.</p>
+<p>It&rsquo;s a good idea to keep them light on dependencies so you can reuse them again
+in later projects. Packages that are too tightly-coupled require time to rework
+so you might as well do it right from the start.</p>
 
-<p>The <strong>static</strong> folder contains the minified CSS and JavaScript as well as
-the generated favicons. The <strong>static</strong> folder is designed to be served up
-so the files can be accessed like this:</p>
+<p>Let&rsquo;s take a look at the <strong>lib/email</strong> package in sections. The first of the
+three sections is the package declaration and import section. Notice how the
+only packages the <strong>email</strong> package uses are part of the standard library. This
+is a good indicator that the package could be moved to a different project
+without rewriting.</p>
 
-<pre><code class="language-html">&lt;!-- Favicons --&gt;
-&lt;link rel=&quot;apple-touch-icon&quot; sizes=&quot;57x57&quot; href=&quot;/static/favicon/apple-touch-icon-57x57.png?v1.0=3eepn6WlLO&quot;&gt;
-&lt;link rel=&quot;apple-touch-icon&quot; sizes=&quot;60x60&quot; href=&quot;/static/favicon/apple-touch-icon-60x60.png?v1.0=3eepn6WlLO&quot;&gt;
-&lt;link rel=&quot;apple-touch-icon&quot; sizes=&quot;72x72&quot; href=&quot;/static/favicon/apple-touch-icon-72x72.png?v1.0=3eepn6WlLO&quot;&gt;
-&lt;!-- CSS and Fonts --&gt;
-&lt;link media=&quot;all&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;/static/css/bootstrap.min.css?1466973904&quot; /&gt;
-&lt;link media=&quot;all&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;//fonts.googleapis.com/css?family=Open+Sans:300,400,bold,italic&quot; /&gt;
-&lt;link media=&quot;all&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;/static/css/all.css?1466973904&quot; /&gt;
+<pre><code class="language-go">// Package email provides email sending via SMTP.
+package email
+
+import (
+    &quot;encoding/base64&quot;
+    &quot;fmt&quot;
+    &quot;net/smtp&quot;
+    &quot;sync&quot;
+)
 </code></pre>
 
-<p>Check out the <a href="http://blue-jay.github.io/controllers">Controllers</a> and <a href="http://blue-jay.github.io/views">Views</a> pages for how
-the files are served and how to append timestamps to them to manage caching.</p>
+<p>The next section shows the thread-safe configuration that is used in many of
+the lib packages. The Info struct holds the details for the SMTP server and is
+public so it can be nested in the <strong>Info</strong> struct of the <strong>bootstrap</strong> package
+and then parsed from the env.json file. See the <a href="http://blue-jay.github.io/configuration/">Configuration</a>
+section for more information about adding to env.json.</p>
 
-<p>If you make changes to any of the files in the <strong>dynamic</strong> folder, you still
-need a way to compile/minify them and then move them to the <strong>static</strong> folder
-so we&rsquo;ll use Gulp to do that.</p>
+<p>There are also a few methods standard to the lib packages:</p>
 
-<h2 id="install-npm">Install npm</h2>
+<ul>
+<li>SetConfig() - allows the <strong>bootstrap</strong> package to store the Info struct to a package level variable</li>
+<li>ResetConfig() - allows test packages to reset the configuration</li>
+<li>Config() - returns the configuration so the values can be accessed by other packages</li>
+</ul>
 
-<p>The Node Package Manager (npm) helps install packages that work with NodeJS.
-If you don&rsquo;t have NodeJS and npm installed, you can install the latest version
-from <a href="https://nodejs.org">https://nodejs.org</a>.</p>
+<p>All of these methods are thread-safe so they can be called by external packages
+and by the functions within the package itself.</p>
 
-<h2 id="install-gulp-and-dependencies">Install Gulp and Dependencies</h2>
+<pre><code class="language-go">// *****************************************************************************
+// Thread-Safe Configuration
+// *****************************************************************************
 
-<p>Once npm is installed, you can open your terminal and CD to the root of the
-project folder. You can then run these commands:</p>
+var (
+    info      Info
+    infoMutex sync.RWMutex
+)
 
-<pre><code class="language-bash"># Install Gulp globally
-npm install -g gulp-cli
+// Info holds the details for the SMTP server.
+type Info struct {
+    Username string
+    Password string
+    Hostname string
+    Port     int
+    From     string
+}
 
-# Install Gulp locally and dependencies from package.json
-npm install
+// SetConfig stores the config.
+func SetConfig(i Info) {
+    infoMutex.Lock()
+    info = i
+    infoMutex.Unlock()
+}
+
+// ResetConfig removes the config.
+func ResetConfig() {
+    infoMutex.Lock()
+    info = Info{}
+    infoMutex.Unlock()
+}
+
+// Config returns the config.
+func Config() Info {
+    infoMutex.RLock()
+    defer infoMutex.RUnlock()
+    return info
+}
 </code></pre>
 
-<h2 id="gulp">Gulp</h2>
+<p>The final section of the <strong>email</strong> package contains the ability to send an
+email using the configuration settings. You&rsquo;ll notice the <strong>Config()</strong> function
+through the code. This ensures the values are accessed in a thread-safe manner
+so there is no problem if another package tries to change a value at the same
+time.</p>
 
-<p>Once the environment is set up, you should have your terminal open to the root
-of the project folder. There are a couple commands you can use with Gulp that
-are in the <a href="https://github.com/blue-jay/blueprint/blob/master/gulpfile.js">gulpfile.js</a>.</p>
+<pre><code class="language-go">// Send mails an email.
+func Send(to, subject, body string) error {
+    auth := smtp.PlainAuth(&quot;&quot;, Config().Username, Config().Password, Config().Hostname)
 
-<pre><code class="language-bash"># Compile the SASS from asset/dynamic/sass and store CSS in asset/static/css/all.css
-gulp sass
+    header := make(map[string]string)
+    header[&quot;From&quot;] = Config().From
+    header[&quot;To&quot;] = to
+    header[&quot;Subject&quot;] = subject
+    header[&quot;MIME-Version&quot;] = &quot;1.0&quot;
+    header[&quot;Content-Type&quot;] = `text/plain; charset=&quot;utf-8&quot;`
+    header[&quot;Content-Transfer-Encoding&quot;] = &quot;base64&quot;
 
-# Concat the JavaScript from asset/dynamic/js and store JS in asset/static/js/all.js
-gulp javascript
+    message := &quot;&quot;
+    for k, v := range header {
+        message += fmt.Sprintf(&quot;%s: %s\r\n&quot;, k, v)
+    }
+    message += &quot;\r\n&quot; + base64.StdEncoding.EncodeToString([]byte(body))
 
-# Copy the jQuery files from node_modules/jquery to asset/static/js
-gulp jquery
+    // Send the email
+    err := smtp.SendMail(
+        fmt.Sprintf(&quot;%s:%d&quot;, Config().Hostname, Config().Port),
+        auth,
+        Config().From,
+        []string{to},
+        []byte(message),
+    )
 
-# Copy the Bootstrap files from node_modules/bootstrap to asset/static
-gulp bootstrap
-
-# Copy the Underscore files from note_modules/underscore to asset/static/js
-gulp underscore
-
-# Run tasks favicon-generate and favicon-inject
-gulp favicon
-
-# Generate favicons from asset/dynamic/logo.png and copy to /asset/static/favicon
-gulp favicon-generate
-
-# Generate view/partial/favicon.tmpl with favicon tags
-gulp favicon-inject
-
-# Update the asset/dynamic/favicon/data.json file with the latest version from the RealFaviconGenerator website
-gulp favicon-update
-
-# Run the sass and javascript tasks when any of the files change
-gulp watch
-
-# Run all the tasks once
-gulp init
-
-# Run just the sass and javascript tasks once
-gulp default
+    return err
+}
 </code></pre>
 
-<p>It is best to run <code>gulp watch</code> so when you are working with the SASS and
-JavaScript files so they will automatically generate in the <strong>static</strong> folder
-for you.</p>
+<h2 id="code-generation">Code Generation</h2>
+
+<p>A new <strong>lib</strong> package can be generated with the thread-safe configuration using
+this command: <code>jay generate lib/default package:value</code></p>
 
 			
 			<aside class="copyright" role="note">
@@ -566,7 +595,7 @@ for you.</p>
 <nav class="pagination" aria-label="Footer">
   <div class="previous">
   
-      <a href="http://blue-jay.github.io/configuration/" title="Configuration">
+      <a href="http://blue-jay.github.io/views/" title="Views">
         <span class="direction">
           Previous
         </span>
@@ -576,7 +605,7 @@ for you.</p>
           </div>
           <div class="stretch">
             <div class="title">
-              Configuration
+              Views
             </div>
           </div>
         </div>
@@ -586,14 +615,14 @@ for you.</p>
 
   <div class="next">
   
-      <a href="http://blue-jay.github.io/routing/" title="Routing">
+      <a href="http://blue-jay.github.io/jay/" title="Jay Overview">
         <span class="direction">
           Next
         </span>
         <div class="page">
           <div class="stretch">
             <div class="title">
-              Routing
+              Jay Overview
             </div>
           </div>
           <div class="button button-next" role="button" aria-label="Next">

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Database-migrations on Blue Jay</title>
+    <link>http://blue-jay.github.io/database-migration/</link>
+    <description>Recent content in Database-migrations on Blue Jay</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://blue-jay.github.io/database-migration/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Database Migration</title>
+      <link>http://blue-jay.github.io/database-migration/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blue-jay.github.io/database-migration/</guid>
+      <description>
+
+&lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
+
+&lt;p&gt;Database migrations are a great way to manage incremental database changes.
+The migration state is stored in the same database (the one specified in
+env.json) and recorded in the &lt;strong&gt;migration&lt;/strong&gt; table. This is how the &lt;code&gt;jay status&lt;/code&gt;
+command knows which migration was performed last.&lt;/p&gt;
+
+&lt;p&gt;Each incremental change should have a set of two files: an &amp;lsquo;up&amp;rsquo; file and a
+&amp;lsquo;down&amp;rsquo; file. The &amp;lsquo;up&amp;rsquo; file contains code (like SQL) which is applied to the
+database you add features or fix bugs in your database. The &amp;lsquo;down&amp;rsquo; file contains
+the code to remove the change or undo it.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: The &lt;code&gt;jay migrate&lt;/code&gt; commands requires the environment variable,
+JAYCONFIG, to point to the env.json file path. The &lt;strong&gt;database&lt;/strong&gt; folder
+containing the &lt;strong&gt;migration&lt;/strong&gt; folder must also be in the same folder.&lt;/p&gt;
+
+&lt;p&gt;When you start using &lt;strong&gt;Blueprint&lt;/strong&gt; you&amp;rsquo;ll see two migration files already exist
+in the &lt;strong&gt;database/migration&lt;/strong&gt; folder:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;20160630_020000.000000_init.up.sql - adds the initial tables and data&lt;/li&gt;
+&lt;li&gt;20160630_020000.000000_init.down.sql - removes the tables and data&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Jay&lt;/strong&gt; provides a few commands to make the migrations easier. Here is a list
+of the commands:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;jay migrate make &amp;quot;test&amp;quot; # Create new migration
+jay migrate all         # Advance all migrations
+jay migrate reset       # Rollback all migrations
+jay migrate refresh     # Rollback all migrations then advance all migrations
+jay migrate status      # See last &#39;up&#39; migration
+jay migrate up          # Apply only the next &#39;up&#39; migration
+jay migrate down        # Apply only the current &#39;down&#39; migration
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;workflow&#34;&gt;Workflow&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;rsquo;s walk through an typical workflow. Assume the &lt;strong&gt;blueprint&lt;/strong&gt; folder is the
+root of a git repository. Developer Joe needs to add a feature to the
+application to store books. Joe creates a new branch called feature-store-books.
+He needs to create a new table called &lt;strong&gt;book&lt;/strong&gt; so he creates a new database
+migration: &lt;code&gt;jay migrate make &amp;quot;feature-store-books&amp;quot;&lt;/code&gt;. He opens the &amp;lsquo;up&amp;rsquo; file
+and adds the SQL query to create a new table with the following columns: title,
+author, and publication_date. In the &amp;lsquo;down&amp;rsquo; file, he writes the code to drop the
+table. He also writes the code to create, read, update, and
+delete the books in his Go code and then performs a &lt;code&gt;git merge&lt;/code&gt; and then a
+&lt;code&gt;git push&lt;/code&gt;. Developer Steve needs to add an additional column to the
+&lt;strong&gt;book&lt;/strong&gt; table called: publisher. Steve performs a &lt;code&gt;git pull&lt;/code&gt; to download the
+latest code from the repository. In order to update his local database to the
+latest version of code, runs: &lt;code&gt;jay migrate all&lt;/code&gt;. Then, Steve creates a new
+migration for the new requirement: &lt;code&gt;jay migrate make &amp;quot;feature-add-publisher&amp;quot;&lt;/code&gt;.
+Steve adds the SQL &lt;code&gt;ADD COLUMN&lt;/code&gt; code to the new &amp;lsquo;up&amp;rsquo; file and the SQL
+&lt;code&gt;DROP COLUMN&lt;/code&gt; code to the new &amp;lsquo;down&amp;rsquo; file and then performs a &lt;code&gt;git merge&lt;/code&gt; and a
+&lt;code&gt;git push&lt;/code&gt; again.&lt;/p&gt;
+
+&lt;h2 id=&#34;migrate-make&#34;&gt;migrate make&lt;/h2&gt;
+
+&lt;p&gt;The &lt;code&gt;jay migrate make [description]&lt;/code&gt; command create a new &amp;lsquo;up&amp;rsquo; and &amp;lsquo;down&amp;rsquo;
+migration in the &lt;strong&gt;database/migration&lt;/strong&gt; folder.&lt;/p&gt;
+
+&lt;h2 id=&#34;migrate-all&#34;&gt;migrate all&lt;/h2&gt;
+
+&lt;p&gt;The &lt;code&gt;jay migrate all&lt;/code&gt; command finds the current status of the database and then
+applies all the code from each of the &amp;lsquo;up&amp;rsquo; files in chronological order based on
+filename.&lt;/p&gt;
+
+&lt;h2 id=&#34;migrate-reset&#34;&gt;migrate reset&lt;/h2&gt;
+
+&lt;p&gt;The &lt;code&gt;jay migrate reset&lt;/code&gt; command finds the current status of the database and
+then applies all the code from each of the &amp;lsquo;down&amp;rsquo; files in reverse chronological
+order based on filename which should remove all tables and data with the
+exception of an an empty &lt;strong&gt;migration&lt;/strong&gt; table.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; If any tables were created outside of the migrations, they should
+still be in the database.&lt;/p&gt;
+
+&lt;h2 id=&#34;migrate-refresh&#34;&gt;migrate refresh&lt;/h2&gt;
+
+&lt;p&gt;The &lt;code&gt;jay migrate refresh&lt;/code&gt; command runs a &lt;code&gt;jay migrate reset&lt;/code&gt; and then applies
+all the code from each of the &amp;lsquo;up&amp;rsquo; files in chronological order based on
+filename.&lt;/p&gt;
+
+&lt;h2 id=&#34;migrate-status&#34;&gt;migrate status&lt;/h2&gt;
+
+&lt;p&gt;The &lt;code&gt;jay migrate status&lt;/code&gt; command reads the latest record in the &lt;strong&gt;migration&lt;/strong&gt;
+table which is the last &amp;lsquo;up&amp;rsquo; file that was applied to the database.&lt;/p&gt;
+
+&lt;h2 id=&#34;migrate-up&#34;&gt;migrate up&lt;/h2&gt;
+
+&lt;p&gt;The &lt;code&gt;jay migrate up&lt;/code&gt; command applies only the code in the next &amp;lsquo;up&amp;rsquo; file in
+chronological order based on filename.&lt;/p&gt;
+
+&lt;h2 id=&#34;migrate-down&#34;&gt;migrate down&lt;/h2&gt;
+
+&lt;p&gt;The &lt;code&gt;jay migrate down&lt;/code&gt; command applies only the code in the current &amp;lsquo;down&amp;rsquo; file.&lt;/p&gt;
+
+&lt;h2 id=&#34;other-database-changes&#34;&gt;Other Database Changes&lt;/h2&gt;
+
+&lt;p&gt;If the &amp;lsquo;up&amp;rsquo; and &amp;lsquo;down&amp;rsquo; files are written properly, tables created manually
+outside the migrations should be left untouched by the &lt;code&gt;jay migrate&lt;/code&gt; commands.
+The only changes &lt;code&gt;jay migrate&lt;/code&gt; makes to the database outside of the migrations
+are the creation of the database itself based on the settings in env.json and
+the modification of the &lt;strong&gt;migration&lt;/strong&gt; table.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

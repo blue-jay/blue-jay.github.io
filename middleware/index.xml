@@ -6,13 +6,12 @@
     <description>Recent content in Middlewares on Blue Jay</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 20 Jun 2016 21:07:13 +0100</lastBuildDate>
     <atom:link href="http://blue-jay.github.io/middleware/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Middleware</title>
       <link>http://blue-jay.github.io/middleware/</link>
-      <pubDate>Mon, 20 Jun 2016 21:07:13 +0100</pubDate>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>http://blue-jay.github.io/middleware/</guid>
       <description>
@@ -21,8 +20,8 @@
 
 &lt;p&gt;Middleware, in the context of Go, is applied during routing to provide
 features like request/response logging, access controls lists (ACLs), and
-header modification. Middleware is either applied to every request (for request
-logging) or specified routes (for ACLs).&lt;/p&gt;
+header modification. Middleware is either applied to every request (like for
+request logging) or specified routes (like for ACLs).&lt;/p&gt;
 
 &lt;p&gt;There are a few pieces of middleware included. The package called &lt;strong&gt;csrfbanana&lt;/strong&gt;
 protects against Cross-Site Request Forgery attacks and prevents double submits.
@@ -59,7 +58,7 @@ func Handler(next http.Handler) http.Handler {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;This is an example of the minimum requirements for middleware:&lt;/p&gt;
+&lt;p&gt;This is an example of the minimum code required for middleware:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Handler
 func Handler(next http.Handler) http.Handler {
@@ -73,13 +72,14 @@ func Handler(next http.Handler) http.Handler {
 
 &lt;h2 id=&#34;chaining&#34;&gt;Chaining&lt;/h2&gt;
 
-&lt;p&gt;Chaining prevents middleware from stacking up which is hard to read like this:&lt;/p&gt;
+&lt;p&gt;The more middleware you use, the more it stacks up like this and makes it hard
+to read:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;return context.ClearHandler(rest.Handler(logrequest.Handler(setUpBanana)))
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Before &lt;a href=&#34;https://github.com/justinas/alice&#34;&gt;justinas/alice&lt;/a&gt;, a workaround was to
-use the variable and reassign it multiple times like this:&lt;/p&gt;
+use a variable and reassign it multiple times like this:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;h = setUpBanana(h)
 h = logrequest.Handler(h)
@@ -87,8 +87,9 @@ h = rest.Handler(h)
 return context.ClearHandler(h)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;In &lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/controller/notepad/notepad.go&#34;&gt;controller/notepad&lt;/a&gt;,
-the application uses the &lt;strong&gt;router.ChainHandler()&lt;/strong&gt; function. The function is a wrapper for
+&lt;p&gt;You can see chaining in action in &lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/controller/notepad/notepad.go&#34;&gt;controller/notepad&lt;/a&gt;
+where the controller uses the &lt;strong&gt;router.ChainHandler()&lt;/strong&gt; function.
+The function is a wrapper for
 the &lt;a href=&#34;https://github.com/justinas/alice&#34;&gt;justinas/alice&lt;/a&gt; package which makes
 using middleware more scalable and a little &amp;ldquo;prettier&amp;rdquo;. If you look at the
 &lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/bootstrap/bootstrap.go&#34;&gt;bootstrap&lt;/a&gt;

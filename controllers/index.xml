@@ -6,13 +6,12 @@
     <description>Recent content in Controllers on Blue Jay</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 08 Mar 2016 21:07:13 +0100</lastBuildDate>
     <atom:link href="http://blue-jay.github.io/controllers/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Controllers</title>
       <link>http://blue-jay.github.io/controllers/</link>
-      <pubDate>Tue, 08 Mar 2016 21:07:13 +0100</pubDate>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>http://blue-jay.github.io/controllers/</guid>
       <description>
@@ -121,9 +120,9 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 &lt;h2 id=&#34;access-a-session&#34;&gt;Access a Session&lt;/h2&gt;
 
-&lt;p&gt;Sessions provide access to variables that are set at login as well as flash
-messages. You &lt;strong&gt;must&lt;/strong&gt; remember to save the sessions once you make a change to
-// them.&lt;/p&gt;
+&lt;p&gt;Sessions provide access to flash messages as well as variables that are set at
+login. You &lt;strong&gt;must&lt;/strong&gt; remember to save the sessions once you make a change to
+them.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Get the current session
 sess := session.Instance(r)
@@ -152,8 +151,8 @@ sess.Save(r, w) // Ensure you save the session after making a change to it
 
 &lt;p&gt;The &lt;strong&gt;form&lt;/strong&gt; package makes it easy to validate required fields. It works on the
 inputs: text, textarea, checkbox, radio, and select. The function,
-&lt;strong&gt;form.Required()&lt;/strong&gt;, requires the request &amp;reg; and then any number of fields
-because it is a variadic function.&lt;/p&gt;
+&lt;strong&gt;form.Required()&lt;/strong&gt;, requires the request and then any number of fields
+as it is a variadic function.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;if valid, missingField := form.Required(r, &amp;quot;email&amp;quot;, &amp;quot;password&amp;quot;); !valid {
 	sess.AddFlash(flash.Info{&amp;quot;Field missing: &amp;quot; + missingField, flash.Error})

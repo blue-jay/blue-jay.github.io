@@ -8,18 +8,18 @@
   <head lang="en-us">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
-    <title>Assets - Blue Jay</title>
+    <title>Jay Overview - Blue Jay</title>
     <meta name="generator" content="Hugo 0.15" />
 
     
     <meta name="description" content="Blue Jay is a toolkit written in Go for the web.">
     
-    <link rel="canonical" href="http://blue-jay.github.io/assets/">
+    <link rel="canonical" href="http://blue-jay.github.io/jay/">
     
     <meta name="author" content="Joseph Spurrier">
     
 
-    <meta property="og:url" content="http://blue-jay.github.io/assets/">
+    <meta property="og:url" content="http://blue-jay.github.io/jay/">
     <meta property="og:title" content="Blue Jay">
     <meta property="og:image" content="http://blue-jay.github.io/images/bluejaylogo.png">
     <meta name="apple-mobile-web-app-title" content="Blue Jay">
@@ -99,7 +99,7 @@
     </div>
     <div class="stretch">
       <div class="title">
-        Asset
+        Jay Overview
       </div>
     </div>
 
@@ -233,14 +233,11 @@
 
 
 
-<a class="current" title="Assets" href="http://blue-jay.github.io/assets/">
+<a  title="Assets" href="http://blue-jay.github.io/assets/">
 	
 	Assets
 </a>
 
-
-<ul id="scrollspy">
-</ul>
 
   
 </li>
@@ -355,11 +352,14 @@
 
 
 
-<a  title="Jay Overview" href="http://blue-jay.github.io/jay/">
+<a class="current" title="Jay Overview" href="http://blue-jay.github.io/jay/">
 	
 	Jay Overview
 </a>
 
+
+<ul id="scrollspy">
+</ul>
 
   
 </li>
@@ -444,108 +444,70 @@
 
 	<article class="article">
 		<div class="wrapper">
-			<h1>Assets </h1>
+			<h1>Jay Overview </h1>
 
 			
 
 <h2 id="basic-usage">Basic Usage</h2>
 
-<p>Out of the box, all of the static assets like CSS and JavaScript are ready to
-demo. If you want to make changes to the file, it&rsquo;s best to use the tools
-provided. The <strong>asset</strong> folder contains a <strong>dynamic</strong> folder and a <strong>static</strong>
-folder.</p>
+<p>The command-line tool, <strong>Jay</strong>, has been mentioned throughout this documentation
+quite a few times now so it&rsquo;s a good time to talk a little about the tool.</p>
 
-<p>The <strong>dynamic</strong> folder contains the Syntactically Awesome Style Sheets (SASS),
-individual JavaScript files, and a large PNG image which is used to generate
-favicons for different platforms like Android, iPhone, etc. <em>This is the folder
-in which you want to make your changes.</em> The dynamic folder holds some of the
-assets required to generate the assets in the <strong>static</strong> folder.</p>
+<p><strong>Jay</strong> uses the brilliant
+<a href="github.com/alecthomas/kingpin">github.com/alecthomas/kingpin</a> package to manage
+the help documents, commands, subcommands, and arguments. It takes care of
+groundwork so we can focus on the actual tasks.</p>
 
-<p>The <strong>static</strong> folder contains the minified CSS and JavaScript as well as
-the generated favicons. The <strong>static</strong> folder is designed to be served up
-so the files can be accessed like this:</p>
+<p>If you ever want to see the help documents for a command or subcommand, add
+<code>-h</code> or <code>--help</code> to the end and the help documentation should be able to assist.
+If you are still having problems, check out the
+<a href="https://godoc.org/github.com/blue-jay/jay">Jay GoDoc</a>.</p>
 
-<pre><code class="language-html">&lt;!-- Favicons --&gt;
-&lt;link rel=&quot;apple-touch-icon&quot; sizes=&quot;57x57&quot; href=&quot;/static/favicon/apple-touch-icon-57x57.png?v1.0=3eepn6WlLO&quot;&gt;
-&lt;link rel=&quot;apple-touch-icon&quot; sizes=&quot;60x60&quot; href=&quot;/static/favicon/apple-touch-icon-60x60.png?v1.0=3eepn6WlLO&quot;&gt;
-&lt;link rel=&quot;apple-touch-icon&quot; sizes=&quot;72x72&quot; href=&quot;/static/favicon/apple-touch-icon-72x72.png?v1.0=3eepn6WlLO&quot;&gt;
-&lt;!-- CSS and Fonts --&gt;
-&lt;link media=&quot;all&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;/static/css/bootstrap.min.css?1466973904&quot; /&gt;
-&lt;link media=&quot;all&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;//fonts.googleapis.com/css?family=Open+Sans:300,400,bold,italic&quot; /&gt;
-&lt;link media=&quot;all&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;/static/css/all.css?1466973904&quot; /&gt;
-</code></pre>
+<p>When using <strong>Jay</strong>, there are flags, commands, and subcommands.</p>
 
-<p>Check out the <a href="http://blue-jay.github.io/controllers">Controllers</a> and <a href="http://blue-jay.github.io/views">Views</a> pages for how
-the files are served and how to append timestamps to them to manage caching.</p>
+<p>The available flags throughout are:</p>
 
-<p>If you make changes to any of the files in the <strong>dynamic</strong> folder, you still
-need a way to compile/minify them and then move them to the <strong>static</strong> folder
-so we&rsquo;ll use Gulp to do that.</p>
+<ul>
+<li><code>-h</code> or <code>--help</code> for help documentation</li>
+<li><code>-v</code> or <code>--version</code> for version information</li>
+</ul>
 
-<h2 id="install-npm">Install npm</h2>
+<p>The available commands are:</p>
 
-<p>The Node Package Manager (npm) helps install packages that work with NodeJS.
-If you don&rsquo;t have NodeJS and npm installed, you can install the latest version
-from <a href="https://nodejs.org">https://nodejs.org</a>.</p>
+<ul>
+<li><code>jay env</code> for managing the env.json file</li>
+<li><code>jay find</code> for locating text inside files in subfolders</li>
+<li><code>jay replace</code> for replacing text inside files in subfolder</li>
+<li><code>jay generate</code> for creating code based on templates using the <strong>text/template</strong> package</li>
+<li><code>jay migrate</code> for managing the database state</li>
+</ul>
 
-<h2 id="install-gulp-and-dependencies">Install Gulp and Dependencies</h2>
+<p>The available subcommands are:</p>
 
-<p>Once npm is installed, you can open your terminal and CD to the root of the
-project folder. You can then run these commands:</p>
+<ul>
+<li><code>jay env make</code> for creating env.json from env.json.example</li>
+<li><code>jay env keyshow</code> for showing newly generated session keys</li>
+<li><code>jay env updateshow</code> for updating env.json with newly generation session keys</li>
+<li><code>jay migrate make</code> for creating a new migration &lsquo;up&rsquo; file and &lsquo;down&rsquo; file</li>
+<li><code>jay migrate all</code> for applying all &lsquo;up&rsquo; migrations</li>
+<li><code>jay migrate reset</code> for applying all &lsquo;down&rsquo; migrations</li>
+<li><code>jay migrate refresh</code> for applying all &lsquo;down&rsquo; then &lsquo;up&rsquo; migrations</li>
+<li><code>jay migrate status</code> for displaying the current database state</li>
+<li><code>jay migrate up</code> for applying only one &lsquo;up&rsquo; migration</li>
+<li><code>jay migrate down</code> for applying one one &lsquo;down&rsquo; migration</li>
+</ul>
 
-<pre><code class="language-bash"># Install Gulp globally
-npm install -g gulp-cli
+<p>There is also a common syntax used by each of the commands, subcommands, and
+arguments that make the help documents easy to follow.</p>
 
-# Install Gulp locally and dependencies from package.json
-npm install
-</code></pre>
-
-<h2 id="gulp">Gulp</h2>
-
-<p>Once the environment is set up, you should have your terminal open to the root
-of the project folder. There are a couple commands you can use with Gulp that
-are in the <a href="https://github.com/blue-jay/blueprint/blob/master/gulpfile.js">gulpfile.js</a>.</p>
-
-<pre><code class="language-bash"># Compile the SASS from asset/dynamic/sass and store CSS in asset/static/css/all.css
-gulp sass
-
-# Concat the JavaScript from asset/dynamic/js and store JS in asset/static/js/all.js
-gulp javascript
-
-# Copy the jQuery files from node_modules/jquery to asset/static/js
-gulp jquery
-
-# Copy the Bootstrap files from node_modules/bootstrap to asset/static
-gulp bootstrap
-
-# Copy the Underscore files from note_modules/underscore to asset/static/js
-gulp underscore
-
-# Run tasks favicon-generate and favicon-inject
-gulp favicon
-
-# Generate favicons from asset/dynamic/logo.png and copy to /asset/static/favicon
-gulp favicon-generate
-
-# Generate view/partial/favicon.tmpl with favicon tags
-gulp favicon-inject
-
-# Update the asset/dynamic/favicon/data.json file with the latest version from the RealFaviconGenerator website
-gulp favicon-update
-
-# Run the sass and javascript tasks when any of the files change
-gulp watch
-
-# Run all the tasks once
-gulp init
-
-# Run just the sass and javascript tasks once
-gulp default
-</code></pre>
-
-<p>It is best to run <code>gulp watch</code> so when you are working with the SASS and
-JavaScript files so they will automatically generate in the <strong>static</strong> folder
-for you.</p>
+<ul>
+<li>Flags have one or two dashes in the front: <code>-h, --help</code></li>
+<li>Commands follow the application name (jay): <code>jay migrate</code></li>
+<li>Subcommands follow the command: <code>jay migrate make</code></li>
+<li>Arguments follow the command or subcommand: <code>jay migrate make &lt;description&gt;</code></li>
+<li>Required arguments: <code>&lt;required&gt;</code></li>
+<li>Optional arguments: <code>[&lt;optional&gt;]</code></li>
+</ul>
 
 			
 			<aside class="copyright" role="note">
@@ -566,7 +528,7 @@ for you.</p>
 <nav class="pagination" aria-label="Footer">
   <div class="previous">
   
-      <a href="http://blue-jay.github.io/configuration/" title="Configuration">
+      <a href="http://blue-jay.github.io/library/" title="Library">
         <span class="direction">
           Previous
         </span>
@@ -576,7 +538,7 @@ for you.</p>
           </div>
           <div class="stretch">
             <div class="title">
-              Configuration
+              Library
             </div>
           </div>
         </div>
@@ -586,14 +548,14 @@ for you.</p>
 
   <div class="next">
   
-      <a href="http://blue-jay.github.io/routing/" title="Routing">
+      <a href="http://blue-jay.github.io/find-replace/" title="Find and Replace">
         <span class="direction">
           Next
         </span>
         <div class="page">
           <div class="stretch">
             <div class="title">
-              Routing
+              Find and Replace
             </div>
           </div>
           <div class="button button-next" role="button" aria-label="Next">

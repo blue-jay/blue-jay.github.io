@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Generations on Blue Jay</title>
+    <link>http://blue-jay.github.io/generation/</link>
+    <description>Recent content in Generations on Blue Jay</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://blue-jay.github.io/generation/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Code Generation</title>
+      <link>http://blue-jay.github.io/generation/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blue-jay.github.io/generation/</guid>
+      <description>
+
+&lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
+
+&lt;p&gt;Code generation makes it easy to build out new features so you don&amp;rsquo;t have to
+retype or copy and paste the same code over again. It&amp;rsquo;s especially useful when
+prototyping and need to see how something will look or work.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: The &lt;code&gt;jay migrate&lt;/code&gt; commands requires the environment variable,
+JAYCONFIG, to point to the env.json file path. The &lt;strong&gt;generation&lt;/strong&gt; folder must
+also be in the same folder.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Jay&lt;/strong&gt; tries to make it easy to generate code by using tools that you already
+know: the &lt;strong&gt;text/template&lt;/strong&gt; package from the standard Go library and JSON.&lt;/p&gt;
+
+&lt;p&gt;A template pair consists of a .json file and a .gen file. The .gen file contains
+the &lt;strong&gt;text/template&lt;/strong&gt; parsable code. The .json file contains other information
+needed for the generation process like:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;config.type - either &amp;lsquo;single&amp;rsquo; if creating one file or &amp;lsquo;collection&amp;rsquo; if referencing one or more other .json files&lt;/li&gt;
+&lt;li&gt;config.output - relative path at which to create the file&lt;/li&gt;
+&lt;li&gt;config.parse - either true or false&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In the .json file, any other keys outside these three will be applied directly
+to the .gen file. If you leave a key blank, that tells &lt;code&gt;jay generate&lt;/code&gt; that it
+needs to be passed via command-line.&lt;/p&gt;
+
+&lt;p&gt;Don&amp;rsquo;t worry, there are already a boatload of templates ready to use. They are
+organized by type in the &lt;strong&gt;generate&lt;/strong&gt; folder of Blueprint. If .json file does
+not have a .gen pair in the same folder, then it has a &lt;strong&gt;config.parse&lt;/strong&gt; value
+of &lt;strong&gt;collection&lt;/strong&gt; which means it references other .json files with a
+&lt;strong&gt;config.parse&lt;/strong&gt; value of &lt;strong&gt;single&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;The &lt;strong&gt;flight&lt;/strong&gt; package is a helper package that reduces a lot of code from the
+controller. It contains functions to simplify the use of flash messages,
+form validation, form repopulation, and URL parameters.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;controller
+
+&lt;ul&gt;
+&lt;li&gt;bare.gen | bare.json - creates a bare controller with only placeholder functions&lt;/li&gt;
+&lt;li&gt;default.gen | default.json - creates a controller with CRUD ready code with the &lt;strong&gt;flight&lt;/strong&gt; package&lt;/li&gt;
+&lt;li&gt;noflight.gen | noflight.json - creates a controller with CRUD ready code without the &lt;strong&gt;flight&lt;/strong&gt; package&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;crud
+
+&lt;ul&gt;
+&lt;li&gt;bare.json - creates a bare controller, model, and four views&lt;/li&gt;
+&lt;li&gt;default.json - creates a controller, model, and four views CRUD ready with the &lt;strong&gt;flight&lt;/strong&gt; package&lt;/li&gt;
+&lt;li&gt;noflight.json - creates a controller, model, and four views CRUD ready without the &lt;strong&gt;flight&lt;/strong&gt; package&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;lib
+
+&lt;ul&gt;
+&lt;li&gt;default.gen | default.json - creates a thread-safe wrapper package&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;middleware
+
+&lt;ul&gt;
+&lt;li&gt;default.gen | default.json - creates a middleware package&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;model
+
+&lt;ul&gt;
+&lt;li&gt;bare.gen | bare.json - creates a bare model with only placeholder functions&lt;/li&gt;
+&lt;li&gt;default.gen | default.json - creates a model with CRUD ready code&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;view
+
+&lt;ul&gt;
+&lt;li&gt;base.json - creates four bare views with only a basic structure&lt;/li&gt;
+&lt;li&gt;create.gen | create.json - creates a CRUD ready creation form view&lt;/li&gt;
+&lt;li&gt;create_bare.gen | create_bare.json - creates a bare view with only a basic structure&lt;/li&gt;
+&lt;li&gt;default.json - creates four views with CRUD ready code&lt;/li&gt;
+&lt;li&gt;edit.gen | edit.json - creates a CRUD ready edit form view&lt;/li&gt;
+&lt;li&gt;edit_bare.gen | edit_bare.json - creates a bare view with only a basic structure&lt;/li&gt;
+&lt;li&gt;index.gen | index.json - creates a CRUD ready display view&lt;/li&gt;
+&lt;li&gt;index_bare.gen | index_bare.json - creates a bare view with only a basic structure&lt;/li&gt;
+&lt;li&gt;show.gen | show.json - creates a CRUD ready display view&lt;/li&gt;
+&lt;li&gt;show_bare.gen | show_bare.json - creates a bare view with only a basic structure&lt;/li&gt;
+&lt;li&gt;single.gen | single.json - creates a bare view with only a basic structure&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;viewfunc
+
+&lt;ul&gt;
+&lt;li&gt;default.gen | default.json - creates a FuncMap package for use with the &lt;strong&gt;html/template&lt;/strong&gt; package&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;viewmodify
+
+&lt;ul&gt;
+&lt;li&gt;default.gen | default.json - creates a package to modify the &lt;strong&gt;lib/view&lt;/strong&gt; package before rendering&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Let&amp;rsquo;s view a couple examples.&lt;/p&gt;
+
+&lt;h2 id=&#34;middleware-example&#34;&gt;Middleware Example&lt;/h2&gt;
+
+&lt;p&gt;The &lt;strong&gt;generate/middleware/default.gen&lt;/strong&gt; file contains this template. The
+{{.package}} variable is the only required variable for this template so it must
+be added to the .json file as a key with blank value. This forces &lt;code&gt;jay generate&lt;/code&gt;
+to require the user to pass a &lt;strong&gt;package&lt;/strong&gt; variable before it will generate the
+template.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Package {{.package}}
+package {{.package}}
+
+import (
+    &amp;quot;net/http&amp;quot;
+)
+
+// Handler
+func Handler(next http.Handler) http.Handler {
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        // Logic BEFORE the other handlers and function goes here
+        next.ServeHTTP(w, r)
+        // Logic AFTER the other handlers and function goes here
+    })
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;strong&gt;generate/middleware/default.json&lt;/strong&gt; file contains this JSON. The
+&lt;strong&gt;config.type&lt;/strong&gt; is set to &lt;strong&gt;single&lt;/strong&gt; because it&amp;rsquo;s only generating one file. The
+&lt;strong&gt;config.output&lt;/strong&gt; is the relative path where the file will be generated. Notice
+that the &lt;strong&gt;config.output&lt;/strong&gt; also uses the &lt;strong&gt;package&lt;/strong&gt; variable. This is the
+beauty of the &lt;code&gt;jay generate&lt;/code&gt; tool: the .json files are actually parsed
+multiple times (limit is set to 100) to ensure all variables are set.&lt;/p&gt;
+
+&lt;p&gt;In the first iteration of parsing, the &lt;strong&gt;package&lt;/strong&gt; key is set to value passed
+via the command-line. In the second iteration of parsing, the &lt;strong&gt;{{.package}}&lt;/strong&gt;
+variables are set to the same value because the top level &lt;strong&gt;package&lt;/strong&gt; key
+becomes a variable itself.&lt;/p&gt;
+
+&lt;p&gt;All first level keys (config.type, config.output, package) become variables
+after the first iteration of parsing. If a variable is misspelled and is never
+filled, a helpful error will display to the command-line.&lt;/p&gt;
+
+&lt;p&gt;The folder structure of the templates (model, controller, etc) has no effect
+on the generation, it&amp;rsquo;s purely to aid with organization of the template pairs.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+    &amp;quot;config.type&amp;quot;: &amp;quot;single&amp;quot;,
+    &amp;quot;config.output&amp;quot;: &amp;quot;middleware/{{.package}}/{{.package}}.go&amp;quot;,
+    &amp;quot;package&amp;quot;: &amp;quot;&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To generate this template, the command would look like this. The &lt;strong&gt;package&lt;/strong&gt;
+key is separated from the value by a colon (:). An argument of &lt;code&gt;package:&lt;/code&gt;
+without a value is also acceptable, but would end up creating a file called
+&lt;strong&gt;.go&lt;/strong&gt; in the &lt;strong&gt;middleware&lt;/strong&gt; folder.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;jay generate middleware/default package:test
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The final output would be to the file, &lt;strong&gt;middleware/test/test.go&lt;/strong&gt;, and would
+look like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Package test
+package test
+
+import (
+    &amp;quot;net/http&amp;quot;
+)
+
+// Handler
+func Handler(next http.Handler) http.Handler {
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        // Logic BEFORE the other handlers and function goes here
+        next.ServeHTTP(w, r)
+        // Logic AFTER the other handlers and function goes here
+    })
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;controller-example&#34;&gt;Controller Example&lt;/h2&gt;
+
+&lt;p&gt;This is a snippet of the template in &lt;strong&gt;generate/controller/bare.gen&lt;/strong&gt;. In this
+template, there are two variables: &lt;strong&gt;package&lt;/strong&gt; and &lt;strong&gt;url&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Package {{.package}}
+package {{.package}}
+
+import (
+    &amp;quot;net/http&amp;quot;
+
+    &amp;quot;github.com/blue-jay/blueprint/controller/status&amp;quot;
+    &amp;quot;github.com/blue-jay/blueprint/lib/router&amp;quot;
+)
+
+var (
+    uri = &amp;quot;/{{.url}}&amp;quot;
+)
+
+// Load the routes.
+func Load() {
+    c := router.Chain()
+    router.Get(uri, Index, c...)
+    router.Get(uri+&amp;quot;/create&amp;quot;, Create, c...)
+    router.Post(uri+&amp;quot;/create&amp;quot;, Store, c...)
+    router.Get(uri+&amp;quot;/view/:id&amp;quot;, Show, c...)
+    router.Get(uri+&amp;quot;/edit/:id&amp;quot;, Edit, c...)
+    router.Patch(uri+&amp;quot;/edit/:id&amp;quot;, Update, c...)
+    router.Delete(uri+&amp;quot;/:id&amp;quot;, Destroy, c...)
+}
+
+// Index displays the items.
+func Index(w http.ResponseWriter, r *http.Request) {
+    status.Error501(w, r)
+}
+
+// Create displays the create form.
+func Create(w http.ResponseWriter, r *http.Request) {
+    status.Error501(w, r)
+}
+
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;strong&gt;generate/controller/bare.json&lt;/strong&gt; file contains this JSON.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+    &amp;quot;config.type&amp;quot;: &amp;quot;single&amp;quot;,
+    &amp;quot;config.output&amp;quot;: &amp;quot;controller/{{.package}}/{{.package}}.go&amp;quot;,
+    &amp;quot;package&amp;quot;: &amp;quot;&amp;quot;,
+    &amp;quot;url&amp;quot;: &amp;quot;&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To generate this template, the command would look like this. Notice the second
+variable, &lt;strong&gt;url&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;jay generate controller/base package:monkey url:banana
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The final output would be to the file, &lt;strong&gt;controller/monkey/monkey.go&lt;/strong&gt;, and
+would look like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Package monkey
+package monkey
+
+import (
+    &amp;quot;net/http&amp;quot;
+
+    &amp;quot;github.com/blue-jay/blueprint/controller/status&amp;quot;
+    &amp;quot;github.com/blue-jay/blueprint/lib/router&amp;quot;
+)
+
+var (
+    uri = &amp;quot;/banana&amp;quot;
+)
+
+// Load the routes.
+func Load() {
+    c := router.Chain()
+    router.Get(uri, Index, c...)
+    router.Get(uri+&amp;quot;/create&amp;quot;, Create, c...)
+    router.Post(uri+&amp;quot;/create&amp;quot;, Store, c...)
+    router.Get(uri+&amp;quot;/view/:id&amp;quot;, Show, c...)
+    router.Get(uri+&amp;quot;/edit/:id&amp;quot;, Edit, c...)
+    router.Patch(uri+&amp;quot;/edit/:id&amp;quot;, Update, c...)
+    router.Delete(uri+&amp;quot;/:id&amp;quot;, Destroy, c...)
+}
+
+// Index displays the items.
+func Index(w http.ResponseWriter, r *http.Request) {
+    status.Error501(w, r)
+}
+
+// Create displays the create form.
+func Create(w http.ResponseWriter, r *http.Request) {
+    status.Error501(w, r)
+}
+
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;single-view-example&#34;&gt;Single View Example&lt;/h2&gt;
+
+&lt;p&gt;The &lt;strong&gt;generate/view/single.gen&lt;/strong&gt; file contains this template. We don&amp;rsquo;t actually
+want to parse this code because it&amp;rsquo;s a view itself. We can tell the parser
+not to parse in the single.json file by setting the value of &lt;strong&gt;config.parse&lt;/strong&gt; to
+&lt;strong&gt;false&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;{{define &amp;quot;title&amp;quot;}}{{end}}
+{{define &amp;quot;head&amp;quot;}}{{end}}
+{{define &amp;quot;content&amp;quot;}}
+&amp;lt;div class=&amp;quot;container&amp;quot;&amp;gt;
+    &amp;lt;div class=&amp;quot;page-header&amp;quot;&amp;gt;
+        &amp;lt;h1&amp;gt;{{template &amp;quot;title&amp;quot; .}}&amp;lt;/h1&amp;gt;
+    &amp;lt;/div&amp;gt;
+    
+    &amp;lt;p&amp;gt;Not Implemented&amp;lt;/p&amp;gt;
+    
+    {{template &amp;quot;footer&amp;quot; .}}
+&amp;lt;/div&amp;gt;
+{{end}}
+{{define &amp;quot;foot&amp;quot;}}{{end}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;strong&gt;generate/view/single.json&lt;/strong&gt; file contains this JSON. Again, we set
+&lt;strong&gt;config.parse&lt;/strong&gt; to false and only use the variables for specifying the
+&lt;strong&gt;config.output&lt;/strong&gt; path. The variables are not used inside the single.json
+template at all.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+    &amp;quot;config.type&amp;quot;: &amp;quot;single&amp;quot;,
+    &amp;quot;config.output&amp;quot;: &amp;quot;view/{{.model}}/{{.name}}.tmpl&amp;quot;,
+    &amp;quot;config.parse&amp;quot;: false,
+    &amp;quot;model&amp;quot;: &amp;quot;&amp;quot;,
+    &amp;quot;name&amp;quot;: &amp;quot;&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To generate this template, the command would look like this. Notice the second
+variable, &lt;strong&gt;url&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;jay generate view/single model:test name:create
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The final output would be to the file, &lt;strong&gt;view/test/create.tmpl&lt;/strong&gt;, and
+would look like this - no difference from the template itself since it was not
+parsed, just copied.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;{{define &amp;quot;title&amp;quot;}}{{end}}
+{{define &amp;quot;head&amp;quot;}}{{end}}
+{{define &amp;quot;content&amp;quot;}}
+&amp;lt;div class=&amp;quot;container&amp;quot;&amp;gt;
+    &amp;lt;div class=&amp;quot;page-header&amp;quot;&amp;gt;
+        &amp;lt;h1&amp;gt;{{template &amp;quot;title&amp;quot; .}}&amp;lt;/h1&amp;gt;
+    &amp;lt;/div&amp;gt;
+    
+    &amp;lt;p&amp;gt;Not Implemented&amp;lt;/p&amp;gt;
+    
+    {{template &amp;quot;footer&amp;quot; .}}
+&amp;lt;/div&amp;gt;
+{{end}}
+{{define &amp;quot;foot&amp;quot;}}{{end}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;multiple-view-example&#34;&gt;Multiple View Example&lt;/h1&gt;
+
+&lt;p&gt;The &lt;strong&gt;generate/view/default.json&lt;/strong&gt; file contains this JSON, but does not have
+a matching default.gen file. This is because the .json file simply passes
+variables to other .json files which have matching .gen files that generate
+files. First, the &lt;strong&gt;config.type&lt;/strong&gt; key has a value of &lt;strong&gt;collection&lt;/strong&gt;, that&amp;rsquo;s how
+you know it doesn&amp;rsquo;t have a matching .gen file. Next, the &lt;strong&gt;config.collection&lt;/strong&gt;
+key contains an array of items that specify which template pairs to pass
+variables to.&lt;/p&gt;
+
+&lt;p&gt;The &lt;strong&gt;model&lt;/strong&gt; key under each template receives the &lt;strong&gt;model&lt;/strong&gt; variable from the
+root of the package which is required from the command-line.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+    &amp;quot;config.type&amp;quot;: &amp;quot;collection&amp;quot;,
+    &amp;quot;config.collection&amp;quot;: [
+        {
+            &amp;quot;view/create&amp;quot;: {
+                &amp;quot;model&amp;quot;: &amp;quot;{{.model}}&amp;quot;
+            }
+        },
+        {
+            &amp;quot;view/edit&amp;quot;: {
+                &amp;quot;model&amp;quot;: &amp;quot;{{.model}}&amp;quot;
+            }
+        },
+        {
+            &amp;quot;view/index&amp;quot;: {
+                &amp;quot;model&amp;quot;: &amp;quot;{{.model}}&amp;quot;
+            }
+        },
+        {
+            &amp;quot;view/show&amp;quot;: {
+                &amp;quot;model&amp;quot;: &amp;quot;{{.model}}&amp;quot;
+            }
+        }
+    ],
+    &amp;quot;model&amp;quot;: &amp;quot;&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In this example, the default.json file will pass variables to the following
+files:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;generate/view/create.json&lt;/li&gt;
+&lt;li&gt;generate/view/edit.json&lt;/li&gt;
+&lt;li&gt;generate/view/index.json&lt;/li&gt;
+&lt;li&gt;generate/view/show.json&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The files are all still relative to the root &lt;strong&gt;generate&lt;/strong&gt; folder. Also, if you
+look at each of the four files, you&amp;rsquo;ll see that they require only one variable:
+&lt;strong&gt;model&lt;/strong&gt;. Here is the contents of &lt;strong&gt;generate/view/create.json&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+    &amp;quot;config.type&amp;quot;: &amp;quot;single&amp;quot;,
+    &amp;quot;config.output&amp;quot;: &amp;quot;view/{{.model}}/create.tmpl&amp;quot;,
+    &amp;quot;config.parse&amp;quot;: false,
+    &amp;quot;model&amp;quot;: &amp;quot;&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To generate all four of these templates, the command would look like this.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;jay generate view/default model:test
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The final output would be to the following files:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;view/test/create.json&lt;/li&gt;
+&lt;li&gt;view/test/edit.json&lt;/li&gt;
+&lt;li&gt;view/test/index.json&lt;/li&gt;
+&lt;li&gt;view/test/show.json&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;crud-example&#34;&gt;CRUD Example&lt;/h2&gt;
+
+&lt;p&gt;If you put all those piece above together, you can generate the controller,
+model, and all four views necessary for a working CRUD component in a single
+command.&lt;/p&gt;
+
+&lt;p&gt;The &lt;strong&gt;generate/crud/default.json&lt;/strong&gt; file contains this JSON:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+    &amp;quot;config.type&amp;quot;: &amp;quot;collection&amp;quot;,
+    &amp;quot;config.collection&amp;quot;: [
+        {
+            &amp;quot;model/default&amp;quot;: {
+                &amp;quot;package&amp;quot;: &amp;quot;{{.model}}&amp;quot;,
+                &amp;quot;table&amp;quot;: &amp;quot;{{.model}}&amp;quot;
+            }
+        },
+        {
+            &amp;quot;controller/default&amp;quot;: {
+                &amp;quot;package&amp;quot;: &amp;quot;{{.controller}}&amp;quot;,
+                &amp;quot;url&amp;quot;: &amp;quot;{{.controller}}&amp;quot;,
+                &amp;quot;model&amp;quot;: &amp;quot;{{.model}}&amp;quot;,
+                &amp;quot;view&amp;quot;: &amp;quot;{{.view}}&amp;quot;
+            }
+        },
+        {
+            &amp;quot;view/default&amp;quot;: {
+                &amp;quot;model&amp;quot;: &amp;quot;{{.view}}&amp;quot;
+            }
+        }
+    ],
+    &amp;quot;model&amp;quot;: &amp;quot;&amp;quot;,
+    &amp;quot;controller&amp;quot;: &amp;quot;&amp;quot;,
+    &amp;quot;view&amp;quot;: &amp;quot;&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To generate all the components, the command would look like this.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;jay generate crud/default model:note controller:notepad view:note
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

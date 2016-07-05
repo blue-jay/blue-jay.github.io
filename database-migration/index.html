@@ -8,18 +8,18 @@
   <head lang="en-us">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
-    <title>Assets - Blue Jay</title>
+    <title>Database Migration - Blue Jay</title>
     <meta name="generator" content="Hugo 0.15" />
 
     
     <meta name="description" content="Blue Jay is a toolkit written in Go for the web.">
     
-    <link rel="canonical" href="http://blue-jay.github.io/assets/">
+    <link rel="canonical" href="http://blue-jay.github.io/database-migration/">
     
     <meta name="author" content="Joseph Spurrier">
     
 
-    <meta property="og:url" content="http://blue-jay.github.io/assets/">
+    <meta property="og:url" content="http://blue-jay.github.io/database-migration/">
     <meta property="og:title" content="Blue Jay">
     <meta property="og:image" content="http://blue-jay.github.io/images/bluejaylogo.png">
     <meta name="apple-mobile-web-app-title" content="Blue Jay">
@@ -99,7 +99,7 @@
     </div>
     <div class="stretch">
       <div class="title">
-        Asset
+        Database Migration
       </div>
     </div>
 
@@ -233,14 +233,11 @@
 
 
 
-<a class="current" title="Assets" href="http://blue-jay.github.io/assets/">
+<a  title="Assets" href="http://blue-jay.github.io/assets/">
 	
 	Assets
 </a>
 
-
-<ul id="scrollspy">
-</ul>
 
   
 </li>
@@ -389,11 +386,14 @@
 
 
 
-<a  title="Database Migration" href="http://blue-jay.github.io/database-migration/">
+<a class="current" title="Database Migration" href="http://blue-jay.github.io/database-migration/">
 	
 	Database Migration
 </a>
 
+
+<ul id="scrollspy">
+</ul>
 
   
 </li>
@@ -444,108 +444,114 @@
 
 	<article class="article">
 		<div class="wrapper">
-			<h1>Assets </h1>
+			<h1>Database Migration </h1>
 
 			
 
 <h2 id="basic-usage">Basic Usage</h2>
 
-<p>Out of the box, all of the static assets like CSS and JavaScript are ready to
-demo. If you want to make changes to the file, it&rsquo;s best to use the tools
-provided. The <strong>asset</strong> folder contains a <strong>dynamic</strong> folder and a <strong>static</strong>
-folder.</p>
+<p>Database migrations are a great way to manage incremental database changes.
+The migration state is stored in the same database (the one specified in
+env.json) and recorded in the <strong>migration</strong> table. This is how the <code>jay status</code>
+command knows which migration was performed last.</p>
 
-<p>The <strong>dynamic</strong> folder contains the Syntactically Awesome Style Sheets (SASS),
-individual JavaScript files, and a large PNG image which is used to generate
-favicons for different platforms like Android, iPhone, etc. <em>This is the folder
-in which you want to make your changes.</em> The dynamic folder holds some of the
-assets required to generate the assets in the <strong>static</strong> folder.</p>
+<p>Each incremental change should have a set of two files: an &lsquo;up&rsquo; file and a
+&lsquo;down&rsquo; file. The &lsquo;up&rsquo; file contains code (like SQL) which is applied to the
+database you add features or fix bugs in your database. The &lsquo;down&rsquo; file contains
+the code to remove the change or undo it.</p>
 
-<p>The <strong>static</strong> folder contains the minified CSS and JavaScript as well as
-the generated favicons. The <strong>static</strong> folder is designed to be served up
-so the files can be accessed like this:</p>
+<p><strong>Note</strong>: The <code>jay migrate</code> commands requires the environment variable,
+JAYCONFIG, to point to the env.json file path. The <strong>database</strong> folder
+containing the <strong>migration</strong> folder must also be in the same folder.</p>
 
-<pre><code class="language-html">&lt;!-- Favicons --&gt;
-&lt;link rel=&quot;apple-touch-icon&quot; sizes=&quot;57x57&quot; href=&quot;/static/favicon/apple-touch-icon-57x57.png?v1.0=3eepn6WlLO&quot;&gt;
-&lt;link rel=&quot;apple-touch-icon&quot; sizes=&quot;60x60&quot; href=&quot;/static/favicon/apple-touch-icon-60x60.png?v1.0=3eepn6WlLO&quot;&gt;
-&lt;link rel=&quot;apple-touch-icon&quot; sizes=&quot;72x72&quot; href=&quot;/static/favicon/apple-touch-icon-72x72.png?v1.0=3eepn6WlLO&quot;&gt;
-&lt;!-- CSS and Fonts --&gt;
-&lt;link media=&quot;all&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;/static/css/bootstrap.min.css?1466973904&quot; /&gt;
-&lt;link media=&quot;all&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;//fonts.googleapis.com/css?family=Open+Sans:300,400,bold,italic&quot; /&gt;
-&lt;link media=&quot;all&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;/static/css/all.css?1466973904&quot; /&gt;
+<p>When you start using <strong>Blueprint</strong> you&rsquo;ll see two migration files already exist
+in the <strong>database/migration</strong> folder:</p>
+
+<ul>
+<li>20160630_020000.000000_init.up.sql - adds the initial tables and data</li>
+<li>20160630_020000.000000_init.down.sql - removes the tables and data</li>
+</ul>
+
+<p><strong>Jay</strong> provides a few commands to make the migrations easier. Here is a list
+of the commands:</p>
+
+<pre><code class="language-bash">jay migrate make &quot;test&quot; # Create new migration
+jay migrate all         # Advance all migrations
+jay migrate reset       # Rollback all migrations
+jay migrate refresh     # Rollback all migrations then advance all migrations
+jay migrate status      # See last 'up' migration
+jay migrate up          # Apply only the next 'up' migration
+jay migrate down        # Apply only the current 'down' migration
 </code></pre>
 
-<p>Check out the <a href="http://blue-jay.github.io/controllers">Controllers</a> and <a href="http://blue-jay.github.io/views">Views</a> pages for how
-the files are served and how to append timestamps to them to manage caching.</p>
+<h2 id="workflow">Workflow</h2>
 
-<p>If you make changes to any of the files in the <strong>dynamic</strong> folder, you still
-need a way to compile/minify them and then move them to the <strong>static</strong> folder
-so we&rsquo;ll use Gulp to do that.</p>
+<p>Let&rsquo;s walk through an typical workflow. Assume the <strong>blueprint</strong> folder is the
+root of a git repository. Developer Joe needs to add a feature to the
+application to store books. Joe creates a new branch called feature-store-books.
+He needs to create a new table called <strong>book</strong> so he creates a new database
+migration: <code>jay migrate make &quot;feature-store-books&quot;</code>. He opens the &lsquo;up&rsquo; file
+and adds the SQL query to create a new table with the following columns: title,
+author, and publication_date. In the &lsquo;down&rsquo; file, he writes the code to drop the
+table. He also writes the code to create, read, update, and
+delete the books in his Go code and then performs a <code>git merge</code> and then a
+<code>git push</code>. Developer Steve needs to add an additional column to the
+<strong>book</strong> table called: publisher. Steve performs a <code>git pull</code> to download the
+latest code from the repository. In order to update his local database to the
+latest version of code, runs: <code>jay migrate all</code>. Then, Steve creates a new
+migration for the new requirement: <code>jay migrate make &quot;feature-add-publisher&quot;</code>.
+Steve adds the SQL <code>ADD COLUMN</code> code to the new &lsquo;up&rsquo; file and the SQL
+<code>DROP COLUMN</code> code to the new &lsquo;down&rsquo; file and then performs a <code>git merge</code> and a
+<code>git push</code> again.</p>
 
-<h2 id="install-npm">Install npm</h2>
+<h2 id="migrate-make">migrate make</h2>
 
-<p>The Node Package Manager (npm) helps install packages that work with NodeJS.
-If you don&rsquo;t have NodeJS and npm installed, you can install the latest version
-from <a href="https://nodejs.org">https://nodejs.org</a>.</p>
+<p>The <code>jay migrate make [description]</code> command create a new &lsquo;up&rsquo; and &lsquo;down&rsquo;
+migration in the <strong>database/migration</strong> folder.</p>
 
-<h2 id="install-gulp-and-dependencies">Install Gulp and Dependencies</h2>
+<h2 id="migrate-all">migrate all</h2>
 
-<p>Once npm is installed, you can open your terminal and CD to the root of the
-project folder. You can then run these commands:</p>
+<p>The <code>jay migrate all</code> command finds the current status of the database and then
+applies all the code from each of the &lsquo;up&rsquo; files in chronological order based on
+filename.</p>
 
-<pre><code class="language-bash"># Install Gulp globally
-npm install -g gulp-cli
+<h2 id="migrate-reset">migrate reset</h2>
 
-# Install Gulp locally and dependencies from package.json
-npm install
-</code></pre>
+<p>The <code>jay migrate reset</code> command finds the current status of the database and
+then applies all the code from each of the &lsquo;down&rsquo; files in reverse chronological
+order based on filename which should remove all tables and data with the
+exception of an an empty <strong>migration</strong> table.</p>
 
-<h2 id="gulp">Gulp</h2>
+<p><strong>Note:</strong> If any tables were created outside of the migrations, they should
+still be in the database.</p>
 
-<p>Once the environment is set up, you should have your terminal open to the root
-of the project folder. There are a couple commands you can use with Gulp that
-are in the <a href="https://github.com/blue-jay/blueprint/blob/master/gulpfile.js">gulpfile.js</a>.</p>
+<h2 id="migrate-refresh">migrate refresh</h2>
 
-<pre><code class="language-bash"># Compile the SASS from asset/dynamic/sass and store CSS in asset/static/css/all.css
-gulp sass
+<p>The <code>jay migrate refresh</code> command runs a <code>jay migrate reset</code> and then applies
+all the code from each of the &lsquo;up&rsquo; files in chronological order based on
+filename.</p>
 
-# Concat the JavaScript from asset/dynamic/js and store JS in asset/static/js/all.js
-gulp javascript
+<h2 id="migrate-status">migrate status</h2>
 
-# Copy the jQuery files from node_modules/jquery to asset/static/js
-gulp jquery
+<p>The <code>jay migrate status</code> command reads the latest record in the <strong>migration</strong>
+table which is the last &lsquo;up&rsquo; file that was applied to the database.</p>
 
-# Copy the Bootstrap files from node_modules/bootstrap to asset/static
-gulp bootstrap
+<h2 id="migrate-up">migrate up</h2>
 
-# Copy the Underscore files from note_modules/underscore to asset/static/js
-gulp underscore
+<p>The <code>jay migrate up</code> command applies only the code in the next &lsquo;up&rsquo; file in
+chronological order based on filename.</p>
 
-# Run tasks favicon-generate and favicon-inject
-gulp favicon
+<h2 id="migrate-down">migrate down</h2>
 
-# Generate favicons from asset/dynamic/logo.png and copy to /asset/static/favicon
-gulp favicon-generate
+<p>The <code>jay migrate down</code> command applies only the code in the current &lsquo;down&rsquo; file.</p>
 
-# Generate view/partial/favicon.tmpl with favicon tags
-gulp favicon-inject
+<h2 id="other-database-changes">Other Database Changes</h2>
 
-# Update the asset/dynamic/favicon/data.json file with the latest version from the RealFaviconGenerator website
-gulp favicon-update
-
-# Run the sass and javascript tasks when any of the files change
-gulp watch
-
-# Run all the tasks once
-gulp init
-
-# Run just the sass and javascript tasks once
-gulp default
-</code></pre>
-
-<p>It is best to run <code>gulp watch</code> so when you are working with the SASS and
-JavaScript files so they will automatically generate in the <strong>static</strong> folder
-for you.</p>
+<p>If the &lsquo;up&rsquo; and &lsquo;down&rsquo; files are written properly, tables created manually
+outside the migrations should be left untouched by the <code>jay migrate</code> commands.
+The only changes <code>jay migrate</code> makes to the database outside of the migrations
+are the creation of the database itself based on the settings in env.json and
+the modification of the <strong>migration</strong> table.</p>
 
 			
 			<aside class="copyright" role="note">
@@ -566,7 +572,7 @@ for you.</p>
 <nav class="pagination" aria-label="Footer">
   <div class="previous">
   
-      <a href="http://blue-jay.github.io/configuration/" title="Configuration">
+      <a href="http://blue-jay.github.io/find-replace/" title="Find and Replace">
         <span class="direction">
           Previous
         </span>
@@ -576,7 +582,7 @@ for you.</p>
           </div>
           <div class="stretch">
             <div class="title">
-              Configuration
+              Find and Replace
             </div>
           </div>
         </div>
@@ -586,14 +592,14 @@ for you.</p>
 
   <div class="next">
   
-      <a href="http://blue-jay.github.io/routing/" title="Routing">
+      <a href="http://blue-jay.github.io/generation/" title="Code Generation">
         <span class="direction">
           Next
         </span>
         <div class="page">
           <div class="stretch">
             <div class="title">
-              Routing
+              Code Generation
             </div>
           </div>
           <div class="button button-next" role="button" aria-label="Next">

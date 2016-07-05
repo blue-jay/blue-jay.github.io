@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Structures on Blue Jay</title>
+    <link>http://blue-jay.github.io/structure/</link>
+    <description>Recent content in Structures on Blue Jay</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://blue-jay.github.io/structure/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Structure</title>
+      <link>http://blue-jay.github.io/structure/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blue-jay.github.io/structure/</guid>
+      <description>
+
+&lt;p&gt;It helps to understand the folder structure so you know where each of the
+components lives.&lt;/p&gt;
+
+&lt;h2 id=&#34;blueprint-structure&#34;&gt;Blueprint Structure&lt;/h2&gt;
+
+&lt;p&gt;The project is organized into the following folders:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;asset/
+|----dynamic/    - private assets like SASS files, single JavaScript files, and logo.png for favicon generation
+|----static/     - public assets like CSS, JavaScript, and favicon.ico for Android, Apple, etc
+bootstrap/       - package for initial set up of the application
+controller/      - packages with routes and application logic
+database/
+|----migration/  - SQL files for migration database up and down
+generate/        - template pairs (.gen and .json) for generating code using jay
+lib/             - packages with minimum dependencies
+middleware/      - packages that return a http.Handler to wrap around routes for ACL, request logging, etc
+model/           - packages with database queries and structs matching tables
+view/            - HTML templates parsed using the Go html/template package
+viewfunc/        - packages that return a template.FuncMap for use in views
+viewmodify/      - packages that modify view prior to rendering to add varibles like CSRF token and auth level
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The following files exist at the project root:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;blueprint.go     - entrypoint for the application
+env.json.example - application config template for variables
+gulpfile.js      - Gulp configuration that compiles SASS, concatenates JavaScript, etc
+package.json     - npm configuration that loads Gulp, Boostrap, Underscore.js, etc
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;blueprint-external-go-packages&#34;&gt;Blueprint External Go Packages&lt;/h2&gt;
+
+&lt;p&gt;There are a few external packages used in Blueprint:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;github.com/gorilla/context              - registry for global request variables
+github.com/gorilla/sessions             - cookie and filesystem sessions
+github.com/go-sql-driver/mysql          - MySQL driver
+github.com/jmoiron/sqlx                 - MySQL general purpose extensions
+github.com/josephspurrier/csrfbanana    - CSRF protection for gorilla sessions
+github.com/julienschmidt/httprouter     - high performance HTTP request router
+github.com/justinas/alice               - middleware chaining
+golang.org/x/crypto/bcrypt              - password hashing algorithm
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;jay-structure&#34;&gt;Jay Structure&lt;/h2&gt;
+
+&lt;p&gt;The project is organized into the following folders:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;env/       - package that creates and updated the env.json config file
+find/      - package that finds case-sensitive matched text in files
+generate/  - package that generates code from template pairs
+lib/       - packages with minimum dependencies
+migrate/   - package that handles the database migrations
+replace/   - package that replaces case-sensitive matched text in files
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The following file exists at the project root:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;jay.go     - entrypoint for the application
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;jay-external-go-packages&#34;&gt;Jay External Go Packages&lt;/h2&gt;
+
+&lt;p&gt;There are a few external packages used in Jay:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;gopkg.in/alecthomas/kingpin.v2    - command-line and flag parser
+github.com/gorilla/securecookie   - generate random keys for authentication and encryption
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

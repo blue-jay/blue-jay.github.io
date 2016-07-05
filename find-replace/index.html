@@ -8,18 +8,18 @@
   <head lang="en-us">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
-    <title>Assets - Blue Jay</title>
+    <title>Find and Replace - Blue Jay</title>
     <meta name="generator" content="Hugo 0.15" />
 
     
     <meta name="description" content="Blue Jay is a toolkit written in Go for the web.">
     
-    <link rel="canonical" href="http://blue-jay.github.io/assets/">
+    <link rel="canonical" href="http://blue-jay.github.io/find-replace/">
     
     <meta name="author" content="Joseph Spurrier">
     
 
-    <meta property="og:url" content="http://blue-jay.github.io/assets/">
+    <meta property="og:url" content="http://blue-jay.github.io/find-replace/">
     <meta property="og:title" content="Blue Jay">
     <meta property="og:image" content="http://blue-jay.github.io/images/bluejaylogo.png">
     <meta name="apple-mobile-web-app-title" content="Blue Jay">
@@ -99,7 +99,7 @@
     </div>
     <div class="stretch">
       <div class="title">
-        Asset
+        Find and Replace
       </div>
     </div>
 
@@ -233,14 +233,11 @@
 
 
 
-<a class="current" title="Assets" href="http://blue-jay.github.io/assets/">
+<a  title="Assets" href="http://blue-jay.github.io/assets/">
 	
 	Assets
 </a>
 
-
-<ul id="scrollspy">
-</ul>
 
   
 </li>
@@ -372,11 +369,14 @@
 
 
 
-<a  title="Find and Replace" href="http://blue-jay.github.io/find-replace/">
+<a class="current" title="Find and Replace" href="http://blue-jay.github.io/find-replace/">
 	
 	Find and Replace
 </a>
 
+
+<ul id="scrollspy">
+</ul>
 
   
 </li>
@@ -444,108 +444,85 @@
 
 	<article class="article">
 		<div class="wrapper">
-			<h1>Assets </h1>
+			<h1>Find and Replace </h1>
 
 			
 
 <h2 id="basic-usage">Basic Usage</h2>
 
-<p>Out of the box, all of the static assets like CSS and JavaScript are ready to
-demo. If you want to make changes to the file, it&rsquo;s best to use the tools
-provided. The <strong>asset</strong> folder contains a <strong>dynamic</strong> folder and a <strong>static</strong>
-folder.</p>
+<p><strong>Jay</strong> includes the ability to do a case-sensitive find and replace. This is
+great when you have many files to look through and need simple way to
+find and replace quickly.</p>
 
-<p>The <strong>dynamic</strong> folder contains the Syntactically Awesome Style Sheets (SASS),
-individual JavaScript files, and a large PNG image which is used to generate
-favicons for different platforms like Android, iPhone, etc. <em>This is the folder
-in which you want to make your changes.</em> The dynamic folder holds some of the
-assets required to generate the assets in the <strong>static</strong> folder.</p>
+<h2 id="find-usage">Find Usage</h2>
 
-<p>The <strong>static</strong> folder contains the minified CSS and JavaScript as well as
-the generated favicons. The <strong>static</strong> folder is designed to be served up
-so the files can be accessed like this:</p>
+<pre><code class="language-bash">usage: jay find &lt;folder&gt; &lt;text&gt; [&lt;extension&gt;] [&lt;recursive&gt;] [&lt;filename&gt;]
 
-<pre><code class="language-html">&lt;!-- Favicons --&gt;
-&lt;link rel=&quot;apple-touch-icon&quot; sizes=&quot;57x57&quot; href=&quot;/static/favicon/apple-touch-icon-57x57.png?v1.0=3eepn6WlLO&quot;&gt;
-&lt;link rel=&quot;apple-touch-icon&quot; sizes=&quot;60x60&quot; href=&quot;/static/favicon/apple-touch-icon-60x60.png?v1.0=3eepn6WlLO&quot;&gt;
-&lt;link rel=&quot;apple-touch-icon&quot; sizes=&quot;72x72&quot; href=&quot;/static/favicon/apple-touch-icon-72x72.png?v1.0=3eepn6WlLO&quot;&gt;
-&lt;!-- CSS and Fonts --&gt;
-&lt;link media=&quot;all&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;/static/css/bootstrap.min.css?1466973904&quot; /&gt;
-&lt;link media=&quot;all&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;//fonts.googleapis.com/css?family=Open+Sans:300,400,bold,italic&quot; /&gt;
-&lt;link media=&quot;all&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;/static/css/all.css?1466973904&quot; /&gt;
+Search for files containing matching text.
+
+Flags:
+  -h, --help     Show context-sensitive help (also try --help-long and
+                 --help-man).
+  -v, --version  Show application version.
+
+Args:
+  &lt;folder&gt;       Folder to search
+  &lt;text&gt;         Case-sensitive text to find.
+  [&lt;extension&gt;]  File name or extension to search in. Use * as a wildcard.
+                 Directory names are not valid.
+  [&lt;recursive&gt;]  True to search in subfolders. Default: true
+  [&lt;filename&gt;]   True to include file path in results if matched. Default: false
 </code></pre>
 
-<p>Check out the <a href="http://blue-jay.github.io/controllers">Controllers</a> and <a href="http://blue-jay.github.io/views">Views</a> pages for how
-the files are served and how to append timestamps to them to manage caching.</p>
+<h2 id="replace-usage">Replace Usage</h2>
 
-<p>If you make changes to any of the files in the <strong>dynamic</strong> folder, you still
-need a way to compile/minify them and then move them to the <strong>static</strong> folder
-so we&rsquo;ll use Gulp to do that.</p>
+<pre><code class="language-bash">usage: jay replace &lt;folder&gt; &lt;find&gt; [&lt;replace&gt;] [&lt;extension&gt;] [&lt;recursive&gt;] [&lt;filename&gt;] [&lt;commit&gt;]
 
-<h2 id="install-npm">Install npm</h2>
+Search for files containing matching text and then replace it with new text.
 
-<p>The Node Package Manager (npm) helps install packages that work with NodeJS.
-If you don&rsquo;t have NodeJS and npm installed, you can install the latest version
-from <a href="https://nodejs.org">https://nodejs.org</a>.</p>
+Flags:
+  -h, --help     Show context-sensitive help (also try --help-long and
+                 --help-man).
+  -v, --version  Show application version.
 
-<h2 id="install-gulp-and-dependencies">Install Gulp and Dependencies</h2>
-
-<p>Once npm is installed, you can open your terminal and CD to the root of the
-project folder. You can then run these commands:</p>
-
-<pre><code class="language-bash"># Install Gulp globally
-npm install -g gulp-cli
-
-# Install Gulp locally and dependencies from package.json
-npm install
+Args:
+  &lt;folder&gt;       Folder to search
+  &lt;find&gt;         Case-sensitive text to replace.
+  [&lt;replace&gt;]    Text to replace with.
+  [&lt;extension&gt;]  File name or extension to search in. Use * as a wildcard.
+                 Directory names are not valid.
+  [&lt;recursive&gt;]  True to search in subfolders. Default: true
+  [&lt;filename&gt;]   True to include file path in results if matched. Default: false
+  [&lt;commit&gt;]     True to makes the changes instead of just displaying them.
+                 Default: true
 </code></pre>
 
-<h2 id="gulp">Gulp</h2>
+<h2 id="find-and-replace-examples">Find and Replace Examples</h2>
 
-<p>Once the environment is set up, you should have your terminal open to the root
-of the project folder. There are a couple commands you can use with Gulp that
-are in the <a href="https://github.com/blue-jay/blueprint/blob/master/gulpfile.js">gulpfile.js</a>.</p>
+<p>Here are examples are how to use find and replace:</p>
 
-<pre><code class="language-bash"># Compile the SASS from asset/dynamic/sass and store CSS in asset/static/css/all.css
-gulp sass
+<pre><code class="language-bash"># Find the word &quot;red&quot; in all *.go files in the current folder and in subfolders.
+jay find . red
 
-# Concat the JavaScript from asset/dynamic/js and store JS in asset/static/js/all.js
-gulp javascript
+# Find the word &quot;red&quot; in all files in the current folder only.
+jay find . red &quot;*.*&quot; false
 
-# Copy the jQuery files from node_modules/jquery to asset/static/js
-gulp jquery
+# Find the word &quot;red&quot; in *.go files in current folder and in subfolders and 
+# include file paths that match also.
+jay find . red &quot;*.go&quot; true true
 
-# Copy the Bootstrap files from node_modules/bootstrap to asset/static
-gulp bootstrap
+# Replace the word &quot;red&quot; with the word &quot;blue&quot; in all *.go files in the current
+# folder and in subfolders.
+jay replace . red blue
 
-# Copy the Underscore files from note_modules/underscore to asset/static/js
-gulp underscore
+# Replace the word &quot;red&quot; with the word &quot;blue&quot; in all *.go files in current
+# folder only.
+jay replace . red blue &quot;*.go&quot; false
 
-# Run tasks favicon-generate and favicon-inject
-gulp favicon
-
-# Generate favicons from asset/dynamic/logo.png and copy to /asset/static/favicon
-gulp favicon-generate
-
-# Generate view/partial/favicon.tmpl with favicon tags
-gulp favicon-inject
-
-# Update the asset/dynamic/favicon/data.json file with the latest version from the RealFaviconGenerator website
-gulp favicon-update
-
-# Run the sass and javascript tasks when any of the files change
-gulp watch
-
-# Run all the tasks once
-gulp init
-
-# Run just the sass and javascript tasks once
-gulp default
+# Change the name of the project in current folder and in subfolders and all
+# imports to another repository.
+jay replace . &quot;blue-jay/blueprint&quot; &quot;user/project&quot;
 </code></pre>
-
-<p>It is best to run <code>gulp watch</code> so when you are working with the SASS and
-JavaScript files so they will automatically generate in the <strong>static</strong> folder
-for you.</p>
 
 			
 			<aside class="copyright" role="note">
@@ -566,7 +543,7 @@ for you.</p>
 <nav class="pagination" aria-label="Footer">
   <div class="previous">
   
-      <a href="http://blue-jay.github.io/configuration/" title="Configuration">
+      <a href="http://blue-jay.github.io/jay/" title="Jay Overview">
         <span class="direction">
           Previous
         </span>
@@ -576,7 +553,7 @@ for you.</p>
           </div>
           <div class="stretch">
             <div class="title">
-              Configuration
+              Jay Overview
             </div>
           </div>
         </div>
@@ -586,14 +563,14 @@ for you.</p>
 
   <div class="next">
   
-      <a href="http://blue-jay.github.io/routing/" title="Routing">
+      <a href="http://blue-jay.github.io/database-migration/" title="Database Migration">
         <span class="direction">
           Next
         </span>
         <div class="page">
           <div class="stretch">
             <div class="title">
-              Routing
+              Database Migration
             </div>
           </div>
           <div class="button button-next" role="button" aria-label="Next">

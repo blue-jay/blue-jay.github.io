@@ -143,7 +143,7 @@
         </div>
       
       <div class="name">
-        <strong>Blue Jay <span class="version">0.1-alpha</span></strong>
+        <strong>Blue Jay <span class="version">0.5-bravo</span></strong>
         
           <br>
           blue-jay/blueprint
@@ -193,6 +193,23 @@
 
 <ul id="scrollspy">
 </ul>
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Structure" href="http://blue-jay.github.io/structure/">
+	
+	Structure
+</a>
+
 
   
 </li>
@@ -317,6 +334,91 @@
 </li>
 
 
+
+<li>
+  
+    
+
+
+
+<a  title="Library" href="http://blue-jay.github.io/library/">
+	
+	Library
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Jay Overview" href="http://blue-jay.github.io/jay/">
+	
+	Jay Overview
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Find and Replace" href="http://blue-jay.github.io/find-replace/">
+	
+	Find and Replace
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Database Migration" href="http://blue-jay.github.io/database-migration/">
+	
+	Database Migration
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Code Generation" href="http://blue-jay.github.io/generation/">
+	
+	Code Generation
+</a>
+
+
+  
+</li>
+
+
         </ul>
         
 
@@ -350,17 +452,13 @@
 
 				
 
-<p><a href="https://goreportcard.com/report/github.com/blue-jay/blueprint"><img src="https://goreportcard.com/badge/github.com/blue-jay/blueprint" alt="Go Report Card" /></a>
-<a href="https://godoc.org/github.com/blue-jay/blueprint"><img src="https://godoc.org/github.com/blue-jay/blueprint?status.svg" alt="GoDoc" /></a></p>
-
 <p>Blue Jay is a web toolkit for <a href="https://golang.org/">Go</a>. It&rsquo;s a collection of command-line tools and a web blueprint that allows you to easily structure your web application. There is no rigid framework to which you have to conform and Blueprint is very easy to start using.</p>
 
 <p>There are a few components:</p>
 
 <ul>
-<li><p><a href="https://github.com/blue-jay/blueprint"><strong>Blueprint</strong></a> is a model-view-controller (MVC) style web skeleton.</p></li>
-
-<li><p><a href="https://github.com/blue-jay/jay"><strong>Jay</strong></a> is a command line tool with find/replace, database migrations, and code generation.</p></li>
+<li><a href="https://github.com/blue-jay/blueprint"><strong>Blueprint</strong></a> is a model-view-controller (MVC) style web skeleton.</li>
+<li><a href="https://github.com/blue-jay/jay"><strong>Jay</strong></a> is a command line tool with find/replace, database migrations, and code generation.</li>
 </ul>
 
 <h2 id="high-level">High Level</h2>
@@ -387,60 +485,56 @@ generation of favicons, and copying of static assets like Bootstrap and jQuery
 managed by npm to the <strong>asset/static</strong> folder. They are great tools that speed up
 web development.</p>
 
-<h2 id="quick-start-with-mysql">Quick Start with MySQL</h2>
+<p>Jay is a command-line tool that plays nice with Blueprint. It has a find/replace
+functionality so code refactoring is a little easier. It performs database
+migration to help with moving your database between states when sharing code
+between teams. Jay provides template-based code generation that allows you to
+build controllers, models and middleware, as well as multiple views and any
+other file you would like to build. All templates (*.gen files) are parsed using
+the <strong>text/template</strong> package from the Go standard library and all generation
+instructions (*.json files) allow you to specify which variables to pass via
+<strong>jay</strong> as well as in which folder to create the templates. You can also build
+collections of templates and generate more than one file set which is great when
+you want to scaffold out a component using (create, read, update, and delete)
+CRUD.</p>
+
+<h2 id="quick-start-website-with-jay">Quick Start Website with Jay</h2>
 
 <ol>
-<li>To download, run the following command: <code>go get github.com/blue-ray/blueprint</code></li>
-<li>Start a MySQL instance and import <strong>database/migration/20160630_020000_a.up.sql</strong> to create the database and tables.</li>
-<li>Make a copy of env.json.example and name it: <strong>env.json</strong></li>
-<li>Edit the <strong>Database</strong> section in <strong>env.json</strong> so the connection information matches your MySQL instance.</li>
-<li>Use <code>go run</code> from the root of the project directory.</li>
+<li>To download Blueprint, run the following command: <code>go get github.com/blue-ray/blueprint</code></li>
+<li>To download Jay, run the following command: <code>go get github.com/blue-ray/jay</code></li>
+<li>Open your terminal and CD to the <strong>blueprint</strong> folder.</li>
+<li>Run this command to create the env.json file from env.json.example: <code>jay env make</code></li>
+<li>Set the environment variable, JAYCONFIG, to the env.json file path. For example:
+
+<ul>
+<li>On Windows: <code>SET JAYCONFIG=C:\bluejay\workspace\src\github.com\blue-jay\blueprint\env.json</code></li>
+<li>On Linux/OS X: <code>export JAYCONFIG=$HOME/workspace/src/github.com/blue-jay/blueprint/env.json</code></li>
+</ul></li>
+<li>Start a MySQL instance.</li>
+<li>Edit the <strong>Database</strong> section of env.json to match your database login information.</li>
+<li>Create the database and tables using the command: <code>jay migrate all</code></li>
+<li>Run the application using the command: <code>go run blueprint.go</code></li>
 <li>Open your web browser to <a href="http://localhost">http://localhost</a> and you should see the welcome page.</li>
 <li>Navigate to the register page at <a href="http://localhost/register">http://localhost/register</a> and create a new user.</li>
-<li>You can now login at <a href="http://localhost/login">http://localhost/login</a> to try the Notepad app.</li>
+<li>You can now login at <a href="http://localhost/login">http://localhost/login</a>.</li>
 </ol>
 
-<h2 id="structure">Structure</h2>
+<h2 id="quick-start-website-without-jay">Quick Start Website without Jay</h2>
 
-<p>The project is organized into the following folders:</p>
-
-<pre><code class="language-text">asset/
-|----dynamic/    - private assets like SASS files, single JavaScript files, and logo.png for favicon generation
-|----static/     - public assets like CSS, JavaScript, and favicon.ico for Android, Apple, etc.
-bootstrap/	     - package for initial set up of the application
-controller/	     - packages with routes and application logic
-database/
-|----migration/  - SQL files for migration database up and down
-generate/	     - template pairs (.gen and .json) for generating code using jay
-lib/             - packages with minimum dependencies
-middleware/      - packages that return a http.Handler to wrap around routes for ACL, request logging, etc.
-model/		     - packages with database queries and structs matching tables
-view/            - HTML templates parsed using the Go html/template package
-viewfunc/        - packages that return a template.FuncMap for use in views
-viewmodify/      - packages that modify view prior to rendering to add varibles like CSRF token and auth level
-</code></pre>
-
-<p>The following files exist at the project root:</p>
-
-<pre><code class="language-text">blueprint.go     - entrypoint for the application
-env.json.example - variables for the application
-gulpfile.js      - Gulp configuration that compiles SASS, concatenates JavaScript, etc.
-package.json     - npm configuration that loads Gulp, Boostrap, Underscore.js, etc.
-</code></pre>
-
-<h2 id="external-go-packages">External Go Packages</h2>
-
-<p>There are a few external packages that must be retrieved using <code>go get</code>:</p>
-
-<pre><code class="language-text">github.com/gorilla/context				- registry for global request variables
-github.com/gorilla/sessions				- cookie and filesystem sessions
-github.com/go-sql-driver/mysql 			- MySQL driver
-github.com/jmoiron/sqlx 				- MySQL general purpose extensions
-github.com/josephspurrier/csrfbanana 	- CSRF protection for gorilla sessions
-github.com/julienschmidt/httprouter 	- high performance HTTP request router
-github.com/justinas/alice				- middleware chaining
-golang.org/x/crypto/bcrypt 				- password hashing algorithm
-</code></pre>
+<ol>
+<li>To download Blueprint, run the following command: <code>go get github.com/blue-ray/blueprint</code></li>
+<li>Start a MySQL instance.</li>
+<li>Make a copy of env.json.example and name it: <strong>env.json</strong></li>
+<li>Edit the <strong>Database</strong> section in <strong>env.json</strong> so the connection information matches your MySQL instance.</li>
+<li>Create a database called <strong>blueprint</strong>.</li>
+<li>Import <strong>database/migration/20160630_020000_a.up.sql</strong> to create the tables.</li>
+<li>Open your terminal and CD to the <strong>blueprint</strong> folder.</li>
+<li>Run the application using the command: <code>go run blueprint.go</code></li>
+<li>Open your web browser to <a href="http://localhost">http://localhost</a> and you should see the welcome page.</li>
+<li>Navigate to the register page at <a href="http://localhost/register">http://localhost/register</a> and create a new user.</li>
+<li>You can now login at <a href="http://localhost/login">http://localhost/login</a>.</li>
+</ol>
 
 <h2 id="why-blue-jay">Why Blue Jay?</h2>
 
@@ -483,37 +577,41 @@ language.</p>
 
 <h2 id="screenshots">Screenshots</h2>
 
-<p>Public Home:</p>
+<h3 id="public-home">Public Home</h3>
 
-<p><img src="https://cloud.githubusercontent.com/assets/2394539/11319464/e2cd0eac-9045-11e5-9b24-5e480240cd69.jpg" alt="Image of Public Home" /></p>
+<p><img src="http://blue-jay.github.io/images/home_anon.png" alt="Image of Public Home" /></p>
 
-<p>About:</p>
+<h3 id="about">About</h3>
 
-<p><img src="https://cloud.githubusercontent.com/assets/2394539/11319462/e2c4d2d2-9045-11e5-805f-8b40598c92c3.jpg" alt="Image of About" /></p>
+<p><img src="http://blue-jay.github.io/images/about.png" alt="Image of About" /></p>
 
-<p>Register:</p>
+<h3 id="register">Register</h3>
 
-<p><img src="https://cloud.githubusercontent.com/assets/2394539/11319466/e2d03500-9045-11e5-9c8e-c28fe663ed0f.jpg" alt="Image of Register" /></p>
+<p><img src="http://blue-jay.github.io/images/register.png" alt="Image of Register" /></p>
 
-<p>Login:</p>
+<h3 id="login">Login</h3>
 
-<p><img src="https://cloud.githubusercontent.com/assets/2394539/11319463/e2cd1a00-9045-11e5-8b8e-68030d870cbe.jpg" alt="Image of Login" /></p>
+<p><img src="http://blue-jay.github.io/images/login.png" alt="Image of Login" /></p>
 
-<p>Authenticated Home:</p>
+<h3 id="authenticated-home">Authenticated Home</h3>
 
-<p><img src="https://cloud.githubusercontent.com/assets/2394539/14809208/75f340d2-0b59-11e6-8d2a-cd26ee872281.PNG" alt="Image of Auth Home" /></p>
+<p><img src="http://blue-jay.github.io/images/home_auth.png" alt="Image of Auth Home" /></p>
 
-<p>View Notes:</p>
+<h3 id="view-all-notes">View All Notes</h3>
 
-<p><img src="https://cloud.githubusercontent.com/assets/2394539/14809205/75f08432-0b59-11e6-8737-84ee796bd82e.PNG" alt="Image of Notepad View" /></p>
+<p><img src="http://blue-jay.github.io/images/notepad_index.png" alt="Image of Notepad View" /></p>
 
-<p>Add Note:</p>
+<h3 id="add-note">Add Note</h3>
 
-<p><img src="https://cloud.githubusercontent.com/assets/2394539/14809207/75f338f8-0b59-11e6-9719-61355957996c.PNG" alt="Image of Notepad Add" /></p>
+<p><img src="http://blue-jay.github.io/images/notepad_create.png" alt="Image of Notepad Add" /></p>
 
-<p>Edit Note:</p>
+<h3 id="view-one-note">View One Note</h3>
 
-<p><img src="https://cloud.githubusercontent.com/assets/2394539/14809206/75f33970-0b59-11e6-8acf-b3d533477aac.PNG" alt="Image of Notepad Edit" /></p>
+<p><img src="http://blue-jay.github.io/images/notepad_view.png" alt="Image of Notepad Edit" /></p>
+
+<h3 id="edit-note">Edit Note</h3>
+
+<p><img src="http://blue-jay.github.io/images/notepad_edit.png" alt="Image of Notepad Edit" /></p>
 
 <h2 id="feedback">Feedback</h2>
 
@@ -546,14 +644,14 @@ If something is not idiomatic to Go, please let me know know so we can make it b
   
   
   <div class="next">
-      <a href="http://blue-jay.github.io/configuration/" title="Configuration">
+      <a href="http://blue-jay.github.io/structure/" title="Structure">
         <span class="direction">
           Next
         </span>
         <div class="page">
           <div class="stretch">
             <div class="title">
-              Configuration
+              Structure
             </div>
           </div>
           <div class="button button-next" role="button" aria-label="Next">

@@ -6,13 +6,12 @@
     <description>Recent content in Routings on Blue Jay</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 08 Mar 2016 21:07:13 +0100</lastBuildDate>
     <atom:link href="http://blue-jay.github.io/routing/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Routing</title>
       <link>http://blue-jay.github.io/routing/</link>
-      <pubDate>Tue, 08 Mar 2016 21:07:13 +0100</pubDate>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>http://blue-jay.github.io/routing/</guid>
       <description>
@@ -27,10 +26,9 @@ The controller files are all organized under the &lt;strong&gt;controller&lt;/st
 &lt;h2 id=&#34;routing&#34;&gt;Routing&lt;/h2&gt;
 
 &lt;p&gt;In the &lt;strong&gt;bootstrap&lt;/strong&gt; package, the &lt;strong&gt;RegisterServices()&lt;/strong&gt; function
-calls the &lt;strong&gt;controller.LoadRoutes()&lt;/strong&gt; function.&lt;/p&gt;
-
-&lt;p&gt;The &lt;strong&gt;LoadRoutes()&lt;/strong&gt; function in the &lt;strong&gt;controller&lt;/strong&gt; package loads the routes
-for each of the individual controllers:&lt;/p&gt;
+calls the &lt;strong&gt;controller.LoadRoutes()&lt;/strong&gt; function. The &lt;strong&gt;LoadRoutes()&lt;/strong&gt; function in
+ the &lt;strong&gt;controller&lt;/strong&gt; package loads the routes for each of the individual
+ controllers:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// LoadRoutes loads the routes for each of the controllers.
 func LoadRoutes() {

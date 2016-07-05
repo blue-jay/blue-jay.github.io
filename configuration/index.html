@@ -140,7 +140,7 @@
         </div>
       
       <div class="name">
-        <strong>Blue Jay <span class="version">0.1-alpha</span></strong>
+        <strong>Blue Jay <span class="version">0.5-bravo</span></strong>
         
           <br>
           blue-jay/blueprint
@@ -185,6 +185,23 @@
 <a  title="Toolkit Overview" href="http://blue-jay.github.io/">
 	
 	Toolkit Overview
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Structure" href="http://blue-jay.github.io/structure/">
+	
+	Structure
 </a>
 
 
@@ -314,6 +331,91 @@
 </li>
 
 
+
+<li>
+  
+    
+
+
+
+<a  title="Library" href="http://blue-jay.github.io/library/">
+	
+	Library
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Jay Overview" href="http://blue-jay.github.io/jay/">
+	
+	Jay Overview
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Find and Replace" href="http://blue-jay.github.io/find-replace/">
+	
+	Find and Replace
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Database Migration" href="http://blue-jay.github.io/database-migration/">
+	
+	Database Migration
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Code Generation" href="http://blue-jay.github.io/generation/">
+	
+	Code Generation
+</a>
+
+
+  
+</li>
+
+
         </ul>
         
 
@@ -355,8 +457,28 @@ start from. If you want to use YAML instead of JSON, it&rsquo;s recommended to c
 library in the <strong>lib</strong> folder and then load your env.yaml file via the <strong>bootstrap</strong>
 package.</p>
 
+<h2 id="jay-command-env">Jay Command: env</h2>
+
 <p>One of the first steps before using Blueprint is to create <strong>env.json</strong>. You can make
-a copy of <strong>env.json.example</strong> and then name it <strong>env.json</strong>. The <strong>env.json</strong> file is a
+a copy of <strong>env.json.example</strong> and then name it <strong>env.json</strong>, just be sure to
+generate a new <strong>AuthKey</strong> and <strong>EncryptKey</strong> in the <strong>Session</strong> section.</p>
+
+<p>You can also use <strong>jay</strong> to create the env.json file with new session keys.
+Just CD to the <strong>blueprint</strong> folder and then run: <code>jay env make</code></p>
+
+<p>Here are the commands you can use with <code>jay env</code>:</p>
+
+<pre><code class="language-bash"># Create a new env.json file from env.json.example with newly generated session keys
+jay env make
+
+# Show a new set of session keys that can be copied and pasted into env.json
+jay env keyshow
+
+# Generate a new set of session keys and automatically apply them to env.json
+env env keyupdate
+</code></pre>
+
+<p>The <strong>env.json</strong> file is a
 good place to set variables for the application so you
 don&rsquo;t have to hardcode them. If you want to add any
 of your own settings, you can add them to <strong>env.json</strong> and update the <strong>Info</strong> struct
@@ -372,9 +494,11 @@ in the <strong>bootstrap</strong> package. Here is an example <strong>env.json</
       &quot;Username&quot;:&quot;root&quot;,
       &quot;Password&quot;:&quot;&quot;,
       &quot;Database&quot;:&quot;blueprint&quot;,
+      &quot;Charset&quot;:&quot;utf8mb4&quot;,
+      &quot;Collation&quot;:&quot;utf8mb4_unicode_ci&quot;,
       &quot;Hostname&quot;:&quot;127.0.0.1&quot;,
       &quot;Port&quot;:3306,
-      &quot;Parameter&quot;:&quot;?parseTime=true&quot;
+      &quot;Parameter&quot;:&quot;parseTime=true&quot;
     }
   },
   &quot;Email&quot;:{
@@ -395,7 +519,8 @@ in the <strong>bootstrap</strong> package. Here is an example <strong>env.json</
     &quot;KeyFile&quot;:&quot;tls/server.key&quot;
   },
   &quot;Session&quot;:{
-    &quot;SecretKey&quot;:&quot;@r4B?EThaSEh_drudR7P_hub=s#s2Pah&quot;,
+    &quot;AuthKey&quot;:&quot;PzCh6FNAB7/jhmlUQ0+25sjJ+WgcJeKR2bAOtnh9UnfVN+WJSBvY/YC80Rs+rbMtwfmSP4FUSxKPtpYKzKFqFA==&quot;,
+    &quot;EncryptKey&quot;:&quot;3oTKCcKjDHMUlV+qur2Ve664SPpSuviyGQ/UqnroUD8=&quot;,
     &quot;Name&quot;:&quot;sess&quot;,
     &quot;Options&quot;:{  
       &quot;Path&quot;:&quot;/&quot;,
@@ -409,7 +534,7 @@ in the <strong>bootstrap</strong> package. Here is an example <strong>env.json</
     &quot;Root&quot;:&quot;base&quot;,
     &quot;Children&quot;:[
       &quot;partial/favicon&quot;,
-	  &quot;partial/menu&quot;,
+    &quot;partial/menu&quot;,
       &quot;partial/footer&quot;
     ]
   },
@@ -458,16 +583,17 @@ View		- Info struct in lib/view
 <p>To enable HTTPS:</p>
 
 <ol>
-<li>Set <strong>UseHTTPS</strong> to <strong>true</strong></li>
+<li>Set <strong>UseHTTPS</strong> to <strong>true</strong> in the <strong>env.json</strong> file</li>
 <li>Create a folder called <strong>tls</strong> in the project root folder</li>
 <li>Place your own certificate and key files in the <strong>tls</strong> folder</li>
 </ol>
 
-<p><strong>Note:</strong> If you want to redirect HTTP to HTTPS, you can set <strong>RedirectToHTTPS</strong> to <strong>true</strong> as well.</p>
+<p><strong>Note:</strong> If you want to redirect HTTP to HTTPS, you can set <strong>RedirectToHTTPS</strong> to <strong>true</strong> in the <strong>env.json</strong> file as well.</p>
 
 <h2 id="tip-add-a-section">Tip: Add a Section</h2>
 
-<p>To add a new key called <strong>Captcha</strong>, you could do the following:</p>
+<p>To add a new key called <strong>Captcha</strong>, your workflow would consist of the
+following:</p>
 
 <ol>
 <li>Create a new package in the <strong>lib</strong> folder called <strong>captcha</strong></li>
@@ -479,14 +605,14 @@ View		- Info struct in lib/view
 
 <h2 id="tip-remove-a-section">Tip: Remove a Section</h2>
 
-<p>To remove the <strong>Email</strong> key, you could do the following:</p>
+<p>To remove the <strong>Email</strong> key, your workflow would consist of the following:</p>
 
 <ol>
 <li>Remove the <strong>Email</strong> key and value from the <strong>env.json</strong> file</li>
 <li>Remove the <strong>Email</strong> nested struct from the <strong>Info</strong> struct in the <strong>bootstrap</strong> package</li>
 <li>Remove any code setting up the package from the <strong>RegisterServices()</strong> function in the <strong>bootstrap</strong> package</li>
 <li>Remove the <strong>lib/email</strong> package from the filesystem</li>
-<li>Find any references to the <strong>lib/email</strong> package in your code using the jay command line, <code>jay find &quot;lib/email&quot; &quot;*.go&quot;</code>,
+<li>Find any references to the <strong>lib/email</strong> package in your code using the jay command line, <code>jay find . &quot;lib/email&quot;</code>,
 then delete the imports and referencing code</li>
 </ol>
 
@@ -509,7 +635,7 @@ then delete the imports and referencing code</li>
 <nav class="pagination" aria-label="Footer">
   <div class="previous">
   
-      <a href="http://blue-jay.github.io/assets/" title="Assets">
+      <a href="http://blue-jay.github.io/structure/" title="Structure">
         <span class="direction">
           Previous
         </span>
@@ -519,7 +645,7 @@ then delete the imports and referencing code</li>
           </div>
           <div class="stretch">
             <div class="title">
-              Assets
+              Structure
             </div>
           </div>
         </div>
@@ -529,14 +655,14 @@ then delete the imports and referencing code</li>
 
   <div class="next">
   
-      <a href="http://blue-jay.github.io/routing/" title="Routing">
+      <a href="http://blue-jay.github.io/assets/" title="Assets">
         <span class="direction">
           Next
         </span>
         <div class="page">
           <div class="stretch">
             <div class="title">
-              Routing
+              Assets
             </div>
           </div>
           <div class="button button-next" role="button" aria-label="Next">

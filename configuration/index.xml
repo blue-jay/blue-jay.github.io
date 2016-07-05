@@ -6,13 +6,12 @@
     <description>Recent content in Configurations on Blue Jay</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 08 Mar 2016 21:07:13 +0100</lastBuildDate>
     <atom:link href="http://blue-jay.github.io/configuration/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Configuration</title>
       <link>http://blue-jay.github.io/configuration/</link>
-      <pubDate>Tue, 08 Mar 2016 21:07:13 +0100</pubDate>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>http://blue-jay.github.io/configuration/</guid>
       <description>
@@ -26,8 +25,28 @@ start from. If you want to use YAML instead of JSON, it&amp;rsquo;s recommended 
 library in the &lt;strong&gt;lib&lt;/strong&gt; folder and then load your env.yaml file via the &lt;strong&gt;bootstrap&lt;/strong&gt;
 package.&lt;/p&gt;
 
+&lt;h2 id=&#34;jay-command-env&#34;&gt;Jay Command: env&lt;/h2&gt;
+
 &lt;p&gt;One of the first steps before using Blueprint is to create &lt;strong&gt;env.json&lt;/strong&gt;. You can make
-a copy of &lt;strong&gt;env.json.example&lt;/strong&gt; and then name it &lt;strong&gt;env.json&lt;/strong&gt;. The &lt;strong&gt;env.json&lt;/strong&gt; file is a
+a copy of &lt;strong&gt;env.json.example&lt;/strong&gt; and then name it &lt;strong&gt;env.json&lt;/strong&gt;, just be sure to
+generate a new &lt;strong&gt;AuthKey&lt;/strong&gt; and &lt;strong&gt;EncryptKey&lt;/strong&gt; in the &lt;strong&gt;Session&lt;/strong&gt; section.&lt;/p&gt;
+
+&lt;p&gt;You can also use &lt;strong&gt;jay&lt;/strong&gt; to create the env.json file with new session keys.
+Just CD to the &lt;strong&gt;blueprint&lt;/strong&gt; folder and then run: &lt;code&gt;jay env make&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Here are the commands you can use with &lt;code&gt;jay env&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;# Create a new env.json file from env.json.example with newly generated session keys
+jay env make
+
+# Show a new set of session keys that can be copied and pasted into env.json
+jay env keyshow
+
+# Generate a new set of session keys and automatically apply them to env.json
+env env keyupdate
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;strong&gt;env.json&lt;/strong&gt; file is a
 good place to set variables for the application so you
 don&amp;rsquo;t have to hardcode them. If you want to add any
 of your own settings, you can add them to &lt;strong&gt;env.json&lt;/strong&gt; and update the &lt;strong&gt;Info&lt;/strong&gt; struct
@@ -43,9 +62,11 @@ in the &lt;strong&gt;bootstrap&lt;/strong&gt; package. Here is an example &lt;st
       &amp;quot;Username&amp;quot;:&amp;quot;root&amp;quot;,
       &amp;quot;Password&amp;quot;:&amp;quot;&amp;quot;,
       &amp;quot;Database&amp;quot;:&amp;quot;blueprint&amp;quot;,
+      &amp;quot;Charset&amp;quot;:&amp;quot;utf8mb4&amp;quot;,
+      &amp;quot;Collation&amp;quot;:&amp;quot;utf8mb4_unicode_ci&amp;quot;,
       &amp;quot;Hostname&amp;quot;:&amp;quot;127.0.0.1&amp;quot;,
       &amp;quot;Port&amp;quot;:3306,
-      &amp;quot;Parameter&amp;quot;:&amp;quot;?parseTime=true&amp;quot;
+      &amp;quot;Parameter&amp;quot;:&amp;quot;parseTime=true&amp;quot;
     }
   },
   &amp;quot;Email&amp;quot;:{
@@ -66,7 +87,8 @@ in the &lt;strong&gt;bootstrap&lt;/strong&gt; package. Here is an example &lt;st
     &amp;quot;KeyFile&amp;quot;:&amp;quot;tls/server.key&amp;quot;
   },
   &amp;quot;Session&amp;quot;:{
-    &amp;quot;SecretKey&amp;quot;:&amp;quot;@r4B?EThaSEh_drudR7P_hub=s#s2Pah&amp;quot;,
+    &amp;quot;AuthKey&amp;quot;:&amp;quot;PzCh6FNAB7/jhmlUQ0+25sjJ+WgcJeKR2bAOtnh9UnfVN+WJSBvY/YC80Rs+rbMtwfmSP4FUSxKPtpYKzKFqFA==&amp;quot;,
+    &amp;quot;EncryptKey&amp;quot;:&amp;quot;3oTKCcKjDHMUlV+qur2Ve664SPpSuviyGQ/UqnroUD8=&amp;quot;,
     &amp;quot;Name&amp;quot;:&amp;quot;sess&amp;quot;,
     &amp;quot;Options&amp;quot;:{  
       &amp;quot;Path&amp;quot;:&amp;quot;/&amp;quot;,
@@ -80,7 +102,7 @@ in the &lt;strong&gt;bootstrap&lt;/strong&gt; package. Here is an example &lt;st
     &amp;quot;Root&amp;quot;:&amp;quot;base&amp;quot;,
     &amp;quot;Children&amp;quot;:[
       &amp;quot;partial/favicon&amp;quot;,
-	  &amp;quot;partial/menu&amp;quot;,
+    &amp;quot;partial/menu&amp;quot;,
       &amp;quot;partial/footer&amp;quot;
     ]
   },
@@ -129,16 +151,17 @@ View		- Info struct in lib/view
 &lt;p&gt;To enable HTTPS:&lt;/p&gt;
 
 &lt;ol&gt;
-&lt;li&gt;Set &lt;strong&gt;UseHTTPS&lt;/strong&gt; to &lt;strong&gt;true&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Set &lt;strong&gt;UseHTTPS&lt;/strong&gt; to &lt;strong&gt;true&lt;/strong&gt; in the &lt;strong&gt;env.json&lt;/strong&gt; file&lt;/li&gt;
 &lt;li&gt;Create a folder called &lt;strong&gt;tls&lt;/strong&gt; in the project root folder&lt;/li&gt;
 &lt;li&gt;Place your own certificate and key files in the &lt;strong&gt;tls&lt;/strong&gt; folder&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; If you want to redirect HTTP to HTTPS, you can set &lt;strong&gt;RedirectToHTTPS&lt;/strong&gt; to &lt;strong&gt;true&lt;/strong&gt; as well.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; If you want to redirect HTTP to HTTPS, you can set &lt;strong&gt;RedirectToHTTPS&lt;/strong&gt; to &lt;strong&gt;true&lt;/strong&gt; in the &lt;strong&gt;env.json&lt;/strong&gt; file as well.&lt;/p&gt;
 
 &lt;h2 id=&#34;tip-add-a-section&#34;&gt;Tip: Add a Section&lt;/h2&gt;
 
-&lt;p&gt;To add a new key called &lt;strong&gt;Captcha&lt;/strong&gt;, you could do the following:&lt;/p&gt;
+&lt;p&gt;To add a new key called &lt;strong&gt;Captcha&lt;/strong&gt;, your workflow would consist of the
+following:&lt;/p&gt;
 
 &lt;ol&gt;
 &lt;li&gt;Create a new package in the &lt;strong&gt;lib&lt;/strong&gt; folder called &lt;strong&gt;captcha&lt;/strong&gt;&lt;/li&gt;
@@ -150,14 +173,14 @@ View		- Info struct in lib/view
 
 &lt;h2 id=&#34;tip-remove-a-section&#34;&gt;Tip: Remove a Section&lt;/h2&gt;
 
-&lt;p&gt;To remove the &lt;strong&gt;Email&lt;/strong&gt; key, you could do the following:&lt;/p&gt;
+&lt;p&gt;To remove the &lt;strong&gt;Email&lt;/strong&gt; key, your workflow would consist of the following:&lt;/p&gt;
 
 &lt;ol&gt;
 &lt;li&gt;Remove the &lt;strong&gt;Email&lt;/strong&gt; key and value from the &lt;strong&gt;env.json&lt;/strong&gt; file&lt;/li&gt;
 &lt;li&gt;Remove the &lt;strong&gt;Email&lt;/strong&gt; nested struct from the &lt;strong&gt;Info&lt;/strong&gt; struct in the &lt;strong&gt;bootstrap&lt;/strong&gt; package&lt;/li&gt;
 &lt;li&gt;Remove any code setting up the package from the &lt;strong&gt;RegisterServices()&lt;/strong&gt; function in the &lt;strong&gt;bootstrap&lt;/strong&gt; package&lt;/li&gt;
 &lt;li&gt;Remove the &lt;strong&gt;lib/email&lt;/strong&gt; package from the filesystem&lt;/li&gt;
-&lt;li&gt;Find any references to the &lt;strong&gt;lib/email&lt;/strong&gt; package in your code using the jay command line, &lt;code&gt;jay find &amp;quot;lib/email&amp;quot; &amp;quot;*.go&amp;quot;&lt;/code&gt;,
+&lt;li&gt;Find any references to the &lt;strong&gt;lib/email&lt;/strong&gt; package in your code using the jay command line, &lt;code&gt;jay find . &amp;quot;lib/email&amp;quot;&lt;/code&gt;,
 then delete the imports and referencing code&lt;/li&gt;
 &lt;/ol&gt;
 </description>

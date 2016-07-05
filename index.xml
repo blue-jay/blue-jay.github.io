@@ -6,28 +6,23 @@
     <description>Recent content on Blue Jay</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 08 Mar 2016 21:07:13 +0100</lastBuildDate>
     <atom:link href="http://blue-jay.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Toolkit Overview</title>
       <link>http://blue-jay.github.io/</link>
-      <pubDate>Tue, 08 Mar 2016 21:07:13 +0100</pubDate>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>http://blue-jay.github.io/</guid>
       <description>
-
-&lt;p&gt;&lt;a href=&#34;https://goreportcard.com/report/github.com/blue-jay/blueprint&#34;&gt;&lt;img src=&#34;https://goreportcard.com/badge/github.com/blue-jay/blueprint&#34; alt=&#34;Go Report Card&#34; /&gt;&lt;/a&gt;
-&lt;a href=&#34;https://godoc.org/github.com/blue-jay/blueprint&#34;&gt;&lt;img src=&#34;https://godoc.org/github.com/blue-jay/blueprint?status.svg&#34; alt=&#34;GoDoc&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Blue Jay is a web toolkit for &lt;a href=&#34;https://golang.org/&#34;&gt;Go&lt;/a&gt;. It&amp;rsquo;s a collection of command-line tools and a web blueprint that allows you to easily structure your web application. There is no rigid framework to which you have to conform and Blueprint is very easy to start using.&lt;/p&gt;
 
 &lt;p&gt;There are a few components:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint&#34;&gt;&lt;strong&gt;Blueprint&lt;/strong&gt;&lt;/a&gt; is a model-view-controller (MVC) style web skeleton.&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/blue-jay/jay&#34;&gt;&lt;strong&gt;Jay&lt;/strong&gt;&lt;/a&gt; is a command line tool with find/replace, database migrations, and code generation.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint&#34;&gt;&lt;strong&gt;Blueprint&lt;/strong&gt;&lt;/a&gt; is a model-view-controller (MVC) style web skeleton.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/blue-jay/jay&#34;&gt;&lt;strong&gt;Jay&lt;/strong&gt;&lt;/a&gt; is a command line tool with find/replace, database migrations, and code generation.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&#34;high-level&#34;&gt;High Level&lt;/h2&gt;
@@ -54,60 +49,56 @@ generation of favicons, and copying of static assets like Bootstrap and jQuery
 managed by npm to the &lt;strong&gt;asset/static&lt;/strong&gt; folder. They are great tools that speed up
 web development.&lt;/p&gt;
 
-&lt;h2 id=&#34;quick-start-with-mysql&#34;&gt;Quick Start with MySQL&lt;/h2&gt;
+&lt;p&gt;Jay is a command-line tool that plays nice with Blueprint. It has a find/replace
+functionality so code refactoring is a little easier. It performs database
+migration to help with moving your database between states when sharing code
+between teams. Jay provides template-based code generation that allows you to
+build controllers, models and middleware, as well as multiple views and any
+other file you would like to build. All templates (*.gen files) are parsed using
+the &lt;strong&gt;text/template&lt;/strong&gt; package from the Go standard library and all generation
+instructions (*.json files) allow you to specify which variables to pass via
+&lt;strong&gt;jay&lt;/strong&gt; as well as in which folder to create the templates. You can also build
+collections of templates and generate more than one file set which is great when
+you want to scaffold out a component using (create, read, update, and delete)
+CRUD.&lt;/p&gt;
+
+&lt;h2 id=&#34;quick-start-website-with-jay&#34;&gt;Quick Start Website with Jay&lt;/h2&gt;
 
 &lt;ol&gt;
-&lt;li&gt;To download, run the following command: &lt;code&gt;go get github.com/blue-ray/blueprint&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Start a MySQL instance and import &lt;strong&gt;database/migration/20160630_020000_a.up.sql&lt;/strong&gt; to create the database and tables.&lt;/li&gt;
-&lt;li&gt;Make a copy of env.json.example and name it: &lt;strong&gt;env.json&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;Edit the &lt;strong&gt;Database&lt;/strong&gt; section in &lt;strong&gt;env.json&lt;/strong&gt; so the connection information matches your MySQL instance.&lt;/li&gt;
-&lt;li&gt;Use &lt;code&gt;go run&lt;/code&gt; from the root of the project directory.&lt;/li&gt;
+&lt;li&gt;To download Blueprint, run the following command: &lt;code&gt;go get github.com/blue-ray/blueprint&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;To download Jay, run the following command: &lt;code&gt;go get github.com/blue-ray/jay&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Open your terminal and CD to the &lt;strong&gt;blueprint&lt;/strong&gt; folder.&lt;/li&gt;
+&lt;li&gt;Run this command to create the env.json file from env.json.example: &lt;code&gt;jay env make&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Set the environment variable, JAYCONFIG, to the env.json file path. For example:
+
+&lt;ul&gt;
+&lt;li&gt;On Windows: &lt;code&gt;SET JAYCONFIG=C:\bluejay\workspace\src\github.com\blue-jay\blueprint\env.json&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;On Linux/OS X: &lt;code&gt;export JAYCONFIG=$HOME/workspace/src/github.com/blue-jay/blueprint/env.json&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Start a MySQL instance.&lt;/li&gt;
+&lt;li&gt;Edit the &lt;strong&gt;Database&lt;/strong&gt; section of env.json to match your database login information.&lt;/li&gt;
+&lt;li&gt;Create the database and tables using the command: &lt;code&gt;jay migrate all&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Run the application using the command: &lt;code&gt;go run blueprint.go&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;Open your web browser to &lt;a href=&#34;http://localhost&#34;&gt;http://localhost&lt;/a&gt; and you should see the welcome page.&lt;/li&gt;
 &lt;li&gt;Navigate to the register page at &lt;a href=&#34;http://localhost/register&#34;&gt;http://localhost/register&lt;/a&gt; and create a new user.&lt;/li&gt;
-&lt;li&gt;You can now login at &lt;a href=&#34;http://localhost/login&#34;&gt;http://localhost/login&lt;/a&gt; to try the Notepad app.&lt;/li&gt;
+&lt;li&gt;You can now login at &lt;a href=&#34;http://localhost/login&#34;&gt;http://localhost/login&lt;/a&gt;.&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h2 id=&#34;structure&#34;&gt;Structure&lt;/h2&gt;
+&lt;h2 id=&#34;quick-start-website-without-jay&#34;&gt;Quick Start Website without Jay&lt;/h2&gt;
 
-&lt;p&gt;The project is organized into the following folders:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;asset/
-|----dynamic/    - private assets like SASS files, single JavaScript files, and logo.png for favicon generation
-|----static/     - public assets like CSS, JavaScript, and favicon.ico for Android, Apple, etc.
-bootstrap/	     - package for initial set up of the application
-controller/	     - packages with routes and application logic
-database/
-|----migration/  - SQL files for migration database up and down
-generate/	     - template pairs (.gen and .json) for generating code using jay
-lib/             - packages with minimum dependencies
-middleware/      - packages that return a http.Handler to wrap around routes for ACL, request logging, etc.
-model/		     - packages with database queries and structs matching tables
-view/            - HTML templates parsed using the Go html/template package
-viewfunc/        - packages that return a template.FuncMap for use in views
-viewmodify/      - packages that modify view prior to rendering to add varibles like CSRF token and auth level
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The following files exist at the project root:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;blueprint.go     - entrypoint for the application
-env.json.example - variables for the application
-gulpfile.js      - Gulp configuration that compiles SASS, concatenates JavaScript, etc.
-package.json     - npm configuration that loads Gulp, Boostrap, Underscore.js, etc.
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;external-go-packages&#34;&gt;External Go Packages&lt;/h2&gt;
-
-&lt;p&gt;There are a few external packages that must be retrieved using &lt;code&gt;go get&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;github.com/gorilla/context				- registry for global request variables
-github.com/gorilla/sessions				- cookie and filesystem sessions
-github.com/go-sql-driver/mysql 			- MySQL driver
-github.com/jmoiron/sqlx 				- MySQL general purpose extensions
-github.com/josephspurrier/csrfbanana 	- CSRF protection for gorilla sessions
-github.com/julienschmidt/httprouter 	- high performance HTTP request router
-github.com/justinas/alice				- middleware chaining
-golang.org/x/crypto/bcrypt 				- password hashing algorithm
-&lt;/code&gt;&lt;/pre&gt;
+&lt;ol&gt;
+&lt;li&gt;To download Blueprint, run the following command: &lt;code&gt;go get github.com/blue-ray/blueprint&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Start a MySQL instance.&lt;/li&gt;
+&lt;li&gt;Make a copy of env.json.example and name it: &lt;strong&gt;env.json&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Edit the &lt;strong&gt;Database&lt;/strong&gt; section in &lt;strong&gt;env.json&lt;/strong&gt; so the connection information matches your MySQL instance.&lt;/li&gt;
+&lt;li&gt;Create a database called &lt;strong&gt;blueprint&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;Import &lt;strong&gt;database/migration/20160630_020000_a.up.sql&lt;/strong&gt; to create the tables.&lt;/li&gt;
+&lt;li&gt;Open your terminal and CD to the &lt;strong&gt;blueprint&lt;/strong&gt; folder.&lt;/li&gt;
+&lt;li&gt;Run the application using the command: &lt;code&gt;go run blueprint.go&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Open your web browser to &lt;a href=&#34;http://localhost&#34;&gt;http://localhost&lt;/a&gt; and you should see the welcome page.&lt;/li&gt;
+&lt;li&gt;Navigate to the register page at &lt;a href=&#34;http://localhost/register&#34;&gt;http://localhost/register&lt;/a&gt; and create a new user.&lt;/li&gt;
+&lt;li&gt;You can now login at &lt;a href=&#34;http://localhost/login&#34;&gt;http://localhost/login&lt;/a&gt;.&lt;/li&gt;
+&lt;/ol&gt;
 
 &lt;h2 id=&#34;why-blue-jay&#34;&gt;Why Blue Jay?&lt;/h2&gt;
 
@@ -150,37 +141,41 @@ language.&lt;/p&gt;
 
 &lt;h2 id=&#34;screenshots&#34;&gt;Screenshots&lt;/h2&gt;
 
-&lt;p&gt;Public Home:&lt;/p&gt;
+&lt;h3 id=&#34;public-home&#34;&gt;Public Home&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://cloud.githubusercontent.com/assets/2394539/11319464/e2cd0eac-9045-11e5-9b24-5e480240cd69.jpg&#34; alt=&#34;Image of Public Home&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://blue-jay.github.io/images/home_anon.png&#34; alt=&#34;Image of Public Home&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;About:&lt;/p&gt;
+&lt;h3 id=&#34;about&#34;&gt;About&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://cloud.githubusercontent.com/assets/2394539/11319462/e2c4d2d2-9045-11e5-805f-8b40598c92c3.jpg&#34; alt=&#34;Image of About&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://blue-jay.github.io/images/about.png&#34; alt=&#34;Image of About&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Register:&lt;/p&gt;
+&lt;h3 id=&#34;register&#34;&gt;Register&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://cloud.githubusercontent.com/assets/2394539/11319466/e2d03500-9045-11e5-9c8e-c28fe663ed0f.jpg&#34; alt=&#34;Image of Register&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://blue-jay.github.io/images/register.png&#34; alt=&#34;Image of Register&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Login:&lt;/p&gt;
+&lt;h3 id=&#34;login&#34;&gt;Login&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://cloud.githubusercontent.com/assets/2394539/11319463/e2cd1a00-9045-11e5-8b8e-68030d870cbe.jpg&#34; alt=&#34;Image of Login&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://blue-jay.github.io/images/login.png&#34; alt=&#34;Image of Login&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Authenticated Home:&lt;/p&gt;
+&lt;h3 id=&#34;authenticated-home&#34;&gt;Authenticated Home&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://cloud.githubusercontent.com/assets/2394539/14809208/75f340d2-0b59-11e6-8d2a-cd26ee872281.PNG&#34; alt=&#34;Image of Auth Home&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://blue-jay.github.io/images/home_auth.png&#34; alt=&#34;Image of Auth Home&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;View Notes:&lt;/p&gt;
+&lt;h3 id=&#34;view-all-notes&#34;&gt;View All Notes&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://cloud.githubusercontent.com/assets/2394539/14809205/75f08432-0b59-11e6-8737-84ee796bd82e.PNG&#34; alt=&#34;Image of Notepad View&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://blue-jay.github.io/images/notepad_index.png&#34; alt=&#34;Image of Notepad View&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Add Note:&lt;/p&gt;
+&lt;h3 id=&#34;add-note&#34;&gt;Add Note&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://cloud.githubusercontent.com/assets/2394539/14809207/75f338f8-0b59-11e6-9719-61355957996c.PNG&#34; alt=&#34;Image of Notepad Add&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://blue-jay.github.io/images/notepad_create.png&#34; alt=&#34;Image of Notepad Add&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Edit Note:&lt;/p&gt;
+&lt;h3 id=&#34;view-one-note&#34;&gt;View One Note&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://cloud.githubusercontent.com/assets/2394539/14809206/75f33970-0b59-11e6-8acf-b3d533477aac.PNG&#34; alt=&#34;Image of Notepad Edit&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://blue-jay.github.io/images/notepad_view.png&#34; alt=&#34;Image of Notepad Edit&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;edit-note&#34;&gt;Edit Note&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://blue-jay.github.io/images/notepad_edit.png&#34; alt=&#34;Image of Notepad Edit&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;feedback&#34;&gt;Feedback&lt;/h2&gt;
 
@@ -190,117 +185,89 @@ If something is not idiomatic to Go, please let me know know so we can make it b
     </item>
     
     <item>
-      <title>Assets</title>
-      <link>http://blue-jay.github.io/assets/</link>
-      <pubDate>Thu, 30 Jun 2016 21:07:13 +0100</pubDate>
+      <title>Structure</title>
+      <link>http://blue-jay.github.io/structure/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://blue-jay.github.io/assets/</guid>
+      <guid>http://blue-jay.github.io/structure/</guid>
       <description>
 
-&lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
+&lt;p&gt;It helps to understand the folder structure so you know where each of the
+components lives.&lt;/p&gt;
 
-&lt;p&gt;Out of the box, all of the static assets like CSS and JavaScript are ready to
-demo. If you want to make changes to the file, it&amp;rsquo;s best to use the tools
-provided. The &lt;strong&gt;asset&lt;/strong&gt; folder contains a &lt;strong&gt;dynamic&lt;/strong&gt; folder and a &lt;strong&gt;static&lt;/strong&gt;
-folder.&lt;/p&gt;
+&lt;h2 id=&#34;blueprint-structure&#34;&gt;Blueprint Structure&lt;/h2&gt;
 
-&lt;p&gt;The &lt;strong&gt;dynamic&lt;/strong&gt; folder contains the Syntactically Awesome Style Sheets (SASS),
-individual JavaScript files, and a large PNG image which is used to generate
-favicons for different platforms like Android, iPhone, etc. The dynamic folder
-holds some of the assets required to generate the assets in the &lt;strong&gt;static&lt;/strong&gt;
-folder. &lt;em&gt;This is the folder you want to make your changes.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;The project is organized into the following folders:&lt;/p&gt;
 
-&lt;p&gt;The &lt;strong&gt;static&lt;/strong&gt; folder contains the minified CSS and JavaScript as well as
-the generated favicons. The &lt;strong&gt;static&lt;/strong&gt; folder is designed to be served up
-so the files can be accessed like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;!-- Favicons --&amp;gt;
-&amp;lt;link rel=&amp;quot;apple-touch-icon&amp;quot; sizes=&amp;quot;57x57&amp;quot; href=&amp;quot;/static/favicon/apple-touch-icon-57x57.png?v1.0=3eepn6WlLO&amp;quot;&amp;gt;
-&amp;lt;link rel=&amp;quot;apple-touch-icon&amp;quot; sizes=&amp;quot;60x60&amp;quot; href=&amp;quot;/static/favicon/apple-touch-icon-60x60.png?v1.0=3eepn6WlLO&amp;quot;&amp;gt;
-&amp;lt;link rel=&amp;quot;apple-touch-icon&amp;quot; sizes=&amp;quot;72x72&amp;quot; href=&amp;quot;/static/favicon/apple-touch-icon-72x72.png?v1.0=3eepn6WlLO&amp;quot;&amp;gt;
-&amp;lt;!-- CSS and Fonts --&amp;gt;
-&amp;lt;link media=&amp;quot;all&amp;quot; rel=&amp;quot;stylesheet&amp;quot; type=&amp;quot;text/css&amp;quot; href=&amp;quot;/static/css/bootstrap.min.css?1466973904&amp;quot; /&amp;gt;
-&amp;lt;link media=&amp;quot;all&amp;quot; rel=&amp;quot;stylesheet&amp;quot; type=&amp;quot;text/css&amp;quot; href=&amp;quot;//fonts.googleapis.com/css?family=Open+Sans:300,400,bold,italic&amp;quot; /&amp;gt;
-&amp;lt;link media=&amp;quot;all&amp;quot; rel=&amp;quot;stylesheet&amp;quot; type=&amp;quot;text/css&amp;quot; href=&amp;quot;/static/css/all.css?1466973904&amp;quot; /&amp;gt;
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;asset/
+|----dynamic/    - private assets like SASS files, single JavaScript files, and logo.png for favicon generation
+|----static/     - public assets like CSS, JavaScript, and favicon.ico for Android, Apple, etc
+bootstrap/       - package for initial set up of the application
+controller/      - packages with routes and application logic
+database/
+|----migration/  - SQL files for migration database up and down
+generate/        - template pairs (.gen and .json) for generating code using jay
+lib/             - packages with minimum dependencies
+middleware/      - packages that return a http.Handler to wrap around routes for ACL, request logging, etc
+model/           - packages with database queries and structs matching tables
+view/            - HTML templates parsed using the Go html/template package
+viewfunc/        - packages that return a template.FuncMap for use in views
+viewmodify/      - packages that modify view prior to rendering to add varibles like CSRF token and auth level
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Check out the &lt;a href=&#34;http://blue-jay.github.io/controllers&#34;&gt;Controllers&lt;/a&gt; and &lt;a href=&#34;http://blue-jay.github.io/views&#34;&gt;Views&lt;/a&gt; pages for how
-the files are served and how to append timestamps to them to manage caching.&lt;/p&gt;
+&lt;p&gt;The following files exist at the project root:&lt;/p&gt;
 
-&lt;p&gt;If you make changes to any of the files in the &lt;strong&gt;dynamic&lt;/strong&gt; folder, you still
-need a way to compile/minify them and then move them to the &lt;strong&gt;static&lt;/strong&gt; folder
-so we&amp;rsquo;ll use Gulp to do that.&lt;/p&gt;
-
-&lt;h2 id=&#34;install-npm&#34;&gt;Install npm&lt;/h2&gt;
-
-&lt;p&gt;The Node Package Manager (npm) helps install packages that work with NodeJS.
-If you don&amp;rsquo;t have NodeJS and npm installed, you can install the latest version
-from &lt;a href=&#34;https://nodejs.org&#34;&gt;https://nodejs.org&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&#34;install-gulp-and-dependencies&#34;&gt;Install Gulp and Dependencies&lt;/h2&gt;
-
-&lt;p&gt;Once npm is installed, you can open your terminal and CD to the root of the
-project folder. You can then run these commands:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;# Install Gulp Globally
-npm install -g gulp-cli
-
-# Install Glup Locally with Dependencies from package.json
-npm install
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;blueprint.go     - entrypoint for the application
+env.json.example - application config template for variables
+gulpfile.js      - Gulp configuration that compiles SASS, concatenates JavaScript, etc
+package.json     - npm configuration that loads Gulp, Boostrap, Underscore.js, etc
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&#34;gulp&#34;&gt;Gulp&lt;/h2&gt;
+&lt;h2 id=&#34;blueprint-external-go-packages&#34;&gt;Blueprint External Go Packages&lt;/h2&gt;
 
-&lt;p&gt;Once the environment is set up, you should have your terminal open to the root
-of the project folder. There are a couple commands you can use with Gulp that
-are in the &lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/gulpfile.js&#34;&gt;gulpfile.js&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;There are a few external packages used in Blueprint:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;# Compile the SASS from asset/dynamic/sass and store CSS in asset/static/css/all.css
-gulp sass
-
-# Concat the JavaScript from asset/dynamic/js and store JS in asset/static/js/all.js
-gulp javascript
-
-# Copy the jQuery files from node_modules/jquery to asset/static/js
-gulp jquery
-
-# Copy the Bootstrap files from node_modules/bootstrap to asset/static
-gulp bootstrap
-
-# Copy the Underscore files from note_modules/underscore to asset/static/js
-gulp underscore
-
-# Run tasks favicon-generate and favicon-inject
-gulp favicon
-
-# Generate favicons from asset/dynamic/logo.png and copy to /asset/static/favicon
-gulp favicon-generate
-
-# Generate view/partial/favicon.tmpl with favicon tags
-gulp favicon-inject
-
-# Update the asset/dynamic/favicon/data.json file with the latest version from the RealFaviconGenerator website
-gulp favicon-update
-
-# Run the sass and javascript tasks when any of the files change
-gulp watch
-
-# Run all the tasks once
-gulp init
-
-# Run just the sass and javascript tasks once
-gulp default
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;github.com/gorilla/context              - registry for global request variables
+github.com/gorilla/sessions             - cookie and filesystem sessions
+github.com/go-sql-driver/mysql          - MySQL driver
+github.com/jmoiron/sqlx                 - MySQL general purpose extensions
+github.com/josephspurrier/csrfbanana    - CSRF protection for gorilla sessions
+github.com/julienschmidt/httprouter     - high performance HTTP request router
+github.com/justinas/alice               - middleware chaining
+golang.org/x/crypto/bcrypt              - password hashing algorithm
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;It best to run &lt;code&gt;gulp watch&lt;/code&gt; so when you are working in the SASS and JavaScript
-files, they will automatically update for you&lt;/p&gt;
+&lt;h2 id=&#34;jay-structure&#34;&gt;Jay Structure&lt;/h2&gt;
+
+&lt;p&gt;The project is organized into the following folders:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;env/       - package that creates and updated the env.json config file
+find/      - package that finds case-sensitive matched text in files
+generate/  - package that generates code from template pairs
+lib/       - packages with minimum dependencies
+migrate/   - package that handles the database migrations
+replace/   - package that replaces case-sensitive matched text in files
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The following file exists at the project root:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;jay.go     - entrypoint for the application
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;jay-external-go-packages&#34;&gt;Jay External Go Packages&lt;/h2&gt;
+
+&lt;p&gt;There are a few external packages used in Jay:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;gopkg.in/alecthomas/kingpin.v2    - command-line and flag parser
+github.com/gorilla/securecookie   - generate random keys for authentication and encryption
+&lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>
     
     <item>
       <title>Configuration</title>
       <link>http://blue-jay.github.io/configuration/</link>
-      <pubDate>Tue, 08 Mar 2016 21:07:13 +0100</pubDate>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>http://blue-jay.github.io/configuration/</guid>
       <description>
@@ -314,8 +281,28 @@ start from. If you want to use YAML instead of JSON, it&amp;rsquo;s recommended 
 library in the &lt;strong&gt;lib&lt;/strong&gt; folder and then load your env.yaml file via the &lt;strong&gt;bootstrap&lt;/strong&gt;
 package.&lt;/p&gt;
 
+&lt;h2 id=&#34;jay-command-env&#34;&gt;Jay Command: env&lt;/h2&gt;
+
 &lt;p&gt;One of the first steps before using Blueprint is to create &lt;strong&gt;env.json&lt;/strong&gt;. You can make
-a copy of &lt;strong&gt;env.json.example&lt;/strong&gt; and then name it &lt;strong&gt;env.json&lt;/strong&gt;. The &lt;strong&gt;env.json&lt;/strong&gt; file is a
+a copy of &lt;strong&gt;env.json.example&lt;/strong&gt; and then name it &lt;strong&gt;env.json&lt;/strong&gt;, just be sure to
+generate a new &lt;strong&gt;AuthKey&lt;/strong&gt; and &lt;strong&gt;EncryptKey&lt;/strong&gt; in the &lt;strong&gt;Session&lt;/strong&gt; section.&lt;/p&gt;
+
+&lt;p&gt;You can also use &lt;strong&gt;jay&lt;/strong&gt; to create the env.json file with new session keys.
+Just CD to the &lt;strong&gt;blueprint&lt;/strong&gt; folder and then run: &lt;code&gt;jay env make&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Here are the commands you can use with &lt;code&gt;jay env&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;# Create a new env.json file from env.json.example with newly generated session keys
+jay env make
+
+# Show a new set of session keys that can be copied and pasted into env.json
+jay env keyshow
+
+# Generate a new set of session keys and automatically apply them to env.json
+env env keyupdate
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;strong&gt;env.json&lt;/strong&gt; file is a
 good place to set variables for the application so you
 don&amp;rsquo;t have to hardcode them. If you want to add any
 of your own settings, you can add them to &lt;strong&gt;env.json&lt;/strong&gt; and update the &lt;strong&gt;Info&lt;/strong&gt; struct
@@ -331,9 +318,11 @@ in the &lt;strong&gt;bootstrap&lt;/strong&gt; package. Here is an example &lt;st
       &amp;quot;Username&amp;quot;:&amp;quot;root&amp;quot;,
       &amp;quot;Password&amp;quot;:&amp;quot;&amp;quot;,
       &amp;quot;Database&amp;quot;:&amp;quot;blueprint&amp;quot;,
+      &amp;quot;Charset&amp;quot;:&amp;quot;utf8mb4&amp;quot;,
+      &amp;quot;Collation&amp;quot;:&amp;quot;utf8mb4_unicode_ci&amp;quot;,
       &amp;quot;Hostname&amp;quot;:&amp;quot;127.0.0.1&amp;quot;,
       &amp;quot;Port&amp;quot;:3306,
-      &amp;quot;Parameter&amp;quot;:&amp;quot;?parseTime=true&amp;quot;
+      &amp;quot;Parameter&amp;quot;:&amp;quot;parseTime=true&amp;quot;
     }
   },
   &amp;quot;Email&amp;quot;:{
@@ -354,7 +343,8 @@ in the &lt;strong&gt;bootstrap&lt;/strong&gt; package. Here is an example &lt;st
     &amp;quot;KeyFile&amp;quot;:&amp;quot;tls/server.key&amp;quot;
   },
   &amp;quot;Session&amp;quot;:{
-    &amp;quot;SecretKey&amp;quot;:&amp;quot;@r4B?EThaSEh_drudR7P_hub=s#s2Pah&amp;quot;,
+    &amp;quot;AuthKey&amp;quot;:&amp;quot;PzCh6FNAB7/jhmlUQ0+25sjJ+WgcJeKR2bAOtnh9UnfVN+WJSBvY/YC80Rs+rbMtwfmSP4FUSxKPtpYKzKFqFA==&amp;quot;,
+    &amp;quot;EncryptKey&amp;quot;:&amp;quot;3oTKCcKjDHMUlV+qur2Ve664SPpSuviyGQ/UqnroUD8=&amp;quot;,
     &amp;quot;Name&amp;quot;:&amp;quot;sess&amp;quot;,
     &amp;quot;Options&amp;quot;:{  
       &amp;quot;Path&amp;quot;:&amp;quot;/&amp;quot;,
@@ -368,7 +358,7 @@ in the &lt;strong&gt;bootstrap&lt;/strong&gt; package. Here is an example &lt;st
     &amp;quot;Root&amp;quot;:&amp;quot;base&amp;quot;,
     &amp;quot;Children&amp;quot;:[
       &amp;quot;partial/favicon&amp;quot;,
-	  &amp;quot;partial/menu&amp;quot;,
+    &amp;quot;partial/menu&amp;quot;,
       &amp;quot;partial/footer&amp;quot;
     ]
   },
@@ -417,16 +407,17 @@ View		- Info struct in lib/view
 &lt;p&gt;To enable HTTPS:&lt;/p&gt;
 
 &lt;ol&gt;
-&lt;li&gt;Set &lt;strong&gt;UseHTTPS&lt;/strong&gt; to &lt;strong&gt;true&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Set &lt;strong&gt;UseHTTPS&lt;/strong&gt; to &lt;strong&gt;true&lt;/strong&gt; in the &lt;strong&gt;env.json&lt;/strong&gt; file&lt;/li&gt;
 &lt;li&gt;Create a folder called &lt;strong&gt;tls&lt;/strong&gt; in the project root folder&lt;/li&gt;
 &lt;li&gt;Place your own certificate and key files in the &lt;strong&gt;tls&lt;/strong&gt; folder&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; If you want to redirect HTTP to HTTPS, you can set &lt;strong&gt;RedirectToHTTPS&lt;/strong&gt; to &lt;strong&gt;true&lt;/strong&gt; as well.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; If you want to redirect HTTP to HTTPS, you can set &lt;strong&gt;RedirectToHTTPS&lt;/strong&gt; to &lt;strong&gt;true&lt;/strong&gt; in the &lt;strong&gt;env.json&lt;/strong&gt; file as well.&lt;/p&gt;
 
 &lt;h2 id=&#34;tip-add-a-section&#34;&gt;Tip: Add a Section&lt;/h2&gt;
 
-&lt;p&gt;To add a new key called &lt;strong&gt;Captcha&lt;/strong&gt;, you could do the following:&lt;/p&gt;
+&lt;p&gt;To add a new key called &lt;strong&gt;Captcha&lt;/strong&gt;, your workflow would consist of the
+following:&lt;/p&gt;
 
 &lt;ol&gt;
 &lt;li&gt;Create a new package in the &lt;strong&gt;lib&lt;/strong&gt; folder called &lt;strong&gt;captcha&lt;/strong&gt;&lt;/li&gt;
@@ -438,23 +429,132 @@ View		- Info struct in lib/view
 
 &lt;h2 id=&#34;tip-remove-a-section&#34;&gt;Tip: Remove a Section&lt;/h2&gt;
 
-&lt;p&gt;To remove the &lt;strong&gt;Email&lt;/strong&gt; key, you could do the following:&lt;/p&gt;
+&lt;p&gt;To remove the &lt;strong&gt;Email&lt;/strong&gt; key, your workflow would consist of the following:&lt;/p&gt;
 
 &lt;ol&gt;
 &lt;li&gt;Remove the &lt;strong&gt;Email&lt;/strong&gt; key and value from the &lt;strong&gt;env.json&lt;/strong&gt; file&lt;/li&gt;
 &lt;li&gt;Remove the &lt;strong&gt;Email&lt;/strong&gt; nested struct from the &lt;strong&gt;Info&lt;/strong&gt; struct in the &lt;strong&gt;bootstrap&lt;/strong&gt; package&lt;/li&gt;
 &lt;li&gt;Remove any code setting up the package from the &lt;strong&gt;RegisterServices()&lt;/strong&gt; function in the &lt;strong&gt;bootstrap&lt;/strong&gt; package&lt;/li&gt;
 &lt;li&gt;Remove the &lt;strong&gt;lib/email&lt;/strong&gt; package from the filesystem&lt;/li&gt;
-&lt;li&gt;Find any references to the &lt;strong&gt;lib/email&lt;/strong&gt; package in your code using the jay command line, &lt;code&gt;jay find &amp;quot;lib/email&amp;quot; &amp;quot;*.go&amp;quot;&lt;/code&gt;,
+&lt;li&gt;Find any references to the &lt;strong&gt;lib/email&lt;/strong&gt; package in your code using the jay command line, &lt;code&gt;jay find . &amp;quot;lib/email&amp;quot;&lt;/code&gt;,
 then delete the imports and referencing code&lt;/li&gt;
 &lt;/ol&gt;
 </description>
     </item>
     
     <item>
+      <title>Assets</title>
+      <link>http://blue-jay.github.io/assets/</link>
+      <pubDate>Thu, 30 Jun 2016 21:07:13 +0100</pubDate>
+      
+      <guid>http://blue-jay.github.io/assets/</guid>
+      <description>
+
+&lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
+
+&lt;p&gt;Out of the box, all of the static assets like CSS and JavaScript are ready to
+demo. If you want to make changes to the file, it&amp;rsquo;s best to use the tools
+provided. The &lt;strong&gt;asset&lt;/strong&gt; folder contains a &lt;strong&gt;dynamic&lt;/strong&gt; folder and a &lt;strong&gt;static&lt;/strong&gt;
+folder.&lt;/p&gt;
+
+&lt;p&gt;The &lt;strong&gt;dynamic&lt;/strong&gt; folder contains the Syntactically Awesome Style Sheets (SASS),
+individual JavaScript files, and a large PNG image which is used to generate
+favicons for different platforms like Android, iPhone, etc. &lt;em&gt;This is the folder
+in which you want to make your changes.&lt;/em&gt; The dynamic folder holds some of the
+assets required to generate the assets in the &lt;strong&gt;static&lt;/strong&gt; folder.&lt;/p&gt;
+
+&lt;p&gt;The &lt;strong&gt;static&lt;/strong&gt; folder contains the minified CSS and JavaScript as well as
+the generated favicons. The &lt;strong&gt;static&lt;/strong&gt; folder is designed to be served up
+so the files can be accessed like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;!-- Favicons --&amp;gt;
+&amp;lt;link rel=&amp;quot;apple-touch-icon&amp;quot; sizes=&amp;quot;57x57&amp;quot; href=&amp;quot;/static/favicon/apple-touch-icon-57x57.png?v1.0=3eepn6WlLO&amp;quot;&amp;gt;
+&amp;lt;link rel=&amp;quot;apple-touch-icon&amp;quot; sizes=&amp;quot;60x60&amp;quot; href=&amp;quot;/static/favicon/apple-touch-icon-60x60.png?v1.0=3eepn6WlLO&amp;quot;&amp;gt;
+&amp;lt;link rel=&amp;quot;apple-touch-icon&amp;quot; sizes=&amp;quot;72x72&amp;quot; href=&amp;quot;/static/favicon/apple-touch-icon-72x72.png?v1.0=3eepn6WlLO&amp;quot;&amp;gt;
+&amp;lt;!-- CSS and Fonts --&amp;gt;
+&amp;lt;link media=&amp;quot;all&amp;quot; rel=&amp;quot;stylesheet&amp;quot; type=&amp;quot;text/css&amp;quot; href=&amp;quot;/static/css/bootstrap.min.css?1466973904&amp;quot; /&amp;gt;
+&amp;lt;link media=&amp;quot;all&amp;quot; rel=&amp;quot;stylesheet&amp;quot; type=&amp;quot;text/css&amp;quot; href=&amp;quot;//fonts.googleapis.com/css?family=Open+Sans:300,400,bold,italic&amp;quot; /&amp;gt;
+&amp;lt;link media=&amp;quot;all&amp;quot; rel=&amp;quot;stylesheet&amp;quot; type=&amp;quot;text/css&amp;quot; href=&amp;quot;/static/css/all.css?1466973904&amp;quot; /&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Check out the &lt;a href=&#34;http://blue-jay.github.io/controllers&#34;&gt;Controllers&lt;/a&gt; and &lt;a href=&#34;http://blue-jay.github.io/views&#34;&gt;Views&lt;/a&gt; pages for how
+the files are served and how to append timestamps to them to manage caching.&lt;/p&gt;
+
+&lt;p&gt;If you make changes to any of the files in the &lt;strong&gt;dynamic&lt;/strong&gt; folder, you still
+need a way to compile/minify them and then move them to the &lt;strong&gt;static&lt;/strong&gt; folder
+so we&amp;rsquo;ll use Gulp to do that.&lt;/p&gt;
+
+&lt;h2 id=&#34;install-npm&#34;&gt;Install npm&lt;/h2&gt;
+
+&lt;p&gt;The Node Package Manager (npm) helps install packages that work with NodeJS.
+If you don&amp;rsquo;t have NodeJS and npm installed, you can install the latest version
+from &lt;a href=&#34;https://nodejs.org&#34;&gt;https://nodejs.org&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;install-gulp-and-dependencies&#34;&gt;Install Gulp and Dependencies&lt;/h2&gt;
+
+&lt;p&gt;Once npm is installed, you can open your terminal and CD to the root of the
+project folder. You can then run these commands:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;# Install Gulp globally
+npm install -g gulp-cli
+
+# Install Gulp locally and dependencies from package.json
+npm install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;gulp&#34;&gt;Gulp&lt;/h2&gt;
+
+&lt;p&gt;Once the environment is set up, you should have your terminal open to the root
+of the project folder. There are a couple commands you can use with Gulp that
+are in the &lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/gulpfile.js&#34;&gt;gulpfile.js&lt;/a&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;# Compile the SASS from asset/dynamic/sass and store CSS in asset/static/css/all.css
+gulp sass
+
+# Concat the JavaScript from asset/dynamic/js and store JS in asset/static/js/all.js
+gulp javascript
+
+# Copy the jQuery files from node_modules/jquery to asset/static/js
+gulp jquery
+
+# Copy the Bootstrap files from node_modules/bootstrap to asset/static
+gulp bootstrap
+
+# Copy the Underscore files from note_modules/underscore to asset/static/js
+gulp underscore
+
+# Run tasks favicon-generate and favicon-inject
+gulp favicon
+
+# Generate favicons from asset/dynamic/logo.png and copy to /asset/static/favicon
+gulp favicon-generate
+
+# Generate view/partial/favicon.tmpl with favicon tags
+gulp favicon-inject
+
+# Update the asset/dynamic/favicon/data.json file with the latest version from the RealFaviconGenerator website
+gulp favicon-update
+
+# Run the sass and javascript tasks when any of the files change
+gulp watch
+
+# Run all the tasks once
+gulp init
+
+# Run just the sass and javascript tasks once
+gulp default
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It is best to run &lt;code&gt;gulp watch&lt;/code&gt; so when you are working with the SASS and
+JavaScript files so they will automatically generate in the &lt;strong&gt;static&lt;/strong&gt; folder
+for you.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Routing</title>
       <link>http://blue-jay.github.io/routing/</link>
-      <pubDate>Tue, 08 Mar 2016 21:07:13 +0100</pubDate>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>http://blue-jay.github.io/routing/</guid>
       <description>
@@ -469,10 +569,9 @@ The controller files are all organized under the &lt;strong&gt;controller&lt;/st
 &lt;h2 id=&#34;routing&#34;&gt;Routing&lt;/h2&gt;
 
 &lt;p&gt;In the &lt;strong&gt;bootstrap&lt;/strong&gt; package, the &lt;strong&gt;RegisterServices()&lt;/strong&gt; function
-calls the &lt;strong&gt;controller.LoadRoutes()&lt;/strong&gt; function.&lt;/p&gt;
-
-&lt;p&gt;The &lt;strong&gt;LoadRoutes()&lt;/strong&gt; function in the &lt;strong&gt;controller&lt;/strong&gt; package loads the routes
-for each of the individual controllers:&lt;/p&gt;
+calls the &lt;strong&gt;controller.LoadRoutes()&lt;/strong&gt; function. The &lt;strong&gt;LoadRoutes()&lt;/strong&gt; function in
+ the &lt;strong&gt;controller&lt;/strong&gt; package loads the routes for each of the individual
+ controllers:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// LoadRoutes loads the routes for each of the controllers.
 func LoadRoutes() {
@@ -606,7 +705,7 @@ func Error405(w http.ResponseWriter, r *http.Request) {
     <item>
       <title>Middleware</title>
       <link>http://blue-jay.github.io/middleware/</link>
-      <pubDate>Mon, 20 Jun 2016 21:07:13 +0100</pubDate>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>http://blue-jay.github.io/middleware/</guid>
       <description>
@@ -615,8 +714,8 @@ func Error405(w http.ResponseWriter, r *http.Request) {
 
 &lt;p&gt;Middleware, in the context of Go, is applied during routing to provide
 features like request/response logging, access controls lists (ACLs), and
-header modification. Middleware is either applied to every request (for request
-logging) or specified routes (for ACLs).&lt;/p&gt;
+header modification. Middleware is either applied to every request (like for
+request logging) or specified routes (like for ACLs).&lt;/p&gt;
 
 &lt;p&gt;There are a few pieces of middleware included. The package called &lt;strong&gt;csrfbanana&lt;/strong&gt;
 protects against Cross-Site Request Forgery attacks and prevents double submits.
@@ -653,7 +752,7 @@ func Handler(next http.Handler) http.Handler {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;This is an example of the minimum requirements for middleware:&lt;/p&gt;
+&lt;p&gt;This is an example of the minimum code required for middleware:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Handler
 func Handler(next http.Handler) http.Handler {
@@ -667,13 +766,14 @@ func Handler(next http.Handler) http.Handler {
 
 &lt;h2 id=&#34;chaining&#34;&gt;Chaining&lt;/h2&gt;
 
-&lt;p&gt;Chaining prevents middleware from stacking up which is hard to read like this:&lt;/p&gt;
+&lt;p&gt;The more middleware you use, the more it stacks up like this and makes it hard
+to read:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;return context.ClearHandler(rest.Handler(logrequest.Handler(setUpBanana)))
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Before &lt;a href=&#34;https://github.com/justinas/alice&#34;&gt;justinas/alice&lt;/a&gt;, a workaround was to
-use the variable and reassign it multiple times like this:&lt;/p&gt;
+use a variable and reassign it multiple times like this:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;h = setUpBanana(h)
 h = logrequest.Handler(h)
@@ -681,8 +781,9 @@ h = rest.Handler(h)
 return context.ClearHandler(h)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;In &lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/controller/notepad/notepad.go&#34;&gt;controller/notepad&lt;/a&gt;,
-the application uses the &lt;strong&gt;router.ChainHandler()&lt;/strong&gt; function. The function is a wrapper for
+&lt;p&gt;You can see chaining in action in &lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/controller/notepad/notepad.go&#34;&gt;controller/notepad&lt;/a&gt;
+where the controller uses the &lt;strong&gt;router.ChainHandler()&lt;/strong&gt; function.
+The function is a wrapper for
 the &lt;a href=&#34;https://github.com/justinas/alice&#34;&gt;justinas/alice&lt;/a&gt; package which makes
 using middleware more scalable and a little &amp;ldquo;prettier&amp;rdquo;. If you look at the
 &lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/bootstrap/bootstrap.go&#34;&gt;bootstrap&lt;/a&gt;
@@ -764,7 +865,7 @@ accessible if the user is authenticated.&lt;/p&gt;
     <item>
       <title>Controllers</title>
       <link>http://blue-jay.github.io/controllers/</link>
-      <pubDate>Tue, 08 Mar 2016 21:07:13 +0100</pubDate>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>http://blue-jay.github.io/controllers/</guid>
       <description>
@@ -873,9 +974,9 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 &lt;h2 id=&#34;access-a-session&#34;&gt;Access a Session&lt;/h2&gt;
 
-&lt;p&gt;Sessions provide access to variables that are set at login as well as flash
-messages. You &lt;strong&gt;must&lt;/strong&gt; remember to save the sessions once you make a change to
-// them.&lt;/p&gt;
+&lt;p&gt;Sessions provide access to flash messages as well as variables that are set at
+login. You &lt;strong&gt;must&lt;/strong&gt; remember to save the sessions once you make a change to
+them.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Get the current session
 sess := session.Instance(r)
@@ -904,8 +1005,8 @@ sess.Save(r, w) // Ensure you save the session after making a change to it
 
 &lt;p&gt;The &lt;strong&gt;form&lt;/strong&gt; package makes it easy to validate required fields. It works on the
 inputs: text, textarea, checkbox, radio, and select. The function,
-&lt;strong&gt;form.Required()&lt;/strong&gt;, requires the request &amp;reg; and then any number of fields
-because it is a variadic function.&lt;/p&gt;
+&lt;strong&gt;form.Required()&lt;/strong&gt;, requires the request and then any number of fields
+as it is a variadic function.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;if valid, missingField := form.Required(r, &amp;quot;email&amp;quot;, &amp;quot;password&amp;quot;); !valid {
 	sess.AddFlash(flash.Info{&amp;quot;Field missing: &amp;quot; + missingField, flash.Error})
@@ -1025,7 +1126,7 @@ if err != nil {
     <item>
       <title>Models</title>
       <link>http://blue-jay.github.io/models/</link>
-      <pubDate>Tue, 08 Mar 2016 21:07:13 +0100</pubDate>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>http://blue-jay.github.io/models/</guid>
       <description>
@@ -1614,6 +1715,886 @@ flashSuccess(&amp;quot;Item added!&amp;quot;);
 flashNotice(&amp;quot;Item deleted.&amp;quot;);
 
 flashWarning(&amp;quot;Field missing: email&amp;quot;);
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Library</title>
+      <link>http://blue-jay.github.io/library/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blue-jay.github.io/library/</guid>
+      <description>
+
+&lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
+
+&lt;p&gt;If you look through the &lt;strong&gt;lib&lt;/strong&gt; folder, you&amp;rsquo;ll see packages that provide
+different functionality. These packages are designed to be shared and used
+through the application. Since Blueprint is a web application, the packages
+must be thread-safe to ensure they won&amp;rsquo;t throw any errors if they are accessed
+at the same time by two separate threads.&lt;/p&gt;
+
+&lt;p&gt;It&amp;rsquo;s a good idea to keep them light on dependencies so you can reuse them again
+in later projects. Packages that are too tightly-coupled require time to rework
+so you might as well do it right from the start.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s take a look at the &lt;strong&gt;lib/email&lt;/strong&gt; package in sections. The first of the
+three sections is the package declaration and import section. Notice how the
+only packages the &lt;strong&gt;email&lt;/strong&gt; package uses are part of the standard library. This
+is a good indicator that the package could be moved to a different project
+without rewriting.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Package email provides email sending via SMTP.
+package email
+
+import (
+    &amp;quot;encoding/base64&amp;quot;
+    &amp;quot;fmt&amp;quot;
+    &amp;quot;net/smtp&amp;quot;
+    &amp;quot;sync&amp;quot;
+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The next section shows the thread-safe configuration that is used in many of
+the lib packages. The Info struct holds the details for the SMTP server and is
+public so it can be nested in the &lt;strong&gt;Info&lt;/strong&gt; struct of the &lt;strong&gt;bootstrap&lt;/strong&gt; package
+and then parsed from the env.json file. See the &lt;a href=&#34;http://blue-jay.github.io/configuration/&#34;&gt;Configuration&lt;/a&gt;
+section for more information about adding to env.json.&lt;/p&gt;
+
+&lt;p&gt;There are also a few methods standard to the lib packages:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;SetConfig() - allows the &lt;strong&gt;bootstrap&lt;/strong&gt; package to store the Info struct to a package level variable&lt;/li&gt;
+&lt;li&gt;ResetConfig() - allows test packages to reset the configuration&lt;/li&gt;
+&lt;li&gt;Config() - returns the configuration so the values can be accessed by other packages&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;All of these methods are thread-safe so they can be called by external packages
+and by the functions within the package itself.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// *****************************************************************************
+// Thread-Safe Configuration
+// *****************************************************************************
+
+var (
+    info      Info
+    infoMutex sync.RWMutex
+)
+
+// Info holds the details for the SMTP server.
+type Info struct {
+    Username string
+    Password string
+    Hostname string
+    Port     int
+    From     string
+}
+
+// SetConfig stores the config.
+func SetConfig(i Info) {
+    infoMutex.Lock()
+    info = i
+    infoMutex.Unlock()
+}
+
+// ResetConfig removes the config.
+func ResetConfig() {
+    infoMutex.Lock()
+    info = Info{}
+    infoMutex.Unlock()
+}
+
+// Config returns the config.
+func Config() Info {
+    infoMutex.RLock()
+    defer infoMutex.RUnlock()
+    return info
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The final section of the &lt;strong&gt;email&lt;/strong&gt; package contains the ability to send an
+email using the configuration settings. You&amp;rsquo;ll notice the &lt;strong&gt;Config()&lt;/strong&gt; function
+through the code. This ensures the values are accessed in a thread-safe manner
+so there is no problem if another package tries to change a value at the same
+time.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Send mails an email.
+func Send(to, subject, body string) error {
+    auth := smtp.PlainAuth(&amp;quot;&amp;quot;, Config().Username, Config().Password, Config().Hostname)
+
+    header := make(map[string]string)
+    header[&amp;quot;From&amp;quot;] = Config().From
+    header[&amp;quot;To&amp;quot;] = to
+    header[&amp;quot;Subject&amp;quot;] = subject
+    header[&amp;quot;MIME-Version&amp;quot;] = &amp;quot;1.0&amp;quot;
+    header[&amp;quot;Content-Type&amp;quot;] = `text/plain; charset=&amp;quot;utf-8&amp;quot;`
+    header[&amp;quot;Content-Transfer-Encoding&amp;quot;] = &amp;quot;base64&amp;quot;
+
+    message := &amp;quot;&amp;quot;
+    for k, v := range header {
+        message += fmt.Sprintf(&amp;quot;%s: %s\r\n&amp;quot;, k, v)
+    }
+    message += &amp;quot;\r\n&amp;quot; + base64.StdEncoding.EncodeToString([]byte(body))
+
+    // Send the email
+    err := smtp.SendMail(
+        fmt.Sprintf(&amp;quot;%s:%d&amp;quot;, Config().Hostname, Config().Port),
+        auth,
+        Config().From,
+        []string{to},
+        []byte(message),
+    )
+
+    return err
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;code-generation&#34;&gt;Code Generation&lt;/h2&gt;
+
+&lt;p&gt;A new &lt;strong&gt;lib&lt;/strong&gt; package can be generated with the thread-safe configuration using
+this command: &lt;code&gt;jay generate lib/default package:value&lt;/code&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Jay Overview</title>
+      <link>http://blue-jay.github.io/jay/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blue-jay.github.io/jay/</guid>
+      <description>
+
+&lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
+
+&lt;p&gt;The command-line tool, &lt;strong&gt;Jay&lt;/strong&gt;, has been mentioned throughout this documentation
+quite a few times now so it&amp;rsquo;s a good time to talk a little about the tool.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Jay&lt;/strong&gt; uses the brilliant
+&lt;a href=&#34;github.com/alecthomas/kingpin&#34;&gt;github.com/alecthomas/kingpin&lt;/a&gt; package to manage
+the help documents, commands, subcommands, and arguments. It takes care of
+groundwork so we can focus on the actual tasks.&lt;/p&gt;
+
+&lt;p&gt;If you ever want to see the help documents for a command or subcommand, add
+&lt;code&gt;-h&lt;/code&gt; or &lt;code&gt;--help&lt;/code&gt; to the end and the help documentation should be able to assist.
+If you are still having problems, check out the
+&lt;a href=&#34;https://godoc.org/github.com/blue-jay/jay&#34;&gt;Jay GoDoc&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;When using &lt;strong&gt;Jay&lt;/strong&gt;, there are flags, commands, and subcommands.&lt;/p&gt;
+
+&lt;p&gt;The available flags throughout are:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-h&lt;/code&gt; or &lt;code&gt;--help&lt;/code&gt; for help documentation&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-v&lt;/code&gt; or &lt;code&gt;--version&lt;/code&gt; for version information&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The available commands are:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;jay env&lt;/code&gt; for managing the env.json file&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;jay find&lt;/code&gt; for locating text inside files in subfolders&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;jay replace&lt;/code&gt; for replacing text inside files in subfolder&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;jay generate&lt;/code&gt; for creating code based on templates using the &lt;strong&gt;text/template&lt;/strong&gt; package&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;jay migrate&lt;/code&gt; for managing the database state&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The available subcommands are:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;jay env make&lt;/code&gt; for creating env.json from env.json.example&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;jay env keyshow&lt;/code&gt; for showing newly generated session keys&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;jay env updateshow&lt;/code&gt; for updating env.json with newly generation session keys&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;jay migrate make&lt;/code&gt; for creating a new migration &amp;lsquo;up&amp;rsquo; file and &amp;lsquo;down&amp;rsquo; file&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;jay migrate all&lt;/code&gt; for applying all &amp;lsquo;up&amp;rsquo; migrations&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;jay migrate reset&lt;/code&gt; for applying all &amp;lsquo;down&amp;rsquo; migrations&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;jay migrate refresh&lt;/code&gt; for applying all &amp;lsquo;down&amp;rsquo; then &amp;lsquo;up&amp;rsquo; migrations&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;jay migrate status&lt;/code&gt; for displaying the current database state&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;jay migrate up&lt;/code&gt; for applying only one &amp;lsquo;up&amp;rsquo; migration&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;jay migrate down&lt;/code&gt; for applying one one &amp;lsquo;down&amp;rsquo; migration&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;There is also a common syntax used by each of the commands, subcommands, and
+arguments that make the help documents easy to follow.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Flags have one or two dashes in the front: &lt;code&gt;-h, --help&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Commands follow the application name (jay): &lt;code&gt;jay migrate&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Subcommands follow the command: &lt;code&gt;jay migrate make&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Arguments follow the command or subcommand: &lt;code&gt;jay migrate make &amp;lt;description&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Required arguments: &lt;code&gt;&amp;lt;required&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Optional arguments: &lt;code&gt;[&amp;lt;optional&amp;gt;]&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Find and Replace</title>
+      <link>http://blue-jay.github.io/find-replace/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blue-jay.github.io/find-replace/</guid>
+      <description>
+
+&lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Jay&lt;/strong&gt; includes the ability to do a case-sensitive find and replace. This is
+great when you have many files to look through and need simple way to
+find and replace quickly.&lt;/p&gt;
+
+&lt;h2 id=&#34;find-usage&#34;&gt;Find Usage&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;usage: jay find &amp;lt;folder&amp;gt; &amp;lt;text&amp;gt; [&amp;lt;extension&amp;gt;] [&amp;lt;recursive&amp;gt;] [&amp;lt;filename&amp;gt;]
+
+Search for files containing matching text.
+
+Flags:
+  -h, --help     Show context-sensitive help (also try --help-long and
+                 --help-man).
+  -v, --version  Show application version.
+
+Args:
+  &amp;lt;folder&amp;gt;       Folder to search
+  &amp;lt;text&amp;gt;         Case-sensitive text to find.
+  [&amp;lt;extension&amp;gt;]  File name or extension to search in. Use * as a wildcard.
+                 Directory names are not valid.
+  [&amp;lt;recursive&amp;gt;]  True to search in subfolders. Default: true
+  [&amp;lt;filename&amp;gt;]   True to include file path in results if matched. Default: false
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;replace-usage&#34;&gt;Replace Usage&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;usage: jay replace &amp;lt;folder&amp;gt; &amp;lt;find&amp;gt; [&amp;lt;replace&amp;gt;] [&amp;lt;extension&amp;gt;] [&amp;lt;recursive&amp;gt;] [&amp;lt;filename&amp;gt;] [&amp;lt;commit&amp;gt;]
+
+Search for files containing matching text and then replace it with new text.
+
+Flags:
+  -h, --help     Show context-sensitive help (also try --help-long and
+                 --help-man).
+  -v, --version  Show application version.
+
+Args:
+  &amp;lt;folder&amp;gt;       Folder to search
+  &amp;lt;find&amp;gt;         Case-sensitive text to replace.
+  [&amp;lt;replace&amp;gt;]    Text to replace with.
+  [&amp;lt;extension&amp;gt;]  File name or extension to search in. Use * as a wildcard.
+                 Directory names are not valid.
+  [&amp;lt;recursive&amp;gt;]  True to search in subfolders. Default: true
+  [&amp;lt;filename&amp;gt;]   True to include file path in results if matched. Default: false
+  [&amp;lt;commit&amp;gt;]     True to makes the changes instead of just displaying them.
+                 Default: true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;find-and-replace-examples&#34;&gt;Find and Replace Examples&lt;/h2&gt;
+
+&lt;p&gt;Here are examples are how to use find and replace:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;# Find the word &amp;quot;red&amp;quot; in all *.go files in the current folder and in subfolders.
+jay find . red
+
+# Find the word &amp;quot;red&amp;quot; in all files in the current folder only.
+jay find . red &amp;quot;*.*&amp;quot; false
+
+# Find the word &amp;quot;red&amp;quot; in *.go files in current folder and in subfolders and 
+# include file paths that match also.
+jay find . red &amp;quot;*.go&amp;quot; true true
+
+# Replace the word &amp;quot;red&amp;quot; with the word &amp;quot;blue&amp;quot; in all *.go files in the current
+# folder and in subfolders.
+jay replace . red blue
+
+# Replace the word &amp;quot;red&amp;quot; with the word &amp;quot;blue&amp;quot; in all *.go files in current
+# folder only.
+jay replace . red blue &amp;quot;*.go&amp;quot; false
+
+# Change the name of the project in current folder and in subfolders and all
+# imports to another repository.
+jay replace . &amp;quot;blue-jay/blueprint&amp;quot; &amp;quot;user/project&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Database Migration</title>
+      <link>http://blue-jay.github.io/database-migration/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blue-jay.github.io/database-migration/</guid>
+      <description>
+
+&lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
+
+&lt;p&gt;Database migrations are a great way to manage incremental database changes.
+The migration state is stored in the same database (the one specified in
+env.json) and recorded in the &lt;strong&gt;migration&lt;/strong&gt; table. This is how the &lt;code&gt;jay status&lt;/code&gt;
+command knows which migration was performed last.&lt;/p&gt;
+
+&lt;p&gt;Each incremental change should have a set of two files: an &amp;lsquo;up&amp;rsquo; file and a
+&amp;lsquo;down&amp;rsquo; file. The &amp;lsquo;up&amp;rsquo; file contains code (like SQL) which is applied to the
+database you add features or fix bugs in your database. The &amp;lsquo;down&amp;rsquo; file contains
+the code to remove the change or undo it.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: The &lt;code&gt;jay migrate&lt;/code&gt; commands requires the environment variable,
+JAYCONFIG, to point to the env.json file path. The &lt;strong&gt;database&lt;/strong&gt; folder
+containing the &lt;strong&gt;migration&lt;/strong&gt; folder must also be in the same folder.&lt;/p&gt;
+
+&lt;p&gt;When you start using &lt;strong&gt;Blueprint&lt;/strong&gt; you&amp;rsquo;ll see two migration files already exist
+in the &lt;strong&gt;database/migration&lt;/strong&gt; folder:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;20160630_020000.000000_init.up.sql - adds the initial tables and data&lt;/li&gt;
+&lt;li&gt;20160630_020000.000000_init.down.sql - removes the tables and data&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Jay&lt;/strong&gt; provides a few commands to make the migrations easier. Here is a list
+of the commands:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;jay migrate make &amp;quot;test&amp;quot; # Create new migration
+jay migrate all         # Advance all migrations
+jay migrate reset       # Rollback all migrations
+jay migrate refresh     # Rollback all migrations then advance all migrations
+jay migrate status      # See last &#39;up&#39; migration
+jay migrate up          # Apply only the next &#39;up&#39; migration
+jay migrate down        # Apply only the current &#39;down&#39; migration
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;workflow&#34;&gt;Workflow&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;rsquo;s walk through an typical workflow. Assume the &lt;strong&gt;blueprint&lt;/strong&gt; folder is the
+root of a git repository. Developer Joe needs to add a feature to the
+application to store books. Joe creates a new branch called feature-store-books.
+He needs to create a new table called &lt;strong&gt;book&lt;/strong&gt; so he creates a new database
+migration: &lt;code&gt;jay migrate make &amp;quot;feature-store-books&amp;quot;&lt;/code&gt;. He opens the &amp;lsquo;up&amp;rsquo; file
+and adds the SQL query to create a new table with the following columns: title,
+author, and publication_date. In the &amp;lsquo;down&amp;rsquo; file, he writes the code to drop the
+table. He also writes the code to create, read, update, and
+delete the books in his Go code and then performs a &lt;code&gt;git merge&lt;/code&gt; and then a
+&lt;code&gt;git push&lt;/code&gt;. Developer Steve needs to add an additional column to the
+&lt;strong&gt;book&lt;/strong&gt; table called: publisher. Steve performs a &lt;code&gt;git pull&lt;/code&gt; to download the
+latest code from the repository. In order to update his local database to the
+latest version of code, runs: &lt;code&gt;jay migrate all&lt;/code&gt;. Then, Steve creates a new
+migration for the new requirement: &lt;code&gt;jay migrate make &amp;quot;feature-add-publisher&amp;quot;&lt;/code&gt;.
+Steve adds the SQL &lt;code&gt;ADD COLUMN&lt;/code&gt; code to the new &amp;lsquo;up&amp;rsquo; file and the SQL
+&lt;code&gt;DROP COLUMN&lt;/code&gt; code to the new &amp;lsquo;down&amp;rsquo; file and then performs a &lt;code&gt;git merge&lt;/code&gt; and a
+&lt;code&gt;git push&lt;/code&gt; again.&lt;/p&gt;
+
+&lt;h2 id=&#34;migrate-make&#34;&gt;migrate make&lt;/h2&gt;
+
+&lt;p&gt;The &lt;code&gt;jay migrate make [description]&lt;/code&gt; command create a new &amp;lsquo;up&amp;rsquo; and &amp;lsquo;down&amp;rsquo;
+migration in the &lt;strong&gt;database/migration&lt;/strong&gt; folder.&lt;/p&gt;
+
+&lt;h2 id=&#34;migrate-all&#34;&gt;migrate all&lt;/h2&gt;
+
+&lt;p&gt;The &lt;code&gt;jay migrate all&lt;/code&gt; command finds the current status of the database and then
+applies all the code from each of the &amp;lsquo;up&amp;rsquo; files in chronological order based on
+filename.&lt;/p&gt;
+
+&lt;h2 id=&#34;migrate-reset&#34;&gt;migrate reset&lt;/h2&gt;
+
+&lt;p&gt;The &lt;code&gt;jay migrate reset&lt;/code&gt; command finds the current status of the database and
+then applies all the code from each of the &amp;lsquo;down&amp;rsquo; files in reverse chronological
+order based on filename which should remove all tables and data with the
+exception of an an empty &lt;strong&gt;migration&lt;/strong&gt; table.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; If any tables were created outside of the migrations, they should
+still be in the database.&lt;/p&gt;
+
+&lt;h2 id=&#34;migrate-refresh&#34;&gt;migrate refresh&lt;/h2&gt;
+
+&lt;p&gt;The &lt;code&gt;jay migrate refresh&lt;/code&gt; command runs a &lt;code&gt;jay migrate reset&lt;/code&gt; and then applies
+all the code from each of the &amp;lsquo;up&amp;rsquo; files in chronological order based on
+filename.&lt;/p&gt;
+
+&lt;h2 id=&#34;migrate-status&#34;&gt;migrate status&lt;/h2&gt;
+
+&lt;p&gt;The &lt;code&gt;jay migrate status&lt;/code&gt; command reads the latest record in the &lt;strong&gt;migration&lt;/strong&gt;
+table which is the last &amp;lsquo;up&amp;rsquo; file that was applied to the database.&lt;/p&gt;
+
+&lt;h2 id=&#34;migrate-up&#34;&gt;migrate up&lt;/h2&gt;
+
+&lt;p&gt;The &lt;code&gt;jay migrate up&lt;/code&gt; command applies only the code in the next &amp;lsquo;up&amp;rsquo; file in
+chronological order based on filename.&lt;/p&gt;
+
+&lt;h2 id=&#34;migrate-down&#34;&gt;migrate down&lt;/h2&gt;
+
+&lt;p&gt;The &lt;code&gt;jay migrate down&lt;/code&gt; command applies only the code in the current &amp;lsquo;down&amp;rsquo; file.&lt;/p&gt;
+
+&lt;h2 id=&#34;other-database-changes&#34;&gt;Other Database Changes&lt;/h2&gt;
+
+&lt;p&gt;If the &amp;lsquo;up&amp;rsquo; and &amp;lsquo;down&amp;rsquo; files are written properly, tables created manually
+outside the migrations should be left untouched by the &lt;code&gt;jay migrate&lt;/code&gt; commands.
+The only changes &lt;code&gt;jay migrate&lt;/code&gt; makes to the database outside of the migrations
+are the creation of the database itself based on the settings in env.json and
+the modification of the &lt;strong&gt;migration&lt;/strong&gt; table.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Code Generation</title>
+      <link>http://blue-jay.github.io/generation/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blue-jay.github.io/generation/</guid>
+      <description>
+
+&lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
+
+&lt;p&gt;Code generation makes it easy to build out new features so you don&amp;rsquo;t have to
+retype or copy and paste the same code over again. It&amp;rsquo;s especially useful when
+prototyping and need to see how something will look or work.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: The &lt;code&gt;jay migrate&lt;/code&gt; commands requires the environment variable,
+JAYCONFIG, to point to the env.json file path. The &lt;strong&gt;generation&lt;/strong&gt; folder must
+also be in the same folder.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Jay&lt;/strong&gt; tries to make it easy to generate code by using tools that you already
+know: the &lt;strong&gt;text/template&lt;/strong&gt; package from the standard Go library and JSON.&lt;/p&gt;
+
+&lt;p&gt;A template pair consists of a .json file and a .gen file. The .gen file contains
+the &lt;strong&gt;text/template&lt;/strong&gt; parsable code. The .json file contains other information
+needed for the generation process like:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;config.type - either &amp;lsquo;single&amp;rsquo; if creating one file or &amp;lsquo;collection&amp;rsquo; if referencing one or more other .json files&lt;/li&gt;
+&lt;li&gt;config.output - relative path at which to create the file&lt;/li&gt;
+&lt;li&gt;config.parse - either true or false&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In the .json file, any other keys outside these three will be applied directly
+to the .gen file. If you leave a key blank, that tells &lt;code&gt;jay generate&lt;/code&gt; that it
+needs to be passed via command-line.&lt;/p&gt;
+
+&lt;p&gt;Don&amp;rsquo;t worry, there are already a boatload of templates ready to use. They are
+organized by type in the &lt;strong&gt;generate&lt;/strong&gt; folder of Blueprint. If .json file does
+not have a .gen pair in the same folder, then it has a &lt;strong&gt;config.parse&lt;/strong&gt; value
+of &lt;strong&gt;collection&lt;/strong&gt; which means it references other .json files with a
+&lt;strong&gt;config.parse&lt;/strong&gt; value of &lt;strong&gt;single&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;The &lt;strong&gt;flight&lt;/strong&gt; package is a helper package that reduces a lot of code from the
+controller. It contains functions to simplify the use of flash messages,
+form validation, form repopulation, and URL parameters.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;controller
+
+&lt;ul&gt;
+&lt;li&gt;bare.gen | bare.json - creates a bare controller with only placeholder functions&lt;/li&gt;
+&lt;li&gt;default.gen | default.json - creates a controller with CRUD ready code with the &lt;strong&gt;flight&lt;/strong&gt; package&lt;/li&gt;
+&lt;li&gt;noflight.gen | noflight.json - creates a controller with CRUD ready code without the &lt;strong&gt;flight&lt;/strong&gt; package&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;crud
+
+&lt;ul&gt;
+&lt;li&gt;bare.json - creates a bare controller, model, and four views&lt;/li&gt;
+&lt;li&gt;default.json - creates a controller, model, and four views CRUD ready with the &lt;strong&gt;flight&lt;/strong&gt; package&lt;/li&gt;
+&lt;li&gt;noflight.json - creates a controller, model, and four views CRUD ready without the &lt;strong&gt;flight&lt;/strong&gt; package&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;lib
+
+&lt;ul&gt;
+&lt;li&gt;default.gen | default.json - creates a thread-safe wrapper package&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;middleware
+
+&lt;ul&gt;
+&lt;li&gt;default.gen | default.json - creates a middleware package&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;model
+
+&lt;ul&gt;
+&lt;li&gt;bare.gen | bare.json - creates a bare model with only placeholder functions&lt;/li&gt;
+&lt;li&gt;default.gen | default.json - creates a model with CRUD ready code&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;view
+
+&lt;ul&gt;
+&lt;li&gt;base.json - creates four bare views with only a basic structure&lt;/li&gt;
+&lt;li&gt;create.gen | create.json - creates a CRUD ready creation form view&lt;/li&gt;
+&lt;li&gt;create_bare.gen | create_bare.json - creates a bare view with only a basic structure&lt;/li&gt;
+&lt;li&gt;default.json - creates four views with CRUD ready code&lt;/li&gt;
+&lt;li&gt;edit.gen | edit.json - creates a CRUD ready edit form view&lt;/li&gt;
+&lt;li&gt;edit_bare.gen | edit_bare.json - creates a bare view with only a basic structure&lt;/li&gt;
+&lt;li&gt;index.gen | index.json - creates a CRUD ready display view&lt;/li&gt;
+&lt;li&gt;index_bare.gen | index_bare.json - creates a bare view with only a basic structure&lt;/li&gt;
+&lt;li&gt;show.gen | show.json - creates a CRUD ready display view&lt;/li&gt;
+&lt;li&gt;show_bare.gen | show_bare.json - creates a bare view with only a basic structure&lt;/li&gt;
+&lt;li&gt;single.gen | single.json - creates a bare view with only a basic structure&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;viewfunc
+
+&lt;ul&gt;
+&lt;li&gt;default.gen | default.json - creates a FuncMap package for use with the &lt;strong&gt;html/template&lt;/strong&gt; package&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;viewmodify
+
+&lt;ul&gt;
+&lt;li&gt;default.gen | default.json - creates a package to modify the &lt;strong&gt;lib/view&lt;/strong&gt; package before rendering&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Let&amp;rsquo;s view a couple examples.&lt;/p&gt;
+
+&lt;h2 id=&#34;middleware-example&#34;&gt;Middleware Example&lt;/h2&gt;
+
+&lt;p&gt;The &lt;strong&gt;generate/middleware/default.gen&lt;/strong&gt; file contains this template. The
+{{.package}} variable is the only required variable for this template so it must
+be added to the .json file as a key with blank value. This forces &lt;code&gt;jay generate&lt;/code&gt;
+to require the user to pass a &lt;strong&gt;package&lt;/strong&gt; variable before it will generate the
+template.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Package {{.package}}
+package {{.package}}
+
+import (
+    &amp;quot;net/http&amp;quot;
+)
+
+// Handler
+func Handler(next http.Handler) http.Handler {
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        // Logic BEFORE the other handlers and function goes here
+        next.ServeHTTP(w, r)
+        // Logic AFTER the other handlers and function goes here
+    })
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;strong&gt;generate/middleware/default.json&lt;/strong&gt; file contains this JSON. The
+&lt;strong&gt;config.type&lt;/strong&gt; is set to &lt;strong&gt;single&lt;/strong&gt; because it&amp;rsquo;s only generating one file. The
+&lt;strong&gt;config.output&lt;/strong&gt; is the relative path where the file will be generated. Notice
+that the &lt;strong&gt;config.output&lt;/strong&gt; also uses the &lt;strong&gt;package&lt;/strong&gt; variable. This is the
+beauty of the &lt;code&gt;jay generate&lt;/code&gt; tool: the .json files are actually parsed
+multiple times (limit is set to 100) to ensure all variables are set.&lt;/p&gt;
+
+&lt;p&gt;In the first iteration of parsing, the &lt;strong&gt;package&lt;/strong&gt; key is set to value passed
+via the command-line. In the second iteration of parsing, the &lt;strong&gt;{{.package}}&lt;/strong&gt;
+variables are set to the same value because the top level &lt;strong&gt;package&lt;/strong&gt; key
+becomes a variable itself.&lt;/p&gt;
+
+&lt;p&gt;All first level keys (config.type, config.output, package) become variables
+after the first iteration of parsing. If a variable is misspelled and is never
+filled, a helpful error will display to the command-line.&lt;/p&gt;
+
+&lt;p&gt;The folder structure of the templates (model, controller, etc) has no effect
+on the generation, it&amp;rsquo;s purely to aid with organization of the template pairs.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+    &amp;quot;config.type&amp;quot;: &amp;quot;single&amp;quot;,
+    &amp;quot;config.output&amp;quot;: &amp;quot;middleware/{{.package}}/{{.package}}.go&amp;quot;,
+    &amp;quot;package&amp;quot;: &amp;quot;&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To generate this template, the command would look like this. The &lt;strong&gt;package&lt;/strong&gt;
+key is separated from the value by a colon (:). An argument of &lt;code&gt;package:&lt;/code&gt;
+without a value is also acceptable, but would end up creating a file called
+&lt;strong&gt;.go&lt;/strong&gt; in the &lt;strong&gt;middleware&lt;/strong&gt; folder.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;jay generate middleware/default package:test
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The final output would be to the file, &lt;strong&gt;middleware/test/test.go&lt;/strong&gt;, and would
+look like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Package test
+package test
+
+import (
+    &amp;quot;net/http&amp;quot;
+)
+
+// Handler
+func Handler(next http.Handler) http.Handler {
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        // Logic BEFORE the other handlers and function goes here
+        next.ServeHTTP(w, r)
+        // Logic AFTER the other handlers and function goes here
+    })
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;controller-example&#34;&gt;Controller Example&lt;/h2&gt;
+
+&lt;p&gt;This is a snippet of the template in &lt;strong&gt;generate/controller/bare.gen&lt;/strong&gt;. In this
+template, there are two variables: &lt;strong&gt;package&lt;/strong&gt; and &lt;strong&gt;url&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Package {{.package}}
+package {{.package}}
+
+import (
+    &amp;quot;net/http&amp;quot;
+
+    &amp;quot;github.com/blue-jay/blueprint/controller/status&amp;quot;
+    &amp;quot;github.com/blue-jay/blueprint/lib/router&amp;quot;
+)
+
+var (
+    uri = &amp;quot;/{{.url}}&amp;quot;
+)
+
+// Load the routes.
+func Load() {
+    c := router.Chain()
+    router.Get(uri, Index, c...)
+    router.Get(uri+&amp;quot;/create&amp;quot;, Create, c...)
+    router.Post(uri+&amp;quot;/create&amp;quot;, Store, c...)
+    router.Get(uri+&amp;quot;/view/:id&amp;quot;, Show, c...)
+    router.Get(uri+&amp;quot;/edit/:id&amp;quot;, Edit, c...)
+    router.Patch(uri+&amp;quot;/edit/:id&amp;quot;, Update, c...)
+    router.Delete(uri+&amp;quot;/:id&amp;quot;, Destroy, c...)
+}
+
+// Index displays the items.
+func Index(w http.ResponseWriter, r *http.Request) {
+    status.Error501(w, r)
+}
+
+// Create displays the create form.
+func Create(w http.ResponseWriter, r *http.Request) {
+    status.Error501(w, r)
+}
+
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;strong&gt;generate/controller/bare.json&lt;/strong&gt; file contains this JSON.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+    &amp;quot;config.type&amp;quot;: &amp;quot;single&amp;quot;,
+    &amp;quot;config.output&amp;quot;: &amp;quot;controller/{{.package}}/{{.package}}.go&amp;quot;,
+    &amp;quot;package&amp;quot;: &amp;quot;&amp;quot;,
+    &amp;quot;url&amp;quot;: &amp;quot;&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To generate this template, the command would look like this. Notice the second
+variable, &lt;strong&gt;url&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;jay generate controller/base package:monkey url:banana
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The final output would be to the file, &lt;strong&gt;controller/monkey/monkey.go&lt;/strong&gt;, and
+would look like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Package monkey
+package monkey
+
+import (
+    &amp;quot;net/http&amp;quot;
+
+    &amp;quot;github.com/blue-jay/blueprint/controller/status&amp;quot;
+    &amp;quot;github.com/blue-jay/blueprint/lib/router&amp;quot;
+)
+
+var (
+    uri = &amp;quot;/banana&amp;quot;
+)
+
+// Load the routes.
+func Load() {
+    c := router.Chain()
+    router.Get(uri, Index, c...)
+    router.Get(uri+&amp;quot;/create&amp;quot;, Create, c...)
+    router.Post(uri+&amp;quot;/create&amp;quot;, Store, c...)
+    router.Get(uri+&amp;quot;/view/:id&amp;quot;, Show, c...)
+    router.Get(uri+&amp;quot;/edit/:id&amp;quot;, Edit, c...)
+    router.Patch(uri+&amp;quot;/edit/:id&amp;quot;, Update, c...)
+    router.Delete(uri+&amp;quot;/:id&amp;quot;, Destroy, c...)
+}
+
+// Index displays the items.
+func Index(w http.ResponseWriter, r *http.Request) {
+    status.Error501(w, r)
+}
+
+// Create displays the create form.
+func Create(w http.ResponseWriter, r *http.Request) {
+    status.Error501(w, r)
+}
+
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;single-view-example&#34;&gt;Single View Example&lt;/h2&gt;
+
+&lt;p&gt;The &lt;strong&gt;generate/view/single.gen&lt;/strong&gt; file contains this template. We don&amp;rsquo;t actually
+want to parse this code because it&amp;rsquo;s a view itself. We can tell the parser
+not to parse in the single.json file by setting the value of &lt;strong&gt;config.parse&lt;/strong&gt; to
+&lt;strong&gt;false&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;{{define &amp;quot;title&amp;quot;}}{{end}}
+{{define &amp;quot;head&amp;quot;}}{{end}}
+{{define &amp;quot;content&amp;quot;}}
+&amp;lt;div class=&amp;quot;container&amp;quot;&amp;gt;
+    &amp;lt;div class=&amp;quot;page-header&amp;quot;&amp;gt;
+        &amp;lt;h1&amp;gt;{{template &amp;quot;title&amp;quot; .}}&amp;lt;/h1&amp;gt;
+    &amp;lt;/div&amp;gt;
+    
+    &amp;lt;p&amp;gt;Not Implemented&amp;lt;/p&amp;gt;
+    
+    {{template &amp;quot;footer&amp;quot; .}}
+&amp;lt;/div&amp;gt;
+{{end}}
+{{define &amp;quot;foot&amp;quot;}}{{end}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;strong&gt;generate/view/single.json&lt;/strong&gt; file contains this JSON. Again, we set
+&lt;strong&gt;config.parse&lt;/strong&gt; to false and only use the variables for specifying the
+&lt;strong&gt;config.output&lt;/strong&gt; path. The variables are not used inside the single.json
+template at all.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+    &amp;quot;config.type&amp;quot;: &amp;quot;single&amp;quot;,
+    &amp;quot;config.output&amp;quot;: &amp;quot;view/{{.model}}/{{.name}}.tmpl&amp;quot;,
+    &amp;quot;config.parse&amp;quot;: false,
+    &amp;quot;model&amp;quot;: &amp;quot;&amp;quot;,
+    &amp;quot;name&amp;quot;: &amp;quot;&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To generate this template, the command would look like this. Notice the second
+variable, &lt;strong&gt;url&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;jay generate view/single model:test name:create
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The final output would be to the file, &lt;strong&gt;view/test/create.tmpl&lt;/strong&gt;, and
+would look like this - no difference from the template itself since it was not
+parsed, just copied.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;{{define &amp;quot;title&amp;quot;}}{{end}}
+{{define &amp;quot;head&amp;quot;}}{{end}}
+{{define &amp;quot;content&amp;quot;}}
+&amp;lt;div class=&amp;quot;container&amp;quot;&amp;gt;
+    &amp;lt;div class=&amp;quot;page-header&amp;quot;&amp;gt;
+        &amp;lt;h1&amp;gt;{{template &amp;quot;title&amp;quot; .}}&amp;lt;/h1&amp;gt;
+    &amp;lt;/div&amp;gt;
+    
+    &amp;lt;p&amp;gt;Not Implemented&amp;lt;/p&amp;gt;
+    
+    {{template &amp;quot;footer&amp;quot; .}}
+&amp;lt;/div&amp;gt;
+{{end}}
+{{define &amp;quot;foot&amp;quot;}}{{end}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;multiple-view-example&#34;&gt;Multiple View Example&lt;/h1&gt;
+
+&lt;p&gt;The &lt;strong&gt;generate/view/default.json&lt;/strong&gt; file contains this JSON, but does not have
+a matching default.gen file. This is because the .json file simply passes
+variables to other .json files which have matching .gen files that generate
+files. First, the &lt;strong&gt;config.type&lt;/strong&gt; key has a value of &lt;strong&gt;collection&lt;/strong&gt;, that&amp;rsquo;s how
+you know it doesn&amp;rsquo;t have a matching .gen file. Next, the &lt;strong&gt;config.collection&lt;/strong&gt;
+key contains an array of items that specify which template pairs to pass
+variables to.&lt;/p&gt;
+
+&lt;p&gt;The &lt;strong&gt;model&lt;/strong&gt; key under each template receives the &lt;strong&gt;model&lt;/strong&gt; variable from the
+root of the package which is required from the command-line.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+    &amp;quot;config.type&amp;quot;: &amp;quot;collection&amp;quot;,
+    &amp;quot;config.collection&amp;quot;: [
+        {
+            &amp;quot;view/create&amp;quot;: {
+                &amp;quot;model&amp;quot;: &amp;quot;{{.model}}&amp;quot;
+            }
+        },
+        {
+            &amp;quot;view/edit&amp;quot;: {
+                &amp;quot;model&amp;quot;: &amp;quot;{{.model}}&amp;quot;
+            }
+        },
+        {
+            &amp;quot;view/index&amp;quot;: {
+                &amp;quot;model&amp;quot;: &amp;quot;{{.model}}&amp;quot;
+            }
+        },
+        {
+            &amp;quot;view/show&amp;quot;: {
+                &amp;quot;model&amp;quot;: &amp;quot;{{.model}}&amp;quot;
+            }
+        }
+    ],
+    &amp;quot;model&amp;quot;: &amp;quot;&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In this example, the default.json file will pass variables to the following
+files:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;generate/view/create.json&lt;/li&gt;
+&lt;li&gt;generate/view/edit.json&lt;/li&gt;
+&lt;li&gt;generate/view/index.json&lt;/li&gt;
+&lt;li&gt;generate/view/show.json&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The files are all still relative to the root &lt;strong&gt;generate&lt;/strong&gt; folder. Also, if you
+look at each of the four files, you&amp;rsquo;ll see that they require only one variable:
+&lt;strong&gt;model&lt;/strong&gt;. Here is the contents of &lt;strong&gt;generate/view/create.json&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+    &amp;quot;config.type&amp;quot;: &amp;quot;single&amp;quot;,
+    &amp;quot;config.output&amp;quot;: &amp;quot;view/{{.model}}/create.tmpl&amp;quot;,
+    &amp;quot;config.parse&amp;quot;: false,
+    &amp;quot;model&amp;quot;: &amp;quot;&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To generate all four of these templates, the command would look like this.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;jay generate view/default model:test
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The final output would be to the following files:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;view/test/create.json&lt;/li&gt;
+&lt;li&gt;view/test/edit.json&lt;/li&gt;
+&lt;li&gt;view/test/index.json&lt;/li&gt;
+&lt;li&gt;view/test/show.json&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;crud-example&#34;&gt;CRUD Example&lt;/h2&gt;
+
+&lt;p&gt;If you put all those piece above together, you can generate the controller,
+model, and all four views necessary for a working CRUD component in a single
+command.&lt;/p&gt;
+
+&lt;p&gt;The &lt;strong&gt;generate/crud/default.json&lt;/strong&gt; file contains this JSON:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+    &amp;quot;config.type&amp;quot;: &amp;quot;collection&amp;quot;,
+    &amp;quot;config.collection&amp;quot;: [
+        {
+            &amp;quot;model/default&amp;quot;: {
+                &amp;quot;package&amp;quot;: &amp;quot;{{.model}}&amp;quot;,
+                &amp;quot;table&amp;quot;: &amp;quot;{{.model}}&amp;quot;
+            }
+        },
+        {
+            &amp;quot;controller/default&amp;quot;: {
+                &amp;quot;package&amp;quot;: &amp;quot;{{.controller}}&amp;quot;,
+                &amp;quot;url&amp;quot;: &amp;quot;{{.controller}}&amp;quot;,
+                &amp;quot;model&amp;quot;: &amp;quot;{{.model}}&amp;quot;,
+                &amp;quot;view&amp;quot;: &amp;quot;{{.view}}&amp;quot;
+            }
+        },
+        {
+            &amp;quot;view/default&amp;quot;: {
+                &amp;quot;model&amp;quot;: &amp;quot;{{.view}}&amp;quot;
+            }
+        }
+    ],
+    &amp;quot;model&amp;quot;: &amp;quot;&amp;quot;,
+    &amp;quot;controller&amp;quot;: &amp;quot;&amp;quot;,
+    &amp;quot;view&amp;quot;: &amp;quot;&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To generate all the components, the command would look like this.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;jay generate crud/default model:note controller:notepad view:note
 &lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>

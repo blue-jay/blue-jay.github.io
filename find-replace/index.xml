@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Find-replaces on Blue Jay</title>
+    <link>http://blue-jay.github.io/find-replace/</link>
+    <description>Recent content in Find-replaces on Blue Jay</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://blue-jay.github.io/find-replace/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Find and Replace</title>
+      <link>http://blue-jay.github.io/find-replace/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://blue-jay.github.io/find-replace/</guid>
+      <description>
+
+&lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Jay&lt;/strong&gt; includes the ability to do a case-sensitive find and replace. This is
+great when you have many files to look through and need simple way to
+find and replace quickly.&lt;/p&gt;
+
+&lt;h2 id=&#34;find-usage&#34;&gt;Find Usage&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;usage: jay find &amp;lt;folder&amp;gt; &amp;lt;text&amp;gt; [&amp;lt;extension&amp;gt;] [&amp;lt;recursive&amp;gt;] [&amp;lt;filename&amp;gt;]
+
+Search for files containing matching text.
+
+Flags:
+  -h, --help     Show context-sensitive help (also try --help-long and
+                 --help-man).
+  -v, --version  Show application version.
+
+Args:
+  &amp;lt;folder&amp;gt;       Folder to search
+  &amp;lt;text&amp;gt;         Case-sensitive text to find.
+  [&amp;lt;extension&amp;gt;]  File name or extension to search in. Use * as a wildcard.
+                 Directory names are not valid.
+  [&amp;lt;recursive&amp;gt;]  True to search in subfolders. Default: true
+  [&amp;lt;filename&amp;gt;]   True to include file path in results if matched. Default: false
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;replace-usage&#34;&gt;Replace Usage&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;usage: jay replace &amp;lt;folder&amp;gt; &amp;lt;find&amp;gt; [&amp;lt;replace&amp;gt;] [&amp;lt;extension&amp;gt;] [&amp;lt;recursive&amp;gt;] [&amp;lt;filename&amp;gt;] [&amp;lt;commit&amp;gt;]
+
+Search for files containing matching text and then replace it with new text.
+
+Flags:
+  -h, --help     Show context-sensitive help (also try --help-long and
+                 --help-man).
+  -v, --version  Show application version.
+
+Args:
+  &amp;lt;folder&amp;gt;       Folder to search
+  &amp;lt;find&amp;gt;         Case-sensitive text to replace.
+  [&amp;lt;replace&amp;gt;]    Text to replace with.
+  [&amp;lt;extension&amp;gt;]  File name or extension to search in. Use * as a wildcard.
+                 Directory names are not valid.
+  [&amp;lt;recursive&amp;gt;]  True to search in subfolders. Default: true
+  [&amp;lt;filename&amp;gt;]   True to include file path in results if matched. Default: false
+  [&amp;lt;commit&amp;gt;]     True to makes the changes instead of just displaying them.
+                 Default: true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;find-and-replace-examples&#34;&gt;Find and Replace Examples&lt;/h2&gt;
+
+&lt;p&gt;Here are examples are how to use find and replace:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;# Find the word &amp;quot;red&amp;quot; in all *.go files in the current folder and in subfolders.
+jay find . red
+
+# Find the word &amp;quot;red&amp;quot; in all files in the current folder only.
+jay find . red &amp;quot;*.*&amp;quot; false
+
+# Find the word &amp;quot;red&amp;quot; in *.go files in current folder and in subfolders and 
+# include file paths that match also.
+jay find . red &amp;quot;*.go&amp;quot; true true
+
+# Replace the word &amp;quot;red&amp;quot; with the word &amp;quot;blue&amp;quot; in all *.go files in the current
+# folder and in subfolders.
+jay replace . red blue
+
+# Replace the word &amp;quot;red&amp;quot; with the word &amp;quot;blue&amp;quot; in all *.go files in current
+# folder only.
+jay replace . red blue &amp;quot;*.go&amp;quot; false
+
+# Change the name of the project in current folder and in subfolders and all
+# imports to another repository.
+jay replace . &amp;quot;blue-jay/blueprint&amp;quot; &amp;quot;user/project&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

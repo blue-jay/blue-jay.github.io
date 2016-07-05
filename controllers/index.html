@@ -140,7 +140,7 @@
         </div>
       
       <div class="name">
-        <strong>Blue Jay <span class="version">0.1-alpha</span></strong>
+        <strong>Blue Jay <span class="version">0.5-bravo</span></strong>
         
           <br>
           blue-jay/blueprint
@@ -185,6 +185,23 @@
 <a  title="Toolkit Overview" href="http://blue-jay.github.io/">
 	
 	Toolkit Overview
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Structure" href="http://blue-jay.github.io/structure/">
+	
+	Structure
 </a>
 
 
@@ -307,6 +324,91 @@
 <a  title="Views" href="http://blue-jay.github.io/views/">
 	
 	Views
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Library" href="http://blue-jay.github.io/library/">
+	
+	Library
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Jay Overview" href="http://blue-jay.github.io/jay/">
+	
+	Jay Overview
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Find and Replace" href="http://blue-jay.github.io/find-replace/">
+	
+	Find and Replace
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Database Migration" href="http://blue-jay.github.io/database-migration/">
+	
+	Database Migration
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Code Generation" href="http://blue-jay.github.io/generation/">
+	
+	Code Generation
 </a>
 
 
@@ -450,9 +552,9 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 <h2 id="access-a-session">Access a Session</h2>
 
-<p>Sessions provide access to variables that are set at login as well as flash
-messages. You <strong>must</strong> remember to save the sessions once you make a change to
-// them.</p>
+<p>Sessions provide access to flash messages as well as variables that are set at
+login. You <strong>must</strong> remember to save the sessions once you make a change to
+them.</p>
 
 <pre><code class="language-go">// Get the current session
 sess := session.Instance(r)
@@ -481,8 +583,8 @@ sess.Save(r, w) // Ensure you save the session after making a change to it
 
 <p>The <strong>form</strong> package makes it easy to validate required fields. It works on the
 inputs: text, textarea, checkbox, radio, and select. The function,
-<strong>form.Required()</strong>, requires the request &reg; and then any number of fields
-because it is a variadic function.</p>
+<strong>form.Required()</strong>, requires the request and then any number of fields
+as it is a variadic function.</p>
 
 <pre><code class="language-go">if valid, missingField := form.Required(r, &quot;email&quot;, &quot;password&quot;); !valid {
 	sess.AddFlash(flash.Info{&quot;Field missing: &quot; + missingField, flash.Error})

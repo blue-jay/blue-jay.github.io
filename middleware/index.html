@@ -140,7 +140,7 @@
         </div>
       
       <div class="name">
-        <strong>Blue Jay <span class="version">0.1-alpha</span></strong>
+        <strong>Blue Jay <span class="version">0.5-bravo</span></strong>
         
           <br>
           blue-jay/blueprint
@@ -185,6 +185,23 @@
 <a  title="Toolkit Overview" href="http://blue-jay.github.io/">
 	
 	Toolkit Overview
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Structure" href="http://blue-jay.github.io/structure/">
+	
+	Structure
 </a>
 
 
@@ -314,6 +331,91 @@
 </li>
 
 
+
+<li>
+  
+    
+
+
+
+<a  title="Library" href="http://blue-jay.github.io/library/">
+	
+	Library
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Jay Overview" href="http://blue-jay.github.io/jay/">
+	
+	Jay Overview
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Find and Replace" href="http://blue-jay.github.io/find-replace/">
+	
+	Find and Replace
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Database Migration" href="http://blue-jay.github.io/database-migration/">
+	
+	Database Migration
+</a>
+
+
+  
+</li>
+
+
+
+<li>
+  
+    
+
+
+
+<a  title="Code Generation" href="http://blue-jay.github.io/generation/">
+	
+	Code Generation
+</a>
+
+
+  
+</li>
+
+
         </ul>
         
 
@@ -350,8 +452,8 @@
 
 <p>Middleware, in the context of Go, is applied during routing to provide
 features like request/response logging, access controls lists (ACLs), and
-header modification. Middleware is either applied to every request (for request
-logging) or specified routes (for ACLs).</p>
+header modification. Middleware is either applied to every request (like for
+request logging) or specified routes (like for ACLs).</p>
 
 <p>There are a few pieces of middleware included. The package called <strong>csrfbanana</strong>
 protects against Cross-Site Request Forgery attacks and prevents double submits.
@@ -388,7 +490,7 @@ func Handler(next http.Handler) http.Handler {
 }
 </code></pre>
 
-<p>This is an example of the minimum requirements for middleware:</p>
+<p>This is an example of the minimum code required for middleware:</p>
 
 <pre><code class="language-go">// Handler
 func Handler(next http.Handler) http.Handler {
@@ -402,13 +504,14 @@ func Handler(next http.Handler) http.Handler {
 
 <h2 id="chaining">Chaining</h2>
 
-<p>Chaining prevents middleware from stacking up which is hard to read like this:</p>
+<p>The more middleware you use, the more it stacks up like this and makes it hard
+to read:</p>
 
 <pre><code class="language-go">return context.ClearHandler(rest.Handler(logrequest.Handler(setUpBanana)))
 </code></pre>
 
 <p>Before <a href="https://github.com/justinas/alice">justinas/alice</a>, a workaround was to
-use the variable and reassign it multiple times like this:</p>
+use a variable and reassign it multiple times like this:</p>
 
 <pre><code class="language-go">h = setUpBanana(h)
 h = logrequest.Handler(h)
@@ -416,8 +519,9 @@ h = rest.Handler(h)
 return context.ClearHandler(h)
 </code></pre>
 
-<p>In <a href="https://github.com/blue-jay/blueprint/blob/master/controller/notepad/notepad.go">controller/notepad</a>,
-the application uses the <strong>router.ChainHandler()</strong> function. The function is a wrapper for
+<p>You can see chaining in action in <a href="https://github.com/blue-jay/blueprint/blob/master/controller/notepad/notepad.go">controller/notepad</a>
+where the controller uses the <strong>router.ChainHandler()</strong> function.
+The function is a wrapper for
 the <a href="https://github.com/justinas/alice">justinas/alice</a> package which makes
 using middleware more scalable and a little &ldquo;prettier&rdquo;. If you look at the
 <a href="https://github.com/blue-jay/blueprint/blob/master/bootstrap/bootstrap.go">bootstrap</a>
