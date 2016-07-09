@@ -29,7 +29,7 @@ package.&lt;/p&gt;
 
 &lt;p&gt;One of the first steps before using Blueprint is to create &lt;strong&gt;env.json&lt;/strong&gt;. You can make
 a copy of &lt;strong&gt;env.json.example&lt;/strong&gt; and then name it &lt;strong&gt;env.json&lt;/strong&gt;, just be sure to
-generate a new &lt;strong&gt;AuthKey&lt;/strong&gt; and &lt;strong&gt;EncryptKey&lt;/strong&gt; in the &lt;strong&gt;Session&lt;/strong&gt; section.&lt;/p&gt;
+generate a new &lt;strong&gt;AuthKey&lt;/strong&gt;, &lt;strong&gt;EncryptKey&lt;/strong&gt;, and &lt;strong&gt;CSRFKey&lt;/strong&gt; in the &lt;strong&gt;Session&lt;/strong&gt; section.&lt;/p&gt;
 
 &lt;p&gt;You can also use &lt;strong&gt;jay&lt;/strong&gt; to create the env.json file with new session keys.
 Just CD to the &lt;strong&gt;blueprint&lt;/strong&gt; folder and then run: &lt;code&gt;jay env make&lt;/code&gt;&lt;/p&gt;
@@ -46,10 +46,9 @@ jay env keyshow
 env env keyupdate
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;The &lt;strong&gt;env.json&lt;/strong&gt; file is a
-good place to set variables for the application so you
-don&amp;rsquo;t have to hardcode them. If you want to add any
-of your own settings, you can add them to &lt;strong&gt;env.json&lt;/strong&gt; and update the &lt;strong&gt;Info&lt;/strong&gt; struct
+&lt;p&gt;The &lt;strong&gt;env.json&lt;/strong&gt; file is a good place to set variables for the application so
+you don&amp;rsquo;t have to hardcode them. If you want to add any of your own settings,
+you can add them to &lt;strong&gt;env.json&lt;/strong&gt; and update the &lt;strong&gt;Info&lt;/strong&gt; struct
 in the &lt;strong&gt;bootstrap&lt;/strong&gt; package. Here is an example &lt;strong&gt;env.json&lt;/strong&gt;:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
@@ -89,6 +88,7 @@ in the &lt;strong&gt;bootstrap&lt;/strong&gt; package. Here is an example &lt;st
   &amp;quot;Session&amp;quot;:{
     &amp;quot;AuthKey&amp;quot;:&amp;quot;PzCh6FNAB7/jhmlUQ0+25sjJ+WgcJeKR2bAOtnh9UnfVN+WJSBvY/YC80Rs+rbMtwfmSP4FUSxKPtpYKzKFqFA==&amp;quot;,
     &amp;quot;EncryptKey&amp;quot;:&amp;quot;3oTKCcKjDHMUlV+qur2Ve664SPpSuviyGQ/UqnroUD8=&amp;quot;,
+    &amp;quot;CSRFKey&amp;quot;:&amp;quot;xULAGF5FcWvqHsXaovNFJYfgCt6pedRPROqNvsZjU18=&amp;quot;,
     &amp;quot;Name&amp;quot;:&amp;quot;sess&amp;quot;,
     &amp;quot;Options&amp;quot;:{  
       &amp;quot;Path&amp;quot;:&amp;quot;/&amp;quot;,
@@ -114,6 +114,17 @@ in the &lt;strong&gt;bootstrap&lt;/strong&gt; package. Here is an example &lt;st
   }
 }
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;production&#34;&gt;Production&lt;/h2&gt;
+
+&lt;p&gt;When you move your application to production, you should make the following
+changes:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Set &lt;strong&gt;Server&lt;/strong&gt;.&lt;strong&gt;Hostname&lt;/strong&gt; to the server&lt;/li&gt;
+&lt;li&gt;Generate the tls certs and use HTTPS&lt;/li&gt;
+&lt;li&gt;Set &lt;strong&gt;Session&lt;/strong&gt;.&lt;strong&gt;Secure&lt;/strong&gt; to true&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;h2 id=&#34;configuration-structure&#34;&gt;Configuration Structure&lt;/h2&gt;
 

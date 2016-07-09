@@ -62,7 +62,7 @@ func LoadRoutes() {
 
 &lt;p&gt;There are a few things to note here. The &lt;strong&gt;router&lt;/strong&gt; references the
 &lt;strong&gt;lib/router&lt;/strong&gt; package which is a thread-safe wrapper for the
-&lt;a href=&#34;http://github.com/julienschmidt/httprouter&#34;&gt;julienschmidt/httprouter&lt;/a&gt; package.
+&lt;a href=&#34;http://github.com/husobee/vestigo&#34;&gt;husobee/vestigo&lt;/a&gt; package.
 The &lt;strong&gt;router.Chain()&lt;/strong&gt; function uses the
 &lt;a href=&#34;http://github.com/justinas/alice&#34;&gt;justinas/alice&lt;/a&gt; package
 to help with middleware chaining.&lt;/p&gt;

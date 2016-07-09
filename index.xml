@@ -228,11 +228,11 @@ package.json     - npm configuration that loads Gulp, Boostrap, Underscore.js, e
 &lt;p&gt;There are a few external packages used in Blueprint:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;github.com/gorilla/context              - registry for global request variables
+github.com/gorilla/csrf                 - CSRF protection for gorilla sessions
 github.com/gorilla/sessions             - cookie and filesystem sessions
 github.com/go-sql-driver/mysql          - MySQL driver
+github.com/husobee/vestigo              - HTTP router with wildcards
 github.com/jmoiron/sqlx                 - MySQL general purpose extensions
-github.com/josephspurrier/csrfbanana    - CSRF protection for gorilla sessions
-github.com/julienschmidt/httprouter     - high performance HTTP request router
 github.com/justinas/alice               - middleware chaining
 golang.org/x/crypto/bcrypt              - password hashing algorithm
 &lt;/code&gt;&lt;/pre&gt;
@@ -241,7 +241,7 @@ golang.org/x/crypto/bcrypt              - password hashing algorithm
 
 &lt;p&gt;The project is organized into the following folders:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;env/       - package that creates and updated the env.json config file
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;env/       - package that creates and updates the env.json config file
 find/      - package that finds case-sensitive matched text in files
 generate/  - package that generates code from template pairs
 lib/       - packages with minimum dependencies
@@ -258,8 +258,10 @@ replace/   - package that replaces case-sensitive matched text in files
 
 &lt;p&gt;There are a few external packages used in Jay:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;gopkg.in/alecthomas/kingpin.v2    - command-line and flag parser
-github.com/gorilla/securecookie   - generate random keys for authentication and encryption
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;github.com/gorilla/securecookie   - generate random keys for authentication and encryption
+github.com/go-sql-driver/mysql    - MySQL driver
+github.com/jmoiron/sqlx           - MySQL general purpose extensions
+gopkg.in/alecthomas/kingpin.v2    - command-line and flag parser
 &lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>
@@ -285,7 +287,7 @@ package.&lt;/p&gt;
 
 &lt;p&gt;One of the first steps before using Blueprint is to create &lt;strong&gt;env.json&lt;/strong&gt;. You can make
 a copy of &lt;strong&gt;env.json.example&lt;/strong&gt; and then name it &lt;strong&gt;env.json&lt;/strong&gt;, just be sure to
-generate a new &lt;strong&gt;AuthKey&lt;/strong&gt; and &lt;strong&gt;EncryptKey&lt;/strong&gt; in the &lt;strong&gt;Session&lt;/strong&gt; section.&lt;/p&gt;
+generate a new &lt;strong&gt;AuthKey&lt;/strong&gt;, &lt;strong&gt;EncryptKey&lt;/strong&gt;, and &lt;strong&gt;CSRFKey&lt;/strong&gt; in the &lt;strong&gt;Session&lt;/strong&gt; section.&lt;/p&gt;
 
 &lt;p&gt;You can also use &lt;strong&gt;jay&lt;/strong&gt; to create the env.json file with new session keys.
 Just CD to the &lt;strong&gt;blueprint&lt;/strong&gt; folder and then run: &lt;code&gt;jay env make&lt;/code&gt;&lt;/p&gt;
@@ -302,10 +304,9 @@ jay env keyshow
 env env keyupdate
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;The &lt;strong&gt;env.json&lt;/strong&gt; file is a
-good place to set variables for the application so you
-don&amp;rsquo;t have to hardcode them. If you want to add any
-of your own settings, you can add them to &lt;strong&gt;env.json&lt;/strong&gt; and update the &lt;strong&gt;Info&lt;/strong&gt; struct
+&lt;p&gt;The &lt;strong&gt;env.json&lt;/strong&gt; file is a good place to set variables for the application so
+you don&amp;rsquo;t have to hardcode them. If you want to add any of your own settings,
+you can add them to &lt;strong&gt;env.json&lt;/strong&gt; and update the &lt;strong&gt;Info&lt;/strong&gt; struct
 in the &lt;strong&gt;bootstrap&lt;/strong&gt; package. Here is an example &lt;strong&gt;env.json&lt;/strong&gt;:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
@@ -345,6 +346,7 @@ in the &lt;strong&gt;bootstrap&lt;/strong&gt; package. Here is an example &lt;st
   &amp;quot;Session&amp;quot;:{
     &amp;quot;AuthKey&amp;quot;:&amp;quot;PzCh6FNAB7/jhmlUQ0+25sjJ+WgcJeKR2bAOtnh9UnfVN+WJSBvY/YC80Rs+rbMtwfmSP4FUSxKPtpYKzKFqFA==&amp;quot;,
     &amp;quot;EncryptKey&amp;quot;:&amp;quot;3oTKCcKjDHMUlV+qur2Ve664SPpSuviyGQ/UqnroUD8=&amp;quot;,
+    &amp;quot;CSRFKey&amp;quot;:&amp;quot;xULAGF5FcWvqHsXaovNFJYfgCt6pedRPROqNvsZjU18=&amp;quot;,
     &amp;quot;Name&amp;quot;:&amp;quot;sess&amp;quot;,
     &amp;quot;Options&amp;quot;:{  
       &amp;quot;Path&amp;quot;:&amp;quot;/&amp;quot;,
@@ -370,6 +372,17 @@ in the &lt;strong&gt;bootstrap&lt;/strong&gt; package. Here is an example &lt;st
   }
 }
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;production&#34;&gt;Production&lt;/h2&gt;
+
+&lt;p&gt;When you move your application to production, you should make the following
+changes:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Set &lt;strong&gt;Server&lt;/strong&gt;.&lt;strong&gt;Hostname&lt;/strong&gt; to the server&lt;/li&gt;
+&lt;li&gt;Generate the tls certs and use HTTPS&lt;/li&gt;
+&lt;li&gt;Set &lt;strong&gt;Session&lt;/strong&gt;.&lt;strong&gt;Secure&lt;/strong&gt; to true&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;h2 id=&#34;configuration-structure&#34;&gt;Configuration Structure&lt;/h2&gt;
 
@@ -605,7 +618,7 @@ func LoadRoutes() {
 
 &lt;p&gt;There are a few things to note here. The &lt;strong&gt;router&lt;/strong&gt; references the
 &lt;strong&gt;lib/router&lt;/strong&gt; package which is a thread-safe wrapper for the
-&lt;a href=&#34;http://github.com/julienschmidt/httprouter&#34;&gt;julienschmidt/httprouter&lt;/a&gt; package.
+&lt;a href=&#34;http://github.com/husobee/vestigo&#34;&gt;husobee/vestigo&lt;/a&gt; package.
 The &lt;strong&gt;router.Chain()&lt;/strong&gt; function uses the
 &lt;a href=&#34;http://github.com/justinas/alice&#34;&gt;justinas/alice&lt;/a&gt; package
 to help with middleware chaining.&lt;/p&gt;

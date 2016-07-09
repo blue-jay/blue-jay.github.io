@@ -461,7 +461,7 @@ package.</p>
 
 <p>One of the first steps before using Blueprint is to create <strong>env.json</strong>. You can make
 a copy of <strong>env.json.example</strong> and then name it <strong>env.json</strong>, just be sure to
-generate a new <strong>AuthKey</strong> and <strong>EncryptKey</strong> in the <strong>Session</strong> section.</p>
+generate a new <strong>AuthKey</strong>, <strong>EncryptKey</strong>, and <strong>CSRFKey</strong> in the <strong>Session</strong> section.</p>
 
 <p>You can also use <strong>jay</strong> to create the env.json file with new session keys.
 Just CD to the <strong>blueprint</strong> folder and then run: <code>jay env make</code></p>
@@ -478,10 +478,9 @@ jay env keyshow
 env env keyupdate
 </code></pre>
 
-<p>The <strong>env.json</strong> file is a
-good place to set variables for the application so you
-don&rsquo;t have to hardcode them. If you want to add any
-of your own settings, you can add them to <strong>env.json</strong> and update the <strong>Info</strong> struct
+<p>The <strong>env.json</strong> file is a good place to set variables for the application so
+you don&rsquo;t have to hardcode them. If you want to add any of your own settings,
+you can add them to <strong>env.json</strong> and update the <strong>Info</strong> struct
 in the <strong>bootstrap</strong> package. Here is an example <strong>env.json</strong>:</p>
 
 <pre><code class="language-json">{
@@ -521,6 +520,7 @@ in the <strong>bootstrap</strong> package. Here is an example <strong>env.json</
   &quot;Session&quot;:{
     &quot;AuthKey&quot;:&quot;PzCh6FNAB7/jhmlUQ0+25sjJ+WgcJeKR2bAOtnh9UnfVN+WJSBvY/YC80Rs+rbMtwfmSP4FUSxKPtpYKzKFqFA==&quot;,
     &quot;EncryptKey&quot;:&quot;3oTKCcKjDHMUlV+qur2Ve664SPpSuviyGQ/UqnroUD8=&quot;,
+    &quot;CSRFKey&quot;:&quot;xULAGF5FcWvqHsXaovNFJYfgCt6pedRPROqNvsZjU18=&quot;,
     &quot;Name&quot;:&quot;sess&quot;,
     &quot;Options&quot;:{  
       &quot;Path&quot;:&quot;/&quot;,
@@ -546,6 +546,17 @@ in the <strong>bootstrap</strong> package. Here is an example <strong>env.json</
   }
 }
 </code></pre>
+
+<h2 id="production">Production</h2>
+
+<p>When you move your application to production, you should make the following
+changes:</p>
+
+<ul>
+<li>Set <strong>Server</strong>.<strong>Hostname</strong> to the server</li>
+<li>Generate the tls certs and use HTTPS</li>
+<li>Set <strong>Session</strong>.<strong>Secure</strong> to true</li>
+</ul>
 
 <h2 id="configuration-structure">Configuration Structure</h2>
 
