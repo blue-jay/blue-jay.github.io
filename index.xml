@@ -258,8 +258,7 @@ replace/   - package that replaces case-sensitive matched text in files
 
 &lt;p&gt;There are a few external packages used in Jay:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;github.com/gorilla/securecookie   - generate random keys for authentication and encryption
-github.com/go-sql-driver/mysql    - MySQL driver
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;github.com/go-sql-driver/mysql    - MySQL driver
 github.com/jmoiron/sqlx           - MySQL general purpose extensions
 gopkg.in/alecthomas/kingpin.v2    - command-line and flag parser
 &lt;/code&gt;&lt;/pre&gt;
