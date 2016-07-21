@@ -122,7 +122,8 @@ changes:&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Set &lt;strong&gt;Server&lt;/strong&gt;.&lt;strong&gt;Hostname&lt;/strong&gt; to the server&lt;/li&gt;
-&lt;li&gt;Generate the tls certs and use HTTPS&lt;/li&gt;
+&lt;li&gt;Set &lt;strong&gt;Server&lt;/strong&gt;.&lt;strong&gt;UseHTTPS&lt;/strong&gt; to true&lt;/li&gt;
+&lt;li&gt;Generate a certificate and key for HTTPS and place in the &lt;strong&gt;tls&lt;/strong&gt; folder&lt;/li&gt;
 &lt;li&gt;Set &lt;strong&gt;Session&lt;/strong&gt;.&lt;strong&gt;Secure&lt;/strong&gt; to true&lt;/li&gt;
 &lt;/ul&gt;
 
@@ -148,13 +149,13 @@ type Info struct {
 &lt;p&gt;The &lt;strong&gt;Info&lt;/strong&gt; struct is simply a container that nests structs from packages in the &lt;strong&gt;lib&lt;/strong&gt; folder
 that need variables configured. Here is a list mapping the JSON keys to structs:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;Asset       - Info struct in lib/asset
-Database	- Info struct in lib/database
-Email		- Info struct in lib/email
-Server		- Info struct in lib/server
-Session		- Info struct in lib/session
-Template	- Template struct in lib/view
-View		- Info struct in lib/view
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;Asset     - Info struct in lib/asset
+Database  - Info struct in lib/database
+Email     - Info struct in lib/email
+Server    - Info struct in lib/server
+Session   - Info struct in lib/session
+Template  - Template struct in lib/view
+View      - Info struct in lib/view
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;enable-https&#34;&gt;Enable HTTPS&lt;/h2&gt;

@@ -503,7 +503,7 @@ CRUD.</p>
 <ol>
 <li>To download Blueprint, run the following command: <code>go get github.com/blue-jay/blueprint</code></li>
 <li>To download Jay, run the following command: <code>go get github.com/blue-jay/jay</code></li>
-<li>Open your terminal and CD to the <strong>blueprint</strong> folder.</li>
+<li>In your terminal, CD to the <strong>blueprint</strong> folder.</li>
 <li>Run this command to create the env.json file from env.json.example: <code>jay env make</code></li>
 <li>Set the environment variable, JAYCONFIG, to the env.json file path. For example:
 
@@ -514,11 +514,20 @@ CRUD.</p>
 <li>Start a MySQL instance.</li>
 <li>Edit the <strong>Database</strong> section of env.json to match your database login information.</li>
 <li>Create the database and tables using the command: <code>jay migrate all</code></li>
-<li>Run the application using the command: <code>go run blueprint.go</code></li>
+<li>Run the application: <code>go run blueprint.go</code></li>
 <li>Open your web browser to <a href="http://localhost">http://localhost</a> and you should see the welcome page.</li>
 <li>Navigate to the register page at <a href="http://localhost/register">http://localhost/register</a> and create a new user.</li>
 <li>You can now login at <a href="http://localhost/login">http://localhost/login</a>.</li>
 </ol>
+
+<h3 id="os-specific-instructions">OS Specific Instructions</h3>
+
+<p>There are also more detailed guides available by operating system:</p>
+
+<ul>
+<li><a href="https://github.com/blue-jay/blueprint/wiki/Blueprint-Setup-for-Windows">Setup for Windows</a></li>
+<li><a href="https://github.com/blue-jay/blueprint/wiki/Blueprint-Setup-for-OS-X">Setup for OS X</a></li>
+</ul>
 
 <h2 id="quick-start-website-without-jay">Quick Start Website without Jay</h2>
 
@@ -527,9 +536,16 @@ CRUD.</p>
 <li>Start a MySQL instance.</li>
 <li>Make a copy of env.json.example and name it: <strong>env.json</strong></li>
 <li>Edit the <strong>Database</strong> section in <strong>env.json</strong> so the connection information matches your MySQL instance.</li>
-<li>Create a database called <strong>blueprint</strong>.</li>
-<li>Import <strong>database/migration/20160630_020000_a.up.sql</strong> to create the tables.</li>
-<li>Open your terminal and CD to the <strong>blueprint</strong> folder.</li>
+<li>In the <strong>Session</strong> section, you should generate new passwords for the following keys:
+
+<ul>
+<li>AuthKey should be a 64 byte password and then base64 encoded</li>
+<li>EncryptKey should be a 32 byte password and then base64 encoded</li>
+<li>CSRFKey should be a 32 byte password and then base64 encoded</li>
+</ul></li>
+<li>Create a database called <strong>blueprint</strong> in MySQL.</li>
+<li>Import <strong>database/migration/20160630_020000.000000_init.up.sql</strong> to create the tables.</li>
+<li>In your terminal, CD to the <strong>blueprint</strong> folder.</li>
 <li>Run the application using the command: <code>go run blueprint.go</code></li>
 <li>Open your web browser to <a href="http://localhost">http://localhost</a> and you should see the welcome page.</li>
 <li>Navigate to the register page at <a href="http://localhost/register">http://localhost/register</a> and create a new user.</li>

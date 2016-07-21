@@ -712,19 +712,26 @@ package to see how it was accomplished.</p>
 request to the server. In order for us to make our application more RESTful, we
 can use utilize the simple
 <a href="https://github.com/blue-jay/blueprint/blob/master/middleware/rest/rest.go"><strong>rest</strong></a>
-package to change the HTTP method from a form field. The <strong>rest</strong> middleware is
+package to change the HTTP method from a URL query string. The <strong>rest</strong> middleware is
 already applied to every request in the <strong>bootstrap</strong> package.</p>
 
-<p>To change the method, add this line to your form and change <strong>value</strong> to match
- a method like <strong>DELETE</strong> or <strong>PATCH</strong>.</p>
+<p>To change the method, add this line to your form action and change the value
+<strong>value</strong> to match a method like <strong>DELETE</strong> or <strong>PATCH</strong>. It will automatically
+be converted to uppercase.</p>
 
-<pre><code class="language-html">&lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;POST&quot;&gt;
+<p>The query string key should be: <strong>_method</strong>.</p>
+
+<pre><code class="language-html">&lt;!-- Example of a PATCH request --&gt;
+&lt;form method=&quot;post&quot; action=&quot;{{$.CurrentURI}}?_method=patch&quot;&gt;
+
+&lt;!-- Example of a DELETE request --&gt;
+&lt;form class=&quot;button-form&quot; method=&quot;post&quot; action=&quot;{{$.GrandparentURI}}/{{.item.ID}}?_method=delete&quot;&gt;
 </code></pre>
 
 <p>This is an example of a form that is updating and email and a password using the
 PATCH HTTP method:</p>
 
-<pre><code class="language-html">&lt;form method=&quot;post&quot;&gt;
+<pre><code class="language-html">&lt;form method=&quot;post&quot; action=&quot;{{$.CurrentURI}}?_method=patch&quot;&gt;
 	&lt;div class=&quot;form-group&quot;&gt;
 		&lt;label for=&quot;email&quot;&gt;Email Address&lt;/label&gt;
 		&lt;div&gt;&lt;input {{TEXT &quot;email&quot; .}} type=&quot;email&quot; class=&quot;form-control&quot; id=&quot;email&quot; /&gt;&lt;/div&gt;
@@ -738,7 +745,6 @@ PATCH HTTP method:</p>
 	&lt;input type=&quot;submit&quot; class=&quot;btn btn-primary&quot; value=&quot;Change&quot; class=&quot;button&quot; /&gt;
 	
 	&lt;input type=&quot;hidden&quot; name=&quot;_token&quot; value=&quot;{{$.token}}&quot;&gt;
-	&lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;PATCH&quot;&gt;
 &lt;/form&gt;
 </code></pre>
 

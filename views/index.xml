@@ -281,19 +281,26 @@ package to see how it was accomplished.&lt;/p&gt;
 request to the server. In order for us to make our application more RESTful, we
 can use utilize the simple
 &lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/middleware/rest/rest.go&#34;&gt;&lt;strong&gt;rest&lt;/strong&gt;&lt;/a&gt;
-package to change the HTTP method from a form field. The &lt;strong&gt;rest&lt;/strong&gt; middleware is
+package to change the HTTP method from a URL query string. The &lt;strong&gt;rest&lt;/strong&gt; middleware is
 already applied to every request in the &lt;strong&gt;bootstrap&lt;/strong&gt; package.&lt;/p&gt;
 
-&lt;p&gt;To change the method, add this line to your form and change &lt;strong&gt;value&lt;/strong&gt; to match
- a method like &lt;strong&gt;DELETE&lt;/strong&gt; or &lt;strong&gt;PATCH&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;To change the method, add this line to your form action and change the value
+&lt;strong&gt;value&lt;/strong&gt; to match a method like &lt;strong&gt;DELETE&lt;/strong&gt; or &lt;strong&gt;PATCH&lt;/strong&gt;. It will automatically
+be converted to uppercase.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;input type=&amp;quot;hidden&amp;quot; name=&amp;quot;_method&amp;quot; value=&amp;quot;POST&amp;quot;&amp;gt;
+&lt;p&gt;The query string key should be: &lt;strong&gt;_method&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;!-- Example of a PATCH request --&amp;gt;
+&amp;lt;form method=&amp;quot;post&amp;quot; action=&amp;quot;{{$.CurrentURI}}?_method=patch&amp;quot;&amp;gt;
+
+&amp;lt;!-- Example of a DELETE request --&amp;gt;
+&amp;lt;form class=&amp;quot;button-form&amp;quot; method=&amp;quot;post&amp;quot; action=&amp;quot;{{$.GrandparentURI}}/{{.item.ID}}?_method=delete&amp;quot;&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;This is an example of a form that is updating and email and a password using the
 PATCH HTTP method:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;form method=&amp;quot;post&amp;quot;&amp;gt;
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;form method=&amp;quot;post&amp;quot; action=&amp;quot;{{$.CurrentURI}}?_method=patch&amp;quot;&amp;gt;
 	&amp;lt;div class=&amp;quot;form-group&amp;quot;&amp;gt;
 		&amp;lt;label for=&amp;quot;email&amp;quot;&amp;gt;Email Address&amp;lt;/label&amp;gt;
 		&amp;lt;div&amp;gt;&amp;lt;input {{TEXT &amp;quot;email&amp;quot; .}} type=&amp;quot;email&amp;quot; class=&amp;quot;form-control&amp;quot; id=&amp;quot;email&amp;quot; /&amp;gt;&amp;lt;/div&amp;gt;
@@ -307,7 +314,6 @@ PATCH HTTP method:&lt;/p&gt;
 	&amp;lt;input type=&amp;quot;submit&amp;quot; class=&amp;quot;btn btn-primary&amp;quot; value=&amp;quot;Change&amp;quot; class=&amp;quot;button&amp;quot; /&amp;gt;
 	
 	&amp;lt;input type=&amp;quot;hidden&amp;quot; name=&amp;quot;_token&amp;quot; value=&amp;quot;{{$.token}}&amp;quot;&amp;gt;
-	&amp;lt;input type=&amp;quot;hidden&amp;quot; name=&amp;quot;_method&amp;quot; value=&amp;quot;PATCH&amp;quot;&amp;gt;
 &amp;lt;/form&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 

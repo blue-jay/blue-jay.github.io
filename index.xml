@@ -67,7 +67,7 @@ CRUD.&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;To download Blueprint, run the following command: &lt;code&gt;go get github.com/blue-jay/blueprint&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;To download Jay, run the following command: &lt;code&gt;go get github.com/blue-jay/jay&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Open your terminal and CD to the &lt;strong&gt;blueprint&lt;/strong&gt; folder.&lt;/li&gt;
+&lt;li&gt;In your terminal, CD to the &lt;strong&gt;blueprint&lt;/strong&gt; folder.&lt;/li&gt;
 &lt;li&gt;Run this command to create the env.json file from env.json.example: &lt;code&gt;jay env make&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;Set the environment variable, JAYCONFIG, to the env.json file path. For example:
 
@@ -78,11 +78,20 @@ CRUD.&lt;/p&gt;
 &lt;li&gt;Start a MySQL instance.&lt;/li&gt;
 &lt;li&gt;Edit the &lt;strong&gt;Database&lt;/strong&gt; section of env.json to match your database login information.&lt;/li&gt;
 &lt;li&gt;Create the database and tables using the command: &lt;code&gt;jay migrate all&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Run the application using the command: &lt;code&gt;go run blueprint.go&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Run the application: &lt;code&gt;go run blueprint.go&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;Open your web browser to &lt;a href=&#34;http://localhost&#34;&gt;http://localhost&lt;/a&gt; and you should see the welcome page.&lt;/li&gt;
 &lt;li&gt;Navigate to the register page at &lt;a href=&#34;http://localhost/register&#34;&gt;http://localhost/register&lt;/a&gt; and create a new user.&lt;/li&gt;
 &lt;li&gt;You can now login at &lt;a href=&#34;http://localhost/login&#34;&gt;http://localhost/login&lt;/a&gt;.&lt;/li&gt;
 &lt;/ol&gt;
+
+&lt;h3 id=&#34;os-specific-instructions&#34;&gt;OS Specific Instructions&lt;/h3&gt;
+
+&lt;p&gt;There are also more detailed guides available by operating system:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint/wiki/Blueprint-Setup-for-Windows&#34;&gt;Setup for Windows&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint/wiki/Blueprint-Setup-for-OS-X&#34;&gt;Setup for OS X&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;h2 id=&#34;quick-start-website-without-jay&#34;&gt;Quick Start Website without Jay&lt;/h2&gt;
 
@@ -91,9 +100,16 @@ CRUD.&lt;/p&gt;
 &lt;li&gt;Start a MySQL instance.&lt;/li&gt;
 &lt;li&gt;Make a copy of env.json.example and name it: &lt;strong&gt;env.json&lt;/strong&gt;&lt;/li&gt;
 &lt;li&gt;Edit the &lt;strong&gt;Database&lt;/strong&gt; section in &lt;strong&gt;env.json&lt;/strong&gt; so the connection information matches your MySQL instance.&lt;/li&gt;
-&lt;li&gt;Create a database called &lt;strong&gt;blueprint&lt;/strong&gt;.&lt;/li&gt;
-&lt;li&gt;Import &lt;strong&gt;database/migration/20160630_020000_a.up.sql&lt;/strong&gt; to create the tables.&lt;/li&gt;
-&lt;li&gt;Open your terminal and CD to the &lt;strong&gt;blueprint&lt;/strong&gt; folder.&lt;/li&gt;
+&lt;li&gt;In the &lt;strong&gt;Session&lt;/strong&gt; section, you should generate new passwords for the following keys:
+
+&lt;ul&gt;
+&lt;li&gt;AuthKey should be a 64 byte password and then base64 encoded&lt;/li&gt;
+&lt;li&gt;EncryptKey should be a 32 byte password and then base64 encoded&lt;/li&gt;
+&lt;li&gt;CSRFKey should be a 32 byte password and then base64 encoded&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Create a database called &lt;strong&gt;blueprint&lt;/strong&gt; in MySQL.&lt;/li&gt;
+&lt;li&gt;Import &lt;strong&gt;database/migration/20160630_020000.000000_init.up.sql&lt;/strong&gt; to create the tables.&lt;/li&gt;
+&lt;li&gt;In your terminal, CD to the &lt;strong&gt;blueprint&lt;/strong&gt; folder.&lt;/li&gt;
 &lt;li&gt;Run the application using the command: &lt;code&gt;go run blueprint.go&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;Open your web browser to &lt;a href=&#34;http://localhost&#34;&gt;http://localhost&lt;/a&gt; and you should see the welcome page.&lt;/li&gt;
 &lt;li&gt;Navigate to the register page at &lt;a href=&#34;http://localhost/register&#34;&gt;http://localhost/register&lt;/a&gt; and create a new user.&lt;/li&gt;
@@ -379,7 +395,8 @@ changes:&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Set &lt;strong&gt;Server&lt;/strong&gt;.&lt;strong&gt;Hostname&lt;/strong&gt; to the server&lt;/li&gt;
-&lt;li&gt;Generate the tls certs and use HTTPS&lt;/li&gt;
+&lt;li&gt;Set &lt;strong&gt;Server&lt;/strong&gt;.&lt;strong&gt;UseHTTPS&lt;/strong&gt; to true&lt;/li&gt;
+&lt;li&gt;Generate a certificate and key for HTTPS and place in the &lt;strong&gt;tls&lt;/strong&gt; folder&lt;/li&gt;
 &lt;li&gt;Set &lt;strong&gt;Session&lt;/strong&gt;.&lt;strong&gt;Secure&lt;/strong&gt; to true&lt;/li&gt;
 &lt;/ul&gt;
 
@@ -405,13 +422,13 @@ type Info struct {
 &lt;p&gt;The &lt;strong&gt;Info&lt;/strong&gt; struct is simply a container that nests structs from packages in the &lt;strong&gt;lib&lt;/strong&gt; folder
 that need variables configured. Here is a list mapping the JSON keys to structs:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;Asset       - Info struct in lib/asset
-Database	- Info struct in lib/database
-Email		- Info struct in lib/email
-Server		- Info struct in lib/server
-Session		- Info struct in lib/session
-Template	- Template struct in lib/view
-View		- Info struct in lib/view
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;Asset     - Info struct in lib/asset
+Database  - Info struct in lib/database
+Email     - Info struct in lib/email
+Server    - Info struct in lib/server
+Session   - Info struct in lib/session
+Template  - Template struct in lib/view
+View      - Info struct in lib/view
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;enable-https&#34;&gt;Enable HTTPS&lt;/h2&gt;
@@ -729,8 +746,8 @@ features like request/response logging, access controls lists (ACLs), and
 header modification. Middleware is either applied to every request (like for
 request logging) or specified routes (like for ACLs).&lt;/p&gt;
 
-&lt;p&gt;There are a few pieces of middleware included. The package called &lt;strong&gt;csrfbanana&lt;/strong&gt;
-protects against Cross-Site Request Forgery attacks and prevents double submits.
+&lt;p&gt;There are a few pieces of middleware included. The package called &lt;strong&gt;csrf&lt;/strong&gt;
+protects against Cross-Site Request Forgery attacks.
 The &lt;strong&gt;logrequest&lt;/strong&gt; package will log every request made against the
 website to the console. The &lt;strong&gt;rest&lt;/strong&gt; package allows the HTTP method to be
 changed during a form submission to DELETE or PATCH instead of POST.&lt;/p&gt;
@@ -781,13 +798,13 @@ func Handler(next http.Handler) http.Handler {
 &lt;p&gt;The more middleware you use, the more it stacks up like this and makes it hard
 to read:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;return context.ClearHandler(rest.Handler(logrequest.Handler(setUpBanana)))
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;return context.ClearHandler(rest.Handler(logrequest.Handler(setUpCSRF)))
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Before &lt;a href=&#34;https://github.com/justinas/alice&#34;&gt;justinas/alice&lt;/a&gt;, a workaround was to
 use a variable and reassign it multiple times like this:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;h = setUpBanana(h)
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;h = setUpCSRF(h)
 h = logrequest.Handler(h)
 h = rest.Handler(h)
 return context.ClearHandler(h)
@@ -815,10 +832,11 @@ router.Get(&amp;quot;/notepad/create&amp;quot;, Create, c...)
 // Pass Chain() to ChainHandler()
 c := router.Chain( // Chain middleware, bottom runs first
     h,                    // Handler to wrap
-    context.ClearHandler, // Clear handler for Gorilla Context
-    rest.Handler,         // Support changing HTTP method sent via form input
+    setUpCSRF,            // Prevent CSRF
+    rest.Handler,         // Support changing HTTP method sent via query string
     logrequest.Handler,   // Log every request
-    setUpBanana)          // Prevent CSRF and double submits
+    context.ClearHandler, // Prevent memory leak with gorilla.sessions
+)
 return router.ChainHandler(c...)
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -839,13 +857,13 @@ request.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// SetUpMiddleware contains the middleware that applies to every request.
 func SetUpMiddleware(h http.Handler) http.Handler {
-    return router.ChainHandler( // Chain middleware, bottom runs first
+    return router.ChainHandler( // Chain middleware, top middlware runs first
         h,                    // Handler to wrap
-        context.ClearHandler, // Clear handler for Gorilla Context
-        rest.Handler,         // Support changing HTTP method sent via form input
+        setUpCSRF,            // Prevent CSRF
+        rest.Handler,         // Support changing HTTP method sent via query string
         logrequest.Handler,   // Log every request
-        setUpBanana)          // Prevent CSRF and double submits
-}
+        context.ClearHandler, // Prevent memory leak with gorilla.sessions
+    )
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;apply-to-specific-routes&#34;&gt;Apply to Specific Routes&lt;/h2&gt;
@@ -1664,19 +1682,26 @@ package to see how it was accomplished.&lt;/p&gt;
 request to the server. In order for us to make our application more RESTful, we
 can use utilize the simple
 &lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/middleware/rest/rest.go&#34;&gt;&lt;strong&gt;rest&lt;/strong&gt;&lt;/a&gt;
-package to change the HTTP method from a form field. The &lt;strong&gt;rest&lt;/strong&gt; middleware is
+package to change the HTTP method from a URL query string. The &lt;strong&gt;rest&lt;/strong&gt; middleware is
 already applied to every request in the &lt;strong&gt;bootstrap&lt;/strong&gt; package.&lt;/p&gt;
 
-&lt;p&gt;To change the method, add this line to your form and change &lt;strong&gt;value&lt;/strong&gt; to match
- a method like &lt;strong&gt;DELETE&lt;/strong&gt; or &lt;strong&gt;PATCH&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;To change the method, add this line to your form action and change the value
+&lt;strong&gt;value&lt;/strong&gt; to match a method like &lt;strong&gt;DELETE&lt;/strong&gt; or &lt;strong&gt;PATCH&lt;/strong&gt;. It will automatically
+be converted to uppercase.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;input type=&amp;quot;hidden&amp;quot; name=&amp;quot;_method&amp;quot; value=&amp;quot;POST&amp;quot;&amp;gt;
+&lt;p&gt;The query string key should be: &lt;strong&gt;_method&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;!-- Example of a PATCH request --&amp;gt;
+&amp;lt;form method=&amp;quot;post&amp;quot; action=&amp;quot;{{$.CurrentURI}}?_method=patch&amp;quot;&amp;gt;
+
+&amp;lt;!-- Example of a DELETE request --&amp;gt;
+&amp;lt;form class=&amp;quot;button-form&amp;quot; method=&amp;quot;post&amp;quot; action=&amp;quot;{{$.GrandparentURI}}/{{.item.ID}}?_method=delete&amp;quot;&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;This is an example of a form that is updating and email and a password using the
 PATCH HTTP method:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;form method=&amp;quot;post&amp;quot;&amp;gt;
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;form method=&amp;quot;post&amp;quot; action=&amp;quot;{{$.CurrentURI}}?_method=patch&amp;quot;&amp;gt;
 	&amp;lt;div class=&amp;quot;form-group&amp;quot;&amp;gt;
 		&amp;lt;label for=&amp;quot;email&amp;quot;&amp;gt;Email Address&amp;lt;/label&amp;gt;
 		&amp;lt;div&amp;gt;&amp;lt;input {{TEXT &amp;quot;email&amp;quot; .}} type=&amp;quot;email&amp;quot; class=&amp;quot;form-control&amp;quot; id=&amp;quot;email&amp;quot; /&amp;gt;&amp;lt;/div&amp;gt;
@@ -1690,7 +1715,6 @@ PATCH HTTP method:&lt;/p&gt;
 	&amp;lt;input type=&amp;quot;submit&amp;quot; class=&amp;quot;btn btn-primary&amp;quot; value=&amp;quot;Change&amp;quot; class=&amp;quot;button&amp;quot; /&amp;gt;
 	
 	&amp;lt;input type=&amp;quot;hidden&amp;quot; name=&amp;quot;_token&amp;quot; value=&amp;quot;{{$.token}}&amp;quot;&amp;gt;
-	&amp;lt;input type=&amp;quot;hidden&amp;quot; name=&amp;quot;_method&amp;quot; value=&amp;quot;PATCH&amp;quot;&amp;gt;
 &amp;lt;/form&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 

@@ -554,7 +554,8 @@ changes:</p>
 
 <ul>
 <li>Set <strong>Server</strong>.<strong>Hostname</strong> to the server</li>
-<li>Generate the tls certs and use HTTPS</li>
+<li>Set <strong>Server</strong>.<strong>UseHTTPS</strong> to true</li>
+<li>Generate a certificate and key for HTTPS and place in the <strong>tls</strong> folder</li>
 <li>Set <strong>Session</strong>.<strong>Secure</strong> to true</li>
 </ul>
 
@@ -580,13 +581,13 @@ type Info struct {
 <p>The <strong>Info</strong> struct is simply a container that nests structs from packages in the <strong>lib</strong> folder
 that need variables configured. Here is a list mapping the JSON keys to structs:</p>
 
-<pre><code class="language-text">Asset       - Info struct in lib/asset
-Database	- Info struct in lib/database
-Email		- Info struct in lib/email
-Server		- Info struct in lib/server
-Session		- Info struct in lib/session
-Template	- Template struct in lib/view
-View		- Info struct in lib/view
+<pre><code class="language-text">Asset     - Info struct in lib/asset
+Database  - Info struct in lib/database
+Email     - Info struct in lib/email
+Server    - Info struct in lib/server
+Session   - Info struct in lib/session
+Template  - Template struct in lib/view
+View      - Info struct in lib/view
 </code></pre>
 
 <h2 id="enable-https">Enable HTTPS</h2>
