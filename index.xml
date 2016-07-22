@@ -89,8 +89,10 @@ CRUD.&lt;/p&gt;
 &lt;p&gt;There are also more detailed guides available by operating system:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint/wiki/Blueprint-Setup-for-Windows&#34;&gt;Setup for Windows&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint/wiki/Blueprint-Setup-for-Amazon-AMI&#34;&gt;Setup for Amazon AMI&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint/wiki/Blueprint-Setup-for-Ubuntu-AMI&#34;&gt;Setup for Ubuntu AMI&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint/wiki/Blueprint-Setup-for-OS-X&#34;&gt;Setup for OS X&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint/wiki/Blueprint-Setup-for-Windows&#34;&gt;Setup for Windows&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&#34;quick-start-website-without-jay&#34;&gt;Quick Start Website without Jay&lt;/h2&gt;
