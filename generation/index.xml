@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Generations on Blue Jay</title>
+    <title>Generations on Blue Jay | Go Toolkit for the Web</title>
     <link>http://blue-jay.github.io/generation/</link>
-    <description>Recent content in Generations on Blue Jay</description>
+    <description>Recent content in Generations on Blue Jay | Go Toolkit for the Web</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <atom:link href="http://blue-jay.github.io/generation/index.xml" rel="self" type="application/rss+xml" />
