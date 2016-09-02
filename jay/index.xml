@@ -47,7 +47,7 @@ If you are still having problems, check out the
 &lt;li&gt;&lt;code&gt;jay find&lt;/code&gt; for locating text inside files in subfolders&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;jay replace&lt;/code&gt; for replacing text inside files in subfolder&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;jay generate&lt;/code&gt; for creating code based on templates using the &lt;strong&gt;text/template&lt;/strong&gt; package&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;jay migrate&lt;/code&gt; for managing the database state&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;jay migrate:mysql&lt;/code&gt; for managing the MySQL database state&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;The available subcommands are:&lt;/p&gt;
@@ -56,13 +56,13 @@ If you are still having problems, check out the
 &lt;li&gt;&lt;code&gt;jay env make&lt;/code&gt; for creating env.json from env.json.example&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;jay env keyshow&lt;/code&gt; for showing newly generated session keys&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;jay env updateshow&lt;/code&gt; for updating env.json with newly generation session keys&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;jay migrate make&lt;/code&gt; for creating a new migration &amp;lsquo;up&amp;rsquo; file and &amp;lsquo;down&amp;rsquo; file&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;jay migrate all&lt;/code&gt; for applying all &amp;lsquo;up&amp;rsquo; migrations&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;jay migrate reset&lt;/code&gt; for applying all &amp;lsquo;down&amp;rsquo; migrations&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;jay migrate refresh&lt;/code&gt; for applying all &amp;lsquo;down&amp;rsquo; then &amp;lsquo;up&amp;rsquo; migrations&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;jay migrate status&lt;/code&gt; for displaying the current database state&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;jay migrate up&lt;/code&gt; for applying only one &amp;lsquo;up&amp;rsquo; migration&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;jay migrate down&lt;/code&gt; for applying one one &amp;lsquo;down&amp;rsquo; migration&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;jay migrate:mysql make&lt;/code&gt; for creating a new migration &amp;lsquo;up&amp;rsquo; file and &amp;lsquo;down&amp;rsquo; file&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;jay migrate:mysql all&lt;/code&gt; for applying all &amp;lsquo;up&amp;rsquo; migrations&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;jay migrate:mysql reset&lt;/code&gt; for applying all &amp;lsquo;down&amp;rsquo; migrations&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;jay migrate:mysql refresh&lt;/code&gt; for applying all &amp;lsquo;down&amp;rsquo; then &amp;lsquo;up&amp;rsquo; migrations&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;jay migrate:mysql status&lt;/code&gt; for displaying the current database state&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;jay migrate:mysql up&lt;/code&gt; for applying only one &amp;lsquo;up&amp;rsquo; migration&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;jay migrate:mysql down&lt;/code&gt; for applying one one &amp;lsquo;down&amp;rsquo; migration&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;There is also a common syntax used by each of the commands, subcommands, and
@@ -70,9 +70,9 @@ arguments that make the help documents easy to follow.&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Flags have one or two dashes in the front: &lt;code&gt;-h, --help&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Commands follow the application name (jay): &lt;code&gt;jay migrate&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Subcommands follow the command: &lt;code&gt;jay migrate make&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Arguments follow the command or subcommand: &lt;code&gt;jay migrate make &amp;lt;description&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Commands follow the application name (jay): &lt;code&gt;jay migrate:mysql&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Subcommands follow the command: &lt;code&gt;jay migrate:mysql make&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Arguments follow the command or subcommand: &lt;code&gt;jay migrate:mysql make &amp;lt;description&amp;gt;&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;Required arguments: &lt;code&gt;&amp;lt;required&amp;gt;&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;Optional arguments: &lt;code&gt;[&amp;lt;optional&amp;gt;]&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;

@@ -462,7 +462,7 @@ JAYCONFIG, to point to the env.json file path. The <strong>database</strong> fol
 containing the <strong>migration</strong> folder must also be in the same folder.</p>
 
 <p>When you start using <strong>Blueprint</strong> you&rsquo;ll see two migration files already exist
-in the <strong>database/migration</strong> folder:</p>
+in the <strong>database/mysql</strong> folder:</p>
 
 <ul>
 <li>20160630_020000.000000_init.up.sql - adds the initial tables and data</li>
@@ -472,13 +472,13 @@ in the <strong>database/migration</strong> folder:</p>
 <p><strong>Jay</strong> provides a few commands to make the migrations easier. Here is a list
 of the commands:</p>
 
-<pre><code class="language-bash">jay migrate make &quot;test&quot; # Create new migration
-jay migrate all         # Advance all migrations
-jay migrate reset       # Rollback all migrations
-jay migrate refresh     # Rollback all migrations then advance all migrations
-jay migrate status      # See last 'up' migration
-jay migrate up          # Apply only the next 'up' migration
-jay migrate down        # Apply only the current 'down' migration
+<pre><code class="language-bash">jay migrate:mysql make &quot;test&quot; # Create new migration
+jay migrate:mysql all         # Advance all migrations
+jay migrate:mysql reset       # Rollback all migrations
+jay migrate:mysql refresh     # Rollback all migrations then advance all migrations
+jay migrate:mysql status      # See last 'up' migration
+jay migrate:mysql up          # Apply only the next 'up' migration
+jay migrate:mysql down        # Apply only the current 'down' migration
 </code></pre>
 
 <h2 id="workflow">Workflow</h2>
@@ -487,7 +487,7 @@ jay migrate down        # Apply only the current 'down' migration
 root of a git repository. Developer Joe needs to add a feature to the
 application to store books. Joe creates a new branch called feature-store-books.
 He needs to create a new table called <strong>book</strong> so he creates a new database
-migration: <code>jay migrate make &quot;feature-store-books&quot;</code>. He opens the &lsquo;up&rsquo; file
+migration: <code>jay migrate:mysql make &quot;feature-store-books&quot;</code>. He opens the &lsquo;up&rsquo; file
 and adds the SQL query to create a new table with the following columns: title,
 author, and publication_date. In the &lsquo;down&rsquo; file, he writes the code to drop the
 table. He also writes the code to create, read, update, and
@@ -495,26 +495,26 @@ delete the books in his Go code and then performs a <code>git merge</code> and t
 <code>git push</code>. Developer Steve needs to add an additional column to the
 <strong>book</strong> table called: publisher. Steve performs a <code>git pull</code> to download the
 latest code from the repository. In order to update his local database to the
-latest version of code, runs: <code>jay migrate all</code>. Then, Steve creates a new
-migration for the new requirement: <code>jay migrate make &quot;feature-add-publisher&quot;</code>.
+latest version of code, runs: <code>jay migrate:mysql all</code>. Then, Steve creates a new
+migration for the new requirement: <code>jay migrate:mysql make &quot;feature-add-publisher&quot;</code>.
 Steve adds the SQL <code>ADD COLUMN</code> code to the new &lsquo;up&rsquo; file and the SQL
 <code>DROP COLUMN</code> code to the new &lsquo;down&rsquo; file and then performs a <code>git merge</code> and a
 <code>git push</code> again.</p>
 
 <h2 id="migrate-make">migrate make</h2>
 
-<p>The <code>jay migrate make [description]</code> command create a new &lsquo;up&rsquo; and &lsquo;down&rsquo;
+<p>The <code>jay migrate:mysql make [description]</code> command create a new &lsquo;up&rsquo; and &lsquo;down&rsquo;
 migration in the <strong>database/migration</strong> folder.</p>
 
 <h2 id="migrate-all">migrate all</h2>
 
-<p>The <code>jay migrate all</code> command finds the current status of the database and then
+<p>The <code>jay migrate:mysql all</code> command finds the current status of the database and then
 applies all the code from each of the &lsquo;up&rsquo; files in chronological order based on
 filename.</p>
 
 <h2 id="migrate-reset">migrate reset</h2>
 
-<p>The <code>jay migrate reset</code> command finds the current status of the database and
+<p>The <code>jay migrate:mysql reset</code> command finds the current status of the database and
 then applies all the code from each of the &lsquo;down&rsquo; files in reverse chronological
 order based on filename which should remove all tables and data with the
 exception of an an empty <strong>migration</strong> table.</p>
@@ -524,23 +524,23 @@ still be in the database.</p>
 
 <h2 id="migrate-refresh">migrate refresh</h2>
 
-<p>The <code>jay migrate refresh</code> command runs a <code>jay migrate reset</code> and then applies
+<p>The <code>jay migrate:mysql refresh</code> command runs a <code>jay migrate reset</code> and then applies
 all the code from each of the &lsquo;up&rsquo; files in chronological order based on
 filename.</p>
 
 <h2 id="migrate-status">migrate status</h2>
 
-<p>The <code>jay migrate status</code> command reads the latest record in the <strong>migration</strong>
+<p>The <code>jay migrate:mysql status</code> command reads the latest record in the <strong>migration</strong>
 table which is the last &lsquo;up&rsquo; file that was applied to the database.</p>
 
 <h2 id="migrate-up">migrate up</h2>
 
-<p>The <code>jay migrate up</code> command applies only the code in the next &lsquo;up&rsquo; file in
+<p>The <code>jay migrate:mysql up</code> command applies only the code in the next &lsquo;up&rsquo; file in
 chronological order based on filename.</p>
 
 <h2 id="migrate-down">migrate down</h2>
 
-<p>The <code>jay migrate down</code> command applies only the code in the current &lsquo;down&rsquo; file.</p>
+<p>The <code>jay migrate:mysql down</code> command applies only the code in the current &lsquo;down&rsquo; file.</p>
 
 <h2 id="other-database-changes">Other Database Changes</h2>
 

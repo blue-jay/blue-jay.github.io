@@ -456,6 +456,7 @@
 <ul>
 <li><a href="https://github.com/blue-jay/blueprint"><strong>Blueprint</strong></a> is a model-view-controller (MVC) style web skeleton.</li>
 <li><a href="https://github.com/blue-jay/jay"><strong>Jay</strong></a> is a command line tool with find/replace, database migrations, and code generation.</li>
+<li><a href="https://github.com/blue-jay/core"><strong>Core</strong></a> is a collection of packages used by Blueprint and Jay.</li>
 </ul>
 
 <h2 id="high-level">High Level</h2>
@@ -510,7 +511,7 @@ you want to scaffold out a component with CRUD (create, read, update, and delete
 </ul></li>
 <li>Start a MySQL instance.</li>
 <li>Edit the <strong>Database</strong> section of env.json to match your database login information.</li>
-<li>Create the database and tables using the command: <code>jay migrate all</code></li>
+<li>Create the database and tables using the command: <code>jay migrate:mysql all</code></li>
 <li>Run the application: <code>go run blueprint.go</code></li>
 <li>Open your web browser to <a href="http://localhost">http://localhost</a> and you should see the welcome page.</li>
 <li>Navigate to the register page at <a href="http://localhost/register">http://localhost/register</a> and create a new user.</li>
@@ -543,7 +544,7 @@ you want to scaffold out a component with CRUD (create, read, update, and delete
 <li>CSRFKey should be a 32 byte password and then base64 encoded</li>
 </ul></li>
 <li>Create a database called <strong>blueprint</strong> in MySQL.</li>
-<li>Import <strong>database/migration/20160630_020000.000000_init.up.sql</strong> to create the tables.</li>
+<li>Import <strong>database/mysql/20160630_020000.000000_init.up.sql</strong> to create the tables.</li>
 <li>In your terminal, CD to the <strong>blueprint</strong> folder.</li>
 <li>Run the application using the command: <code>go run blueprint.go</code></li>
 <li>Open your web browser to <a href="http://localhost">http://localhost</a> and you should see the welcome page.</li>

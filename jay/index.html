@@ -476,7 +476,7 @@ If you are still having problems, check out the
 <li><code>jay find</code> for locating text inside files in subfolders</li>
 <li><code>jay replace</code> for replacing text inside files in subfolder</li>
 <li><code>jay generate</code> for creating code based on templates using the <strong>text/template</strong> package</li>
-<li><code>jay migrate</code> for managing the database state</li>
+<li><code>jay migrate:mysql</code> for managing the MySQL database state</li>
 </ul>
 
 <p>The available subcommands are:</p>
@@ -485,13 +485,13 @@ If you are still having problems, check out the
 <li><code>jay env make</code> for creating env.json from env.json.example</li>
 <li><code>jay env keyshow</code> for showing newly generated session keys</li>
 <li><code>jay env updateshow</code> for updating env.json with newly generation session keys</li>
-<li><code>jay migrate make</code> for creating a new migration &lsquo;up&rsquo; file and &lsquo;down&rsquo; file</li>
-<li><code>jay migrate all</code> for applying all &lsquo;up&rsquo; migrations</li>
-<li><code>jay migrate reset</code> for applying all &lsquo;down&rsquo; migrations</li>
-<li><code>jay migrate refresh</code> for applying all &lsquo;down&rsquo; then &lsquo;up&rsquo; migrations</li>
-<li><code>jay migrate status</code> for displaying the current database state</li>
-<li><code>jay migrate up</code> for applying only one &lsquo;up&rsquo; migration</li>
-<li><code>jay migrate down</code> for applying one one &lsquo;down&rsquo; migration</li>
+<li><code>jay migrate:mysql make</code> for creating a new migration &lsquo;up&rsquo; file and &lsquo;down&rsquo; file</li>
+<li><code>jay migrate:mysql all</code> for applying all &lsquo;up&rsquo; migrations</li>
+<li><code>jay migrate:mysql reset</code> for applying all &lsquo;down&rsquo; migrations</li>
+<li><code>jay migrate:mysql refresh</code> for applying all &lsquo;down&rsquo; then &lsquo;up&rsquo; migrations</li>
+<li><code>jay migrate:mysql status</code> for displaying the current database state</li>
+<li><code>jay migrate:mysql up</code> for applying only one &lsquo;up&rsquo; migration</li>
+<li><code>jay migrate:mysql down</code> for applying one one &lsquo;down&rsquo; migration</li>
 </ul>
 
 <p>There is also a common syntax used by each of the commands, subcommands, and
@@ -499,9 +499,9 @@ arguments that make the help documents easy to follow.</p>
 
 <ul>
 <li>Flags have one or two dashes in the front: <code>-h, --help</code></li>
-<li>Commands follow the application name (jay): <code>jay migrate</code></li>
-<li>Subcommands follow the command: <code>jay migrate make</code></li>
-<li>Arguments follow the command or subcommand: <code>jay migrate make &lt;description&gt;</code></li>
+<li>Commands follow the application name (jay): <code>jay migrate:mysql</code></li>
+<li>Subcommands follow the command: <code>jay migrate:mysql make</code></li>
+<li>Arguments follow the command or subcommand: <code>jay migrate:mysql make &lt;description&gt;</code></li>
 <li>Required arguments: <code>&lt;required&gt;</code></li>
 <li>Optional arguments: <code>[&lt;optional&gt;]</code></li>
 </ul>
