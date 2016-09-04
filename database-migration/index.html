@@ -179,9 +179,9 @@
 
 
 
-<a  title="Toolkit Overview" href="http://blue-jay.github.io/">
+<a  title="Blue Jay Overview" href="http://blue-jay.github.io/">
 	
-	Toolkit Overview
+	Blue Jay Overview
 </a>
 
 
@@ -449,8 +449,8 @@
 
 <p>Database migrations are a great way to manage incremental database changes.
 The migration state is stored in the same database (the one specified in
-env.json) and recorded in the <strong>migration</strong> table. This is how the <code>jay status</code>
-command knows which migration was performed last.</p>
+env.json) and recorded in the <strong>migration</strong> table. This is how the
+<code>jay migrate:mysql status</code>command knows which migration was performed last.</p>
 
 <p>Each incremental change should have a set of two files: an &lsquo;up&rsquo; file and a
 &lsquo;down&rsquo; file. The &lsquo;up&rsquo; file contains code (like SQL) which is applied to the
@@ -458,11 +458,11 @@ database you add features or fix bugs in your database. The &lsquo;down&rsquo; f
 the code to remove the change or undo it.</p>
 
 <p><strong>Note</strong>: The <code>jay migrate</code> commands requires the environment variable,
-JAYCONFIG, to point to the env.json file path. The <strong>database</strong> folder
-containing the <strong>migration</strong> folder must also be in the same folder.</p>
+<strong>JAYCONFIG</strong>, to point to the env.json file path. The migration folder is specified
+in the env.json file under <strong>MySQL.MigrationFolder</strong>.</p>
 
 <p>When you start using <strong>Blueprint</strong> you&rsquo;ll see two migration files already exist
-in the <strong>database/mysql</strong> folder:</p>
+in the <strong>migration/mysql</strong> folder:</p>
 
 <ul>
 <li>20160630_020000.000000_init.up.sql - adds the initial tables and data</li>

@@ -179,9 +179,9 @@
 
 
 
-<a  title="Toolkit Overview" href="http://blue-jay.github.io/">
+<a  title="Blue Jay Overview" href="http://blue-jay.github.io/">
 	
-	Toolkit Overview
+	Blue Jay Overview
 </a>
 
 
@@ -454,7 +454,7 @@ The controller files are all organized under the <strong>controller</strong> fol
 
 <h2 id="routing">Routing</h2>
 
-<p>In the <strong>bootstrap</strong> package, the <strong>RegisterServices()</strong> function
+<p>In the <strong>boot</strong> package, the <strong>RegisterServices()</strong> function
 calls the <strong>controller.LoadRoutes()</strong> function. The <strong>LoadRoutes()</strong> function in
  the <strong>controller</strong> package loads the routes for each of the individual
  controllers:</p>
@@ -518,8 +518,9 @@ import (
     &quot;path&quot;
 
     &quot;github.com/blue-jay/blueprint/controller/status&quot;
-    &quot;github.com/blue-jay/blueprint/lib/asset&quot;
-    &quot;github.com/blue-jay/blueprint/lib/router&quot;
+
+    &quot;github.com/blue-jay/core/asset&quot;
+    &quot;github.com/blue-jay/core/router&quot;
 )
 
 // Load the routes.
@@ -557,8 +558,8 @@ package status
 import (
     &quot;net/http&quot;
 
-    &quot;github.com/blue-jay/blueprint/lib/router&quot;
-    &quot;github.com/blue-jay/blueprint/lib/view&quot;
+    &quot;github.com/blue-jay/core/router&quot;
+    &quot;github.com/blue-jay/core/view&quot;
 )
 
 // Load the routes.
@@ -577,12 +578,14 @@ func Error404(w http.ResponseWriter, r *http.Request) {
 }
 
 // Error405 - Method Not Allowed.
-func Error405(w http.ResponseWriter, r *http.Request) {
-    w.WriteHeader(http.StatusMethodNotAllowed)
-    v := view.New(&quot;status/index&quot;)
-    v.Vars[&quot;title&quot;] = &quot;405 Method Not Allowed&quot;
-    v.Vars[&quot;message&quot;] = &quot;Method is not allowed.&quot;
-    v.Render(w, r)
+func Error405(allowedMethods string) func(w http.ResponseWriter, r *http.Request) {
+    return func(w http.ResponseWriter, r *http.Request) {
+        w.WriteHeader(http.StatusMethodNotAllowed)
+        v := view.New(&quot;status/index&quot;)
+        v.Vars[&quot;title&quot;] = &quot;405 Method Not Allowed&quot;
+        v.Vars[&quot;message&quot;] = &quot;Method is not allowed.&quot;
+        v.Render(w, r)
+    }
 }
 </code></pre>
 

@@ -179,9 +179,9 @@
 
 
 
-<a  title="Toolkit Overview" href="http://blue-jay.github.io/">
+<a  title="Blue Jay Overview" href="http://blue-jay.github.io/">
 	
-	Toolkit Overview
+	Blue Jay Overview
 </a>
 
 
@@ -447,7 +447,7 @@
 
 <h2 id="basic-usage">Basic Usage</h2>
 
-<p>Views contain the HTML served by your application and separate your controller / application logic from your presentation logic. The views are parsed by the <a href="https://golang.org/pkg/html/template/">html/template</a> package.</p>
+<p>Views contain the HTML served by your application and separate your controller/application logic from your presentation logic. The views are parsed by the <a href="https://golang.org/pkg/html/template/">html/template</a> package.</p>
 
 <p>A view should include the four <strong>define</strong> blocks (<strong>title</strong>, <strong>head</strong>, <strong>content</strong>, and <strong>foot</strong>) and may look like this:</p>
 
@@ -495,8 +495,9 @@ v.Render(w, r)
 
 <h2 id="view-package">View Package</h2>
 
-<p>The optional <strong>lib/view</strong> package is a wrapper for the Go <a href="https://golang.org/pkg/html/template/">html/template</a> package
-and provides the following:</p>
+<p>The <strong>core/view</strong> package is a wrapper for the Go
+<a href="https://golang.org/pkg/html/template/">html/template</a> package and provides the
+following:</p>
 
 <ul>
 <li>thread-safe template caching</li>
@@ -504,7 +505,7 @@ and provides the following:</p>
 <li>ability to modify the variables available in templates</li>
 </ul>
 
-<p>The set up of the <strong>view</strong> package is handled by the <strong>bootstrap</strong> package:</p>
+<p>The set up of the <strong>view</strong> package is handled by the <strong>boot</strong> package:</p>
 
 <pre><code class="language-go">// Set up the views
 view.SetConfig(config.View)
@@ -546,6 +547,57 @@ register/index.tmpl	 - register page
 base.tmpl            - base template for all pages
 </code></pre>
 
+<h2 id="view-functions">View Functions</h2>
+
+<p>The Go template packages supports passing in a FuncMap which maps names to a
+function. This means you can add functions so they are available to the views.
+These functions are stored in the <strong>viewfunc</strong> folder. Here is an example of a
+LINK function that can be used to create hyperlinks and the code is stored in
+<strong>viewfunc/link/link.go</strong>:</p>
+
+<pre><code class="language-go">// Package link provides a funcmap for html/template to generate a hyperlink.
+package link
+
+import (
+	&quot;fmt&quot;
+	&quot;html/template&quot;
+)
+
+// Map returns a template.FuncMap for LINK that returns a hyperlink tag.
+func Map(baseURI string) template.FuncMap {
+	f := make(template.FuncMap)
+
+	f[&quot;LINK&quot;] = func(path, name string) template.HTML {
+		return template.HTML(fmt.Sprintf(`&lt;a href=&quot;%v%v&quot;&gt;%v&lt;/a&gt;`, baseURI, path, name))
+	}
+
+	return f
+}
+</code></pre>
+
+<p>To use this function in a template, you would write it like this:</p>
+
+<pre><code class="language-html">{{LINK &quot;register&quot; &quot;Create a new account.&quot;}}
+</code></pre>
+
+<p>And the code would render like this:</p>
+
+<pre><code class="language-html">&lt;a href=&quot;/register&quot;&gt;Create a new account.&lt;/a&gt;
+</code></pre>
+
+<p>Once you create a new funcmap, you make it available to the views by adding it
+to the <strong>view.SetFuncMaps()</strong> function in the <strong>boot/boot.go</strong> file:</p>
+
+<pre><code class="language-go">// Set up the functions for the views
+view.SetFuncMaps(
+	asset.Map(config.View.BaseURI),
+	link.Map(config.View.BaseURI),
+	noescape.Map(),
+	prettytime.Map(),
+	form.Map(),
+)
+</code></pre>
+
 <h2 id="included-functions">Included Functions</h2>
 
 <p>There are a few functions that are included to make working with the templates
@@ -571,13 +623,72 @@ and static files easier:</p>
 
 &lt;!-- Time format --&gt;
 {{.SomeTime | PRETTYTIME}}
-&lt;!-- parses to format
+&lt;!-- parses to format --&gt;
 3:04 PM 01/02/2006
+</code></pre>
+
+<h2 id="view-variables">View Variables</h2>
+
+<p>There is an easy way to add variables so they are available in the views. The
+<strong>viewmodify</strong> folder contains packages that define variables and add them to
+the view.Vars map. Since you are editing the map right before it renders, it
+will overwrite any other variables that were set in the controllers so it&rsquo;s best
+to choose names or pick a naming convention for your variables.</p>
+
+<p>You can also modify the view.Info struct before it renders
+if you need to display a different view or use a different base template.</p>
+
+<p>In the <strong>viewmodify/authlevel/authlevel.go</strong> file, the <strong>AuthLevel</strong> variable is
+made available so the views can determine if the user is authenticated or not:</p>
+
+<pre><code class="language-go">// Package authlevel adds an AuthLevel variable to the view template.
+package authlevel
+
+import (
+	&quot;net/http&quot;
+
+	&quot;github.com/blue-jay/core/session&quot;
+	&quot;github.com/blue-jay/core/view&quot;
+)
+
+// Modify sets AuthLevel in the template to auth if the user is authenticated.
+// Sets AuthLevel to anon if not authenticated.
+func Modify(w http.ResponseWriter, r *http.Request, v *view.Info) {
+	sess := session.Instance(r)
+
+	// Set the AuthLevel to auth if the user is logged in
+	if sess.Values[&quot;id&quot;] != nil {
+		v.Vars[&quot;AuthLevel&quot;] = &quot;auth&quot;
+	} else {
+		v.Vars[&quot;AuthLevel&quot;] = &quot;anon&quot;
+	}
+}
+</code></pre>
+
+<p>To use the variable, you could write this type of logic into your view:</p>
+
+<pre><code class="language-html">{{if eq .AuthLevel &quot;auth&quot;}}
+You are logged in.
+{{else}}
+You are not logged in.
+{{end}}
+</code></pre>
+
+<p>Once you create a new package, you make it available to the views by adding it
+to the <strong>view.SetModifiers()</strong> function in the <strong>boot/boot.go</strong> file:</p>
+
+<pre><code class="language-go">// Set up the variables and modifiers for the views
+view.SetModifiers(
+	authlevel.Modify,
+	uri.Modify,
+	xsrf.Token,
+	flash.Modify,
+)
 </code></pre>
 
 <h2 id="included-variables">Included Variables</h2>
 
-<p>There are a few variables you can use in templates as well:</p>
+<p>There are a few included variables you can use in templates:</p>
 
 <pre><code class="language-html">&lt;!-- Use AuthLevel=auth to determine if a user is logged in (if session.Values[&quot;id&quot;] != nil) --&gt;
 {{if eq .AuthLevel &quot;auth&quot;}}
@@ -615,7 +726,7 @@ attributes are missing like <strong>name</strong>, <strong>value</strong>, and <
 The blocks will automatically fill these in for you so you don&rsquo;t have the write
 the name of the element multiple times. By the way, it took very little code to
 add this functionality so check out the
-<a href="https://github.com/blue-jay/blueprint/blob/master/lib/form/form.go">form</a>
+<a href="https://github.com/blue-jay/core/blob/master/form/form.go">form</a>
 package to see how it was accomplished.</p>
 
 <pre><code class="language-html">
@@ -710,7 +821,7 @@ request to the server. In order for us to make our application more RESTful, we
 can use utilize the simple
 <a href="https://github.com/blue-jay/blueprint/blob/master/middleware/rest/rest.go"><strong>rest</strong></a>
 package to change the HTTP method from a URL query string. The <strong>rest</strong> middleware is
-already applied to every request in the <strong>bootstrap</strong> package.</p>
+already applied to every request in the <strong>boot</strong> package.</p>
 
 <p>To change the method, add this line to your form action and change the value
 <strong>value</strong> to match a method like <strong>DELETE</strong> or <strong>PATCH</strong>. It will automatically

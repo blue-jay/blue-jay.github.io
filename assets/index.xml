@@ -44,8 +44,9 @@ so the files can be accessed like this:&lt;/p&gt;
 &amp;lt;link media=&amp;quot;all&amp;quot; rel=&amp;quot;stylesheet&amp;quot; type=&amp;quot;text/css&amp;quot; href=&amp;quot;/static/css/all.css?1466973904&amp;quot; /&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Check out the &lt;a href=&#34;http://blue-jay.github.io/controllers&#34;&gt;Controllers&lt;/a&gt; and &lt;a href=&#34;http://blue-jay.github.io/views&#34;&gt;Views&lt;/a&gt; pages for how
-the files are served and how to append timestamps to them to manage caching.&lt;/p&gt;
+&lt;p&gt;Check out the &lt;a href=&#34;http://blue-jay.github.io/controllers&#34;&gt;Controllers&lt;/a&gt; and
+&lt;a href=&#34;http://blue-jay.github.io/views/#included-functions&#34;&gt;Views&lt;/a&gt; pages for how
+the files are served and how timestamps are append to them for cach management.&lt;/p&gt;
 
 &lt;p&gt;If you make changes to any of the files in the &lt;strong&gt;dynamic&lt;/strong&gt; folder, you still
 need a way to compile/minify them and then move them to the &lt;strong&gt;static&lt;/strong&gt; folder

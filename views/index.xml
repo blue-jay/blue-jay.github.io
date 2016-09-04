@@ -19,7 +19,7 @@
 
 &lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
 
-&lt;p&gt;Views contain the HTML served by your application and separate your controller / application logic from your presentation logic. The views are parsed by the &lt;a href=&#34;https://golang.org/pkg/html/template/&#34;&gt;html/template&lt;/a&gt; package.&lt;/p&gt;
+&lt;p&gt;Views contain the HTML served by your application and separate your controller/application logic from your presentation logic. The views are parsed by the &lt;a href=&#34;https://golang.org/pkg/html/template/&#34;&gt;html/template&lt;/a&gt; package.&lt;/p&gt;
 
 &lt;p&gt;A view should include the four &lt;strong&gt;define&lt;/strong&gt; blocks (&lt;strong&gt;title&lt;/strong&gt;, &lt;strong&gt;head&lt;/strong&gt;, &lt;strong&gt;content&lt;/strong&gt;, and &lt;strong&gt;foot&lt;/strong&gt;) and may look like this:&lt;/p&gt;
 
@@ -67,8 +67,9 @@ v.Render(w, r)
 
 &lt;h2 id=&#34;view-package&#34;&gt;View Package&lt;/h2&gt;
 
-&lt;p&gt;The optional &lt;strong&gt;lib/view&lt;/strong&gt; package is a wrapper for the Go &lt;a href=&#34;https://golang.org/pkg/html/template/&#34;&gt;html/template&lt;/a&gt; package
-and provides the following:&lt;/p&gt;
+&lt;p&gt;The &lt;strong&gt;core/view&lt;/strong&gt; package is a wrapper for the Go
+&lt;a href=&#34;https://golang.org/pkg/html/template/&#34;&gt;html/template&lt;/a&gt; package and provides the
+following:&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;thread-safe template caching&lt;/li&gt;
@@ -76,7 +77,7 @@ and provides the following:&lt;/p&gt;
 &lt;li&gt;ability to modify the variables available in templates&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;The set up of the &lt;strong&gt;view&lt;/strong&gt; package is handled by the &lt;strong&gt;bootstrap&lt;/strong&gt; package:&lt;/p&gt;
+&lt;p&gt;The set up of the &lt;strong&gt;view&lt;/strong&gt; package is handled by the &lt;strong&gt;boot&lt;/strong&gt; package:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Set up the views
 view.SetConfig(config.View)
@@ -118,6 +119,57 @@ register/index.tmpl	 - register page
 base.tmpl            - base template for all pages
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;h2 id=&#34;view-functions&#34;&gt;View Functions&lt;/h2&gt;
+
+&lt;p&gt;The Go template packages supports passing in a FuncMap which maps names to a
+function. This means you can add functions so they are available to the views.
+These functions are stored in the &lt;strong&gt;viewfunc&lt;/strong&gt; folder. Here is an example of a
+LINK function that can be used to create hyperlinks and the code is stored in
+&lt;strong&gt;viewfunc/link/link.go&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Package link provides a funcmap for html/template to generate a hyperlink.
+package link
+
+import (
+	&amp;quot;fmt&amp;quot;
+	&amp;quot;html/template&amp;quot;
+)
+
+// Map returns a template.FuncMap for LINK that returns a hyperlink tag.
+func Map(baseURI string) template.FuncMap {
+	f := make(template.FuncMap)
+
+	f[&amp;quot;LINK&amp;quot;] = func(path, name string) template.HTML {
+		return template.HTML(fmt.Sprintf(`&amp;lt;a href=&amp;quot;%v%v&amp;quot;&amp;gt;%v&amp;lt;/a&amp;gt;`, baseURI, path, name))
+	}
+
+	return f
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To use this function in a template, you would write it like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;{{LINK &amp;quot;register&amp;quot; &amp;quot;Create a new account.&amp;quot;}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And the code would render like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;a href=&amp;quot;/register&amp;quot;&amp;gt;Create a new account.&amp;lt;/a&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Once you create a new funcmap, you make it available to the views by adding it
+to the &lt;strong&gt;view.SetFuncMaps()&lt;/strong&gt; function in the &lt;strong&gt;boot/boot.go&lt;/strong&gt; file:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Set up the functions for the views
+view.SetFuncMaps(
+	asset.Map(config.View.BaseURI),
+	link.Map(config.View.BaseURI),
+	noescape.Map(),
+	prettytime.Map(),
+	form.Map(),
+)
+&lt;/code&gt;&lt;/pre&gt;
+
 &lt;h2 id=&#34;included-functions&#34;&gt;Included Functions&lt;/h2&gt;
 
 &lt;p&gt;There are a few functions that are included to make working with the templates
@@ -143,13 +195,72 @@ and static files easier:&lt;/p&gt;
 
 &amp;lt;!-- Time format --&amp;gt;
 {{.SomeTime | PRETTYTIME}}
-&amp;lt;!-- parses to format
+&amp;lt;!-- parses to format --&amp;gt;
 3:04 PM 01/02/2006
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;view-variables&#34;&gt;View Variables&lt;/h2&gt;
+
+&lt;p&gt;There is an easy way to add variables so they are available in the views. The
+&lt;strong&gt;viewmodify&lt;/strong&gt; folder contains packages that define variables and add them to
+the view.Vars map. Since you are editing the map right before it renders, it
+will overwrite any other variables that were set in the controllers so it&amp;rsquo;s best
+to choose names or pick a naming convention for your variables.&lt;/p&gt;
+
+&lt;p&gt;You can also modify the view.Info struct before it renders
+if you need to display a different view or use a different base template.&lt;/p&gt;
+
+&lt;p&gt;In the &lt;strong&gt;viewmodify/authlevel/authlevel.go&lt;/strong&gt; file, the &lt;strong&gt;AuthLevel&lt;/strong&gt; variable is
+made available so the views can determine if the user is authenticated or not:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Package authlevel adds an AuthLevel variable to the view template.
+package authlevel
+
+import (
+	&amp;quot;net/http&amp;quot;
+
+	&amp;quot;github.com/blue-jay/core/session&amp;quot;
+	&amp;quot;github.com/blue-jay/core/view&amp;quot;
+)
+
+// Modify sets AuthLevel in the template to auth if the user is authenticated.
+// Sets AuthLevel to anon if not authenticated.
+func Modify(w http.ResponseWriter, r *http.Request, v *view.Info) {
+	sess := session.Instance(r)
+
+	// Set the AuthLevel to auth if the user is logged in
+	if sess.Values[&amp;quot;id&amp;quot;] != nil {
+		v.Vars[&amp;quot;AuthLevel&amp;quot;] = &amp;quot;auth&amp;quot;
+	} else {
+		v.Vars[&amp;quot;AuthLevel&amp;quot;] = &amp;quot;anon&amp;quot;
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To use the variable, you could write this type of logic into your view:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;{{if eq .AuthLevel &amp;quot;auth&amp;quot;}}
+You are logged in.
+{{else}}
+You are not logged in.
+{{end}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Once you create a new package, you make it available to the views by adding it
+to the &lt;strong&gt;view.SetModifiers()&lt;/strong&gt; function in the &lt;strong&gt;boot/boot.go&lt;/strong&gt; file:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Set up the variables and modifiers for the views
+view.SetModifiers(
+	authlevel.Modify,
+	uri.Modify,
+	xsrf.Token,
+	flash.Modify,
+)
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;included-variables&#34;&gt;Included Variables&lt;/h2&gt;
 
-&lt;p&gt;There are a few variables you can use in templates as well:&lt;/p&gt;
+&lt;p&gt;There are a few included variables you can use in templates:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;!-- Use AuthLevel=auth to determine if a user is logged in (if session.Values[&amp;quot;id&amp;quot;] != nil) --&amp;gt;
 {{if eq .AuthLevel &amp;quot;auth&amp;quot;}}
@@ -187,7 +298,7 @@ attributes are missing like &lt;strong&gt;name&lt;/strong&gt;, &lt;strong&gt;val
 The blocks will automatically fill these in for you so you don&amp;rsquo;t have the write
 the name of the element multiple times. By the way, it took very little code to
 add this functionality so check out the
-&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/lib/form/form.go&#34;&gt;form&lt;/a&gt;
+&lt;a href=&#34;https://github.com/blue-jay/core/blob/master/form/form.go&#34;&gt;form&lt;/a&gt;
 package to see how it was accomplished.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;
@@ -282,7 +393,7 @@ request to the server. In order for us to make our application more RESTful, we
 can use utilize the simple
 &lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/middleware/rest/rest.go&#34;&gt;&lt;strong&gt;rest&lt;/strong&gt;&lt;/a&gt;
 package to change the HTTP method from a URL query string. The &lt;strong&gt;rest&lt;/strong&gt; middleware is
-already applied to every request in the &lt;strong&gt;bootstrap&lt;/strong&gt; package.&lt;/p&gt;
+already applied to every request in the &lt;strong&gt;boot&lt;/strong&gt; package.&lt;/p&gt;
 
 &lt;p&gt;To change the method, add this line to your form action and change the value
 &lt;strong&gt;value&lt;/strong&gt; to match a method like &lt;strong&gt;DELETE&lt;/strong&gt; or &lt;strong&gt;PATCH&lt;/strong&gt;. It will automatically

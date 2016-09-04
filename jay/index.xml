@@ -24,7 +24,7 @@ quite a few times now so it&amp;rsquo;s a good time to talk a little about the t
 &lt;p&gt;&lt;strong&gt;Jay&lt;/strong&gt; uses the brilliant
 &lt;a href=&#34;github.com/alecthomas/kingpin&#34;&gt;github.com/alecthomas/kingpin&lt;/a&gt; package to manage
 the help documents, commands, subcommands, and arguments. It takes care of
-groundwork so we can focus on the actual tasks.&lt;/p&gt;
+groundwork so it can focus on the actual tasks.&lt;/p&gt;
 
 &lt;p&gt;If you ever want to see the help documents for a command or subcommand, add
 &lt;code&gt;-h&lt;/code&gt; or &lt;code&gt;--help&lt;/code&gt; to the end and the help documentation should be able to assist.

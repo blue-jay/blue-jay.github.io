@@ -22,7 +22,7 @@
 You are not using a framework so don&amp;rsquo;t be afraid to change code. You don&amp;rsquo;t need to
 use any of the components included with Blueprint, but it does give you a nice foundation to
 start from. If you want to use YAML instead of JSON, it&amp;rsquo;s recommended to create a wrapper
-library in the &lt;strong&gt;lib&lt;/strong&gt; folder and then load your env.yaml file via the &lt;strong&gt;bootstrap&lt;/strong&gt;
+library in the &lt;strong&gt;lib&lt;/strong&gt; folder and then load your env.yaml file via the &lt;strong&gt;boot&lt;/strong&gt;
 package.&lt;/p&gt;
 
 &lt;h2 id=&#34;jay-command-env&#34;&gt;Jay Command: env&lt;/h2&gt;
@@ -55,25 +55,30 @@ in the &lt;strong&gt;bootstrap&lt;/strong&gt; package. Here is an example &lt;st
   &amp;quot;Asset&amp;quot;:{
     &amp;quot;Folder&amp;quot;:&amp;quot;asset&amp;quot;
   },
-  &amp;quot;Database&amp;quot;:{
-    &amp;quot;Type&amp;quot;:&amp;quot;MySQL&amp;quot;,
-    &amp;quot;MySQL&amp;quot;:{  
-      &amp;quot;Username&amp;quot;:&amp;quot;root&amp;quot;,
-      &amp;quot;Password&amp;quot;:&amp;quot;&amp;quot;,
-      &amp;quot;Database&amp;quot;:&amp;quot;blueprint&amp;quot;,
-      &amp;quot;Charset&amp;quot;:&amp;quot;utf8mb4&amp;quot;,
-      &amp;quot;Collation&amp;quot;:&amp;quot;utf8mb4_unicode_ci&amp;quot;,
-      &amp;quot;Hostname&amp;quot;:&amp;quot;127.0.0.1&amp;quot;,
-      &amp;quot;Port&amp;quot;:3306,
-      &amp;quot;Parameter&amp;quot;:&amp;quot;parseTime=true&amp;quot;
-    }
-  },
   &amp;quot;Email&amp;quot;:{
     &amp;quot;Username&amp;quot;:&amp;quot;&amp;quot;,
     &amp;quot;Password&amp;quot;:&amp;quot;&amp;quot;,
     &amp;quot;Hostname&amp;quot;:&amp;quot;&amp;quot;,
     &amp;quot;Port&amp;quot;:25,
     &amp;quot;From&amp;quot;:&amp;quot;&amp;quot;
+  },
+  &amp;quot;Form&amp;quot;:{
+    &amp;quot;FileStorageFolder&amp;quot;:&amp;quot;filestorage&amp;quot;
+  },
+  &amp;quot;Generation&amp;quot;:{
+    &amp;quot;TemplateFolder&amp;quot;:&amp;quot;generate&amp;quot;
+  },
+  &amp;quot;MySQL&amp;quot;:{  
+    &amp;quot;Username&amp;quot;:&amp;quot;root&amp;quot;,
+    &amp;quot;Password&amp;quot;:&amp;quot;&amp;quot;,
+    &amp;quot;Database&amp;quot;:&amp;quot;blueprint&amp;quot;,
+    &amp;quot;Charset&amp;quot;:&amp;quot;utf8mb4&amp;quot;,
+    &amp;quot;Collation&amp;quot;:&amp;quot;utf8mb4_unicode_ci&amp;quot;,
+    &amp;quot;Hostname&amp;quot;:&amp;quot;127.0.0.1&amp;quot;,
+    &amp;quot;Port&amp;quot;:3306,
+    &amp;quot;Parameter&amp;quot;:&amp;quot;parseTime=true&amp;quot;,
+    &amp;quot;MigrationFolder&amp;quot;:&amp;quot;migration/mysql&amp;quot;,
+    &amp;quot;Extension&amp;quot;:&amp;quot;sql&amp;quot;
   },
   &amp;quot;Server&amp;quot;:{
     &amp;quot;Hostname&amp;quot;:&amp;quot;&amp;quot;,
@@ -88,7 +93,7 @@ in the &lt;strong&gt;bootstrap&lt;/strong&gt; package. Here is an example &lt;st
   &amp;quot;Session&amp;quot;:{
     &amp;quot;AuthKey&amp;quot;:&amp;quot;PzCh6FNAB7/jhmlUQ0+25sjJ+WgcJeKR2bAOtnh9UnfVN+WJSBvY/YC80Rs+rbMtwfmSP4FUSxKPtpYKzKFqFA==&amp;quot;,
     &amp;quot;EncryptKey&amp;quot;:&amp;quot;3oTKCcKjDHMUlV+qur2Ve664SPpSuviyGQ/UqnroUD8=&amp;quot;,
-    &amp;quot;CSRFKey&amp;quot;:&amp;quot;xULAGF5FcWvqHsXaovNFJYfgCt6pedRPROqNvsZjU18=&amp;quot;,
+  &amp;quot;CSRFKey&amp;quot;:&amp;quot;xULAGF5FcWvqHsXaovNFJYfgCt6pedRPROqNvsZjU18=&amp;quot;,
     &amp;quot;Name&amp;quot;:&amp;quot;sess&amp;quot;,
     &amp;quot;Options&amp;quot;:{  
       &amp;quot;Path&amp;quot;:&amp;quot;/&amp;quot;,
@@ -129,33 +134,40 @@ changes:&lt;/p&gt;
 
 &lt;h2 id=&#34;configuration-structure&#34;&gt;Configuration Structure&lt;/h2&gt;
 
-&lt;p&gt;The &lt;strong&gt;env.json&lt;/strong&gt; file contains the configuration for Blueprint. It removes the need
+&lt;p&gt;The &lt;strong&gt;env.json&lt;/strong&gt; file contains the configuration for Blueprint and Jay. It removes the need
 to hardcode any of these values and makes it easy to move Blueprint to another system
 with a different setup. The &lt;strong&gt;env.json&lt;/strong&gt; file is parsed and held in the
-&lt;strong&gt;Info&lt;/strong&gt; struct from the &lt;strong&gt;bootstrap&lt;/strong&gt; package:&lt;/p&gt;
+&lt;strong&gt;Info&lt;/strong&gt; struct from the &lt;strong&gt;boot&lt;/strong&gt; package:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Info contains the application settings.
 type Info struct {
-	Asset    asset.Info    `json:&amp;quot;Asset&amp;quot;`
-	Database database.Info `json:&amp;quot;Database&amp;quot;`
-	Email    email.Info    `json:&amp;quot;Email&amp;quot;`
-	Server   server.Info   `json:&amp;quot;Server&amp;quot;`
-	Session  session.Info  `json:&amp;quot;Session&amp;quot;`
-	Template view.Template `json:&amp;quot;Template&amp;quot;`
-	View     view.Info     `json:&amp;quot;View&amp;quot;`
+  Asset      asset.Info    `json:&amp;quot;Asset&amp;quot;`
+  Email      email.Info    `json:&amp;quot;Email&amp;quot;`
+  Form       form.Info     `json:&amp;quot;Form&amp;quot;`
+  Generation generate.Info `json:&amp;quot;Generation&amp;quot;`
+  MySQL      mysql.Info    `json:&amp;quot;MySQL&amp;quot;`
+  Server     server.Info   `json:&amp;quot;Server&amp;quot;`
+  Session    session.Info  `json:&amp;quot;Session&amp;quot;`
+  Template   view.Template `json:&amp;quot;Template&amp;quot;`
+  View       view.Info     `json:&amp;quot;View&amp;quot;`
+  Path       string
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;The &lt;strong&gt;Info&lt;/strong&gt; struct is simply a container that nests structs from packages in the &lt;strong&gt;lib&lt;/strong&gt; folder
-that need variables configured. Here is a list mapping the JSON keys to structs:&lt;/p&gt;
+&lt;p&gt;The &lt;strong&gt;Info&lt;/strong&gt; struct is simply a container that nests structs from packages in
+the &lt;strong&gt;Core&lt;/strong&gt; library that need variables configured. The &lt;strong&gt;Path&lt;/strong&gt; variable is
+the location of the env.json file. Here is a list mapping the JSON keys to
+structs:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;Asset     - Info struct in lib/asset
-Database  - Info struct in lib/database
-Email     - Info struct in lib/email
-Server    - Info struct in lib/server
-Session   - Info struct in lib/session
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;Asset     - Info struct in core/asset
+Email     - Info struct in core/email
+Form      - Info struct in core/form
+Generate  - Info struct in core/generate
+MySQL     - Info struct in core/mysql
+Server    - Info struct in core/server
+Session   - Info struct in core/session
 Template  - Template struct in lib/view
-View      - Info struct in lib/view
+View      - Info struct in core/view
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;enable-https&#34;&gt;Enable HTTPS&lt;/h2&gt;
@@ -179,7 +191,7 @@ following:&lt;/p&gt;
 &lt;li&gt;Create a new package in the &lt;strong&gt;lib&lt;/strong&gt; folder called &lt;strong&gt;captcha&lt;/strong&gt;&lt;/li&gt;
 &lt;li&gt;Create a struct called &lt;strong&gt;Info&lt;/strong&gt; in the &lt;strong&gt;lib/captcha&lt;/strong&gt; package&lt;/li&gt;
 &lt;li&gt;Add the &lt;strong&gt;Captcha&lt;/strong&gt; key and any values to the &lt;strong&gt;env.json&lt;/strong&gt; file&lt;/li&gt;
-&lt;li&gt;Add code to the &lt;strong&gt;RegisterServices()&lt;/strong&gt; function in the &lt;strong&gt;bootstrap&lt;/strong&gt; package to pass the config to the &lt;strong&gt;lib/captcha&lt;/strong&gt; package at start up&lt;/li&gt;
+&lt;li&gt;Add code to the &lt;strong&gt;RegisterServices()&lt;/strong&gt; function in the &lt;strong&gt;boot&lt;/strong&gt; package to pass the config to the &lt;strong&gt;lib/captcha&lt;/strong&gt; package at start up&lt;/li&gt;
 &lt;li&gt;Add code to your controllers that references your &lt;strong&gt;lib/captcha&lt;/strong&gt; package&lt;/li&gt;
 &lt;/ol&gt;
 
@@ -189,8 +201,8 @@ following:&lt;/p&gt;
 
 &lt;ol&gt;
 &lt;li&gt;Remove the &lt;strong&gt;Email&lt;/strong&gt; key and value from the &lt;strong&gt;env.json&lt;/strong&gt; file&lt;/li&gt;
-&lt;li&gt;Remove the &lt;strong&gt;Email&lt;/strong&gt; nested struct from the &lt;strong&gt;Info&lt;/strong&gt; struct in the &lt;strong&gt;bootstrap&lt;/strong&gt; package&lt;/li&gt;
-&lt;li&gt;Remove any code setting up the package from the &lt;strong&gt;RegisterServices()&lt;/strong&gt; function in the &lt;strong&gt;bootstrap&lt;/strong&gt; package&lt;/li&gt;
+&lt;li&gt;Remove the &lt;strong&gt;Email&lt;/strong&gt; nested struct from the &lt;strong&gt;Info&lt;/strong&gt; struct in the &lt;strong&gt;boot&lt;/strong&gt; package&lt;/li&gt;
+&lt;li&gt;Remove any code setting up the package from the &lt;strong&gt;RegisterServices()&lt;/strong&gt; function in the &lt;strong&gt;boot&lt;/strong&gt; package&lt;/li&gt;
 &lt;li&gt;Remove the &lt;strong&gt;lib/email&lt;/strong&gt; package from the filesystem&lt;/li&gt;
 &lt;li&gt;Find any references to the &lt;strong&gt;lib/email&lt;/strong&gt; package in your code using the jay command line, &lt;code&gt;jay find . &amp;quot;lib/email&amp;quot;&lt;/code&gt;,
 then delete the imports and referencing code&lt;/li&gt;

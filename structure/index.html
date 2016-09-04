@@ -179,9 +179,9 @@
 
 
 
-<a  title="Toolkit Overview" href="http://blue-jay.github.io/">
+<a  title="Blue Jay Overview" href="http://blue-jay.github.io/">
 	
-	Toolkit Overview
+	Blue Jay Overview
 </a>
 
 
@@ -455,13 +455,14 @@ components lives.</p>
 <pre><code class="language-text">asset/
 |----dynamic/    - private assets like SASS files, single JavaScript files, and logo.png for favicon generation
 |----static/     - public assets like CSS, JavaScript, and favicon.ico for Android, Apple, etc
-bootstrap/       - package for initial set up of the application
+boot/            - package for initial set up of the application
 controller/      - packages with routes and application logic
-database/
-|----migration/  - SQL files for migration database up and down
+filestorage/     - files uploaded from an HTML form
 generate/        - template pairs (.gen and .json) for generating code using jay
-lib/             - packages with minimum dependencies
+lib/             - packages you'll build that are used by the application (recommended to build with minimum dependencies)
 middleware/      - packages that return a http.Handler to wrap around routes for ACL, request logging, etc
+migration/       - migration database files
+|----mysql/      - MySQL files for migrating database up and down
 model/           - packages with database queries and structs matching tables
 view/            - HTML templates parsed using the Go html/template package
 viewfunc/        - packages that return a template.FuncMap for use in views
@@ -492,29 +493,36 @@ golang.org/x/crypto/bcrypt              - password hashing algorithm
 
 <h2 id="jay-structure">Jay Structure</h2>
 
-<p>The project is organized into the following folders:</p>
+<p>The project is simply a command-line interface for packages in the Core library
+<a href="https://github.com/blue-jay/core">https://github.com/blue-jay/core</a>. The packages that Jay uses from the Core
+library are:</p>
 
 <pre><code class="language-text">env/       - package that creates and updates the env.json config file
 find/      - package that finds case-sensitive matched text in files
 generate/  - package that generates code from template pairs
-lib/       - packages with minimum dependencies
 migrate/   - package that handles the database migrations
 replace/   - package that replaces case-sensitive matched text in files
 </code></pre>
 
-<p>The following file exists at the project root:</p>
+<p>The following file exists at the project root of Jay:</p>
 
 <pre><code class="language-text">jay.go     - entrypoint for the application
 </code></pre>
 
 <h2 id="jay-external-go-packages">Jay External Go Packages</h2>
 
-<p>There are a few external packages used in Jay:</p>
+<p>There is only one external packages used in Jay (not including the Core
+library):</p>
 
-<pre><code class="language-text">github.com/go-sql-driver/mysql    - MySQL driver
-github.com/jmoiron/sqlx           - MySQL general purpose extensions
-gopkg.in/alecthomas/kingpin.v2    - command-line and flag parser
+<pre><code class="language-text">gopkg.in/alecthomas/kingpin.v2    - command-line and flag parser
 </code></pre>
+
+<h2 id="core-structure">Core Structure</h2>
+
+<p>The Core project contains many packages that are all divided into individual
+folders. Each is well documented so the
+<a href="https://godoc.org/github.com/blue-jay/core">GoDoc</a> page should provide enough
+information on each one.</p>
 
 			
 			<aside class="copyright" role="note">
@@ -535,7 +543,7 @@ gopkg.in/alecthomas/kingpin.v2    - command-line and flag parser
 <nav class="pagination" aria-label="Footer">
   <div class="previous">
   
-      <a href="http://blue-jay.github.io/" title="Toolkit Overview">
+      <a href="http://blue-jay.github.io/" title="Blue Jay Overview">
         <span class="direction">
           Previous
         </span>
@@ -545,7 +553,7 @@ gopkg.in/alecthomas/kingpin.v2    - command-line and flag parser
           </div>
           <div class="stretch">
             <div class="title">
-              Toolkit Overview
+              Blue Jay Overview
             </div>
           </div>
         </div>

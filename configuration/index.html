@@ -179,9 +179,9 @@
 
 
 
-<a  title="Toolkit Overview" href="http://blue-jay.github.io/">
+<a  title="Blue Jay Overview" href="http://blue-jay.github.io/">
 	
-	Toolkit Overview
+	Blue Jay Overview
 </a>
 
 
@@ -451,7 +451,7 @@
 You are not using a framework so don&rsquo;t be afraid to change code. You don&rsquo;t need to
 use any of the components included with Blueprint, but it does give you a nice foundation to
 start from. If you want to use YAML instead of JSON, it&rsquo;s recommended to create a wrapper
-library in the <strong>lib</strong> folder and then load your env.yaml file via the <strong>bootstrap</strong>
+library in the <strong>lib</strong> folder and then load your env.yaml file via the <strong>boot</strong>
 package.</p>
 
 <h2 id="jay-command-env">Jay Command: env</h2>
@@ -484,25 +484,30 @@ in the <strong>bootstrap</strong> package. Here is an example <strong>env.json</
   &quot;Asset&quot;:{
     &quot;Folder&quot;:&quot;asset&quot;
   },
-  &quot;Database&quot;:{
-    &quot;Type&quot;:&quot;MySQL&quot;,
-    &quot;MySQL&quot;:{  
-      &quot;Username&quot;:&quot;root&quot;,
-      &quot;Password&quot;:&quot;&quot;,
-      &quot;Database&quot;:&quot;blueprint&quot;,
-      &quot;Charset&quot;:&quot;utf8mb4&quot;,
-      &quot;Collation&quot;:&quot;utf8mb4_unicode_ci&quot;,
-      &quot;Hostname&quot;:&quot;127.0.0.1&quot;,
-      &quot;Port&quot;:3306,
-      &quot;Parameter&quot;:&quot;parseTime=true&quot;
-    }
-  },
   &quot;Email&quot;:{
     &quot;Username&quot;:&quot;&quot;,
     &quot;Password&quot;:&quot;&quot;,
     &quot;Hostname&quot;:&quot;&quot;,
     &quot;Port&quot;:25,
     &quot;From&quot;:&quot;&quot;
+  },
+  &quot;Form&quot;:{
+    &quot;FileStorageFolder&quot;:&quot;filestorage&quot;
+  },
+  &quot;Generation&quot;:{
+    &quot;TemplateFolder&quot;:&quot;generate&quot;
+  },
+  &quot;MySQL&quot;:{  
+    &quot;Username&quot;:&quot;root&quot;,
+    &quot;Password&quot;:&quot;&quot;,
+    &quot;Database&quot;:&quot;blueprint&quot;,
+    &quot;Charset&quot;:&quot;utf8mb4&quot;,
+    &quot;Collation&quot;:&quot;utf8mb4_unicode_ci&quot;,
+    &quot;Hostname&quot;:&quot;127.0.0.1&quot;,
+    &quot;Port&quot;:3306,
+    &quot;Parameter&quot;:&quot;parseTime=true&quot;,
+    &quot;MigrationFolder&quot;:&quot;migration/mysql&quot;,
+    &quot;Extension&quot;:&quot;sql&quot;
   },
   &quot;Server&quot;:{
     &quot;Hostname&quot;:&quot;&quot;,
@@ -517,7 +522,7 @@ in the <strong>bootstrap</strong> package. Here is an example <strong>env.json</
   &quot;Session&quot;:{
     &quot;AuthKey&quot;:&quot;PzCh6FNAB7/jhmlUQ0+25sjJ+WgcJeKR2bAOtnh9UnfVN+WJSBvY/YC80Rs+rbMtwfmSP4FUSxKPtpYKzKFqFA==&quot;,
     &quot;EncryptKey&quot;:&quot;3oTKCcKjDHMUlV+qur2Ve664SPpSuviyGQ/UqnroUD8=&quot;,
-    &quot;CSRFKey&quot;:&quot;xULAGF5FcWvqHsXaovNFJYfgCt6pedRPROqNvsZjU18=&quot;,
+  &quot;CSRFKey&quot;:&quot;xULAGF5FcWvqHsXaovNFJYfgCt6pedRPROqNvsZjU18=&quot;,
     &quot;Name&quot;:&quot;sess&quot;,
     &quot;Options&quot;:{  
       &quot;Path&quot;:&quot;/&quot;,
@@ -558,33 +563,40 @@ changes:</p>
 
 <h2 id="configuration-structure">Configuration Structure</h2>
 
-<p>The <strong>env.json</strong> file contains the configuration for Blueprint. It removes the need
+<p>The <strong>env.json</strong> file contains the configuration for Blueprint and Jay. It removes the need
 to hardcode any of these values and makes it easy to move Blueprint to another system
 with a different setup. The <strong>env.json</strong> file is parsed and held in the
-<strong>Info</strong> struct from the <strong>bootstrap</strong> package:</p>
+<strong>Info</strong> struct from the <strong>boot</strong> package:</p>
 
 <pre><code class="language-go">// Info contains the application settings.
 type Info struct {
-	Asset    asset.Info    `json:&quot;Asset&quot;`
-	Database database.Info `json:&quot;Database&quot;`
-	Email    email.Info    `json:&quot;Email&quot;`
-	Server   server.Info   `json:&quot;Server&quot;`
-	Session  session.Info  `json:&quot;Session&quot;`
-	Template view.Template `json:&quot;Template&quot;`
-	View     view.Info     `json:&quot;View&quot;`
+  Asset      asset.Info    `json:&quot;Asset&quot;`
+  Email      email.Info    `json:&quot;Email&quot;`
+  Form       form.Info     `json:&quot;Form&quot;`
+  Generation generate.Info `json:&quot;Generation&quot;`
+  MySQL      mysql.Info    `json:&quot;MySQL&quot;`
+  Server     server.Info   `json:&quot;Server&quot;`
+  Session    session.Info  `json:&quot;Session&quot;`
+  Template   view.Template `json:&quot;Template&quot;`
+  View       view.Info     `json:&quot;View&quot;`
+  Path       string
 }
 </code></pre>
 
-<p>The <strong>Info</strong> struct is simply a container that nests structs from packages in the <strong>lib</strong> folder
-that need variables configured. Here is a list mapping the JSON keys to structs:</p>
+<p>The <strong>Info</strong> struct is simply a container that nests structs from packages in
+the <strong>Core</strong> library that need variables configured. The <strong>Path</strong> variable is
+the location of the env.json file. Here is a list mapping the JSON keys to
+structs:</p>
 
-<pre><code class="language-text">Asset     - Info struct in lib/asset
-Database  - Info struct in lib/database
-Email     - Info struct in lib/email
-Server    - Info struct in lib/server
-Session   - Info struct in lib/session
+<pre><code class="language-text">Asset     - Info struct in core/asset
+Email     - Info struct in core/email
+Form      - Info struct in core/form
+Generate  - Info struct in core/generate
+MySQL     - Info struct in core/mysql
+Server    - Info struct in core/server
+Session   - Info struct in core/session
 Template  - Template struct in lib/view
-View      - Info struct in lib/view
+View      - Info struct in core/view
 </code></pre>
 
 <h2 id="enable-https">Enable HTTPS</h2>
@@ -608,7 +620,7 @@ following:</p>
 <li>Create a new package in the <strong>lib</strong> folder called <strong>captcha</strong></li>
 <li>Create a struct called <strong>Info</strong> in the <strong>lib/captcha</strong> package</li>
 <li>Add the <strong>Captcha</strong> key and any values to the <strong>env.json</strong> file</li>
-<li>Add code to the <strong>RegisterServices()</strong> function in the <strong>bootstrap</strong> package to pass the config to the <strong>lib/captcha</strong> package at start up</li>
+<li>Add code to the <strong>RegisterServices()</strong> function in the <strong>boot</strong> package to pass the config to the <strong>lib/captcha</strong> package at start up</li>
 <li>Add code to your controllers that references your <strong>lib/captcha</strong> package</li>
 </ol>
 
@@ -618,8 +630,8 @@ following:</p>
 
 <ol>
 <li>Remove the <strong>Email</strong> key and value from the <strong>env.json</strong> file</li>
-<li>Remove the <strong>Email</strong> nested struct from the <strong>Info</strong> struct in the <strong>bootstrap</strong> package</li>
-<li>Remove any code setting up the package from the <strong>RegisterServices()</strong> function in the <strong>bootstrap</strong> package</li>
+<li>Remove the <strong>Email</strong> nested struct from the <strong>Info</strong> struct in the <strong>boot</strong> package</li>
+<li>Remove any code setting up the package from the <strong>RegisterServices()</strong> function in the <strong>boot</strong> package</li>
 <li>Remove the <strong>lib/email</strong> package from the filesystem</li>
 <li>Find any references to the <strong>lib/email</strong> package in your code using the jay command line, <code>jay find . &quot;lib/email&quot;</code>,
 then delete the imports and referencing code</li>

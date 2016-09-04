@@ -179,9 +179,9 @@
 
 
 
-<a  title="Toolkit Overview" href="http://blue-jay.github.io/">
+<a  title="Blue Jay Overview" href="http://blue-jay.github.io/">
 	
-	Toolkit Overview
+	Blue Jay Overview
 </a>
 
 
@@ -521,7 +521,7 @@ where the controller uses the <strong>router.ChainHandler()</strong> function.
 The function is a wrapper for
 the <a href="https://github.com/justinas/alice">justinas/alice</a> package which makes
 using middleware more scalable and a little &ldquo;prettier&rdquo;. If you look at the
-<a href="https://github.com/blue-jay/blueprint/blob/master/bootstrap/bootstrap.go">bootstrap</a>
+<a href="https://github.com/blue-jay/blueprint/blob/master/boot/boot.go">boot</a>
 package, you&rsquo;ll see the <strong>ChainHandler()</strong> function. There is also a <strong>Chain()</strong>
 function that can be used to chain middleware for routes or to pass to
 <strong>ChainHandler()</strong>.</p>
@@ -555,11 +555,11 @@ the alice.Constructor type.</p>
 <h2 id="apply-to-every-request">Apply to Every Request</h2>
 
 <p>In <a href="https://github.com/blue-jay/blueprint/blob/master/blueprint.go">blueprint.go</a>,
-the application calls <strong>bootstrap.SetUpMiddleware(router.Instance())</strong> which
+the application calls <strong>boot.SetUpMiddleware(router.Instance())</strong> which
 applies the middleware to the router. The middleware is called on every
 request.</p>
 
-<p><a href="https://github.com/blue-jay/blueprint/blob/master/bootstrap/bootstrap.go">Source</a></p>
+<p><a href="https://github.com/blue-jay/blueprint/blob/master/boot/boot.go">Source</a></p>
 
 <pre><code class="language-go">// SetUpMiddleware contains the middleware that applies to every request.
 func SetUpMiddleware(h http.Handler) http.Handler {

@@ -25,7 +25,7 @@ The controller files are all organized under the &lt;strong&gt;controller&lt;/st
 
 &lt;h2 id=&#34;routing&#34;&gt;Routing&lt;/h2&gt;
 
-&lt;p&gt;In the &lt;strong&gt;bootstrap&lt;/strong&gt; package, the &lt;strong&gt;RegisterServices()&lt;/strong&gt; function
+&lt;p&gt;In the &lt;strong&gt;boot&lt;/strong&gt; package, the &lt;strong&gt;RegisterServices()&lt;/strong&gt; function
 calls the &lt;strong&gt;controller.LoadRoutes()&lt;/strong&gt; function. The &lt;strong&gt;LoadRoutes()&lt;/strong&gt; function in
  the &lt;strong&gt;controller&lt;/strong&gt; package loads the routes for each of the individual
  controllers:&lt;/p&gt;
@@ -89,8 +89,9 @@ import (
     &amp;quot;path&amp;quot;
 
     &amp;quot;github.com/blue-jay/blueprint/controller/status&amp;quot;
-    &amp;quot;github.com/blue-jay/blueprint/lib/asset&amp;quot;
-    &amp;quot;github.com/blue-jay/blueprint/lib/router&amp;quot;
+
+    &amp;quot;github.com/blue-jay/core/asset&amp;quot;
+    &amp;quot;github.com/blue-jay/core/router&amp;quot;
 )
 
 // Load the routes.
@@ -128,8 +129,8 @@ package status
 import (
     &amp;quot;net/http&amp;quot;
 
-    &amp;quot;github.com/blue-jay/blueprint/lib/router&amp;quot;
-    &amp;quot;github.com/blue-jay/blueprint/lib/view&amp;quot;
+    &amp;quot;github.com/blue-jay/core/router&amp;quot;
+    &amp;quot;github.com/blue-jay/core/view&amp;quot;
 )
 
 // Load the routes.
@@ -148,12 +149,14 @@ func Error404(w http.ResponseWriter, r *http.Request) {
 }
 
 // Error405 - Method Not Allowed.
-func Error405(w http.ResponseWriter, r *http.Request) {
-    w.WriteHeader(http.StatusMethodNotAllowed)
-    v := view.New(&amp;quot;status/index&amp;quot;)
-    v.Vars[&amp;quot;title&amp;quot;] = &amp;quot;405 Method Not Allowed&amp;quot;
-    v.Vars[&amp;quot;message&amp;quot;] = &amp;quot;Method is not allowed.&amp;quot;
-    v.Render(w, r)
+func Error405(allowedMethods string) func(w http.ResponseWriter, r *http.Request) {
+    return func(w http.ResponseWriter, r *http.Request) {
+        w.WriteHeader(http.StatusMethodNotAllowed)
+        v := view.New(&amp;quot;status/index&amp;quot;)
+        v.Vars[&amp;quot;title&amp;quot;] = &amp;quot;405 Method Not Allowed&amp;quot;
+        v.Vars[&amp;quot;message&amp;quot;] = &amp;quot;Method is not allowed.&amp;quot;
+        v.Render(w, r)
+    }
 }
 &lt;/code&gt;&lt;/pre&gt;
 </description>

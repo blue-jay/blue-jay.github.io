@@ -22,9 +22,10 @@
 retype or copy and paste the same code over again. It&amp;rsquo;s especially useful when
 prototyping and need to see how something will look or work.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: The &lt;code&gt;jay migrate&lt;/code&gt; commands requires the environment variable,
-JAYCONFIG, to point to the env.json file path. The &lt;strong&gt;generation&lt;/strong&gt; folder must
-also be in the same folder.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: The &lt;code&gt;jay generate&lt;/code&gt; commands requires the environment variable,
+&lt;strong&gt;JAYCONFIG&lt;/strong&gt;, to point to the env.json file path. The generation folder
+containing the templates is specified in the env.json file under
+&lt;strong&gt;Generation.TemplateFolder&lt;/strong&gt;.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Jay&lt;/strong&gt; tries to make it easy to generate code by using tools that you already
 know: the &lt;strong&gt;text/template&lt;/strong&gt; package from the standard Go library and JSON.&lt;/p&gt;
@@ -204,7 +205,8 @@ import (
     &amp;quot;net/http&amp;quot;
 
     &amp;quot;github.com/blue-jay/blueprint/controller/status&amp;quot;
-    &amp;quot;github.com/blue-jay/blueprint/lib/router&amp;quot;
+
+    &amp;quot;github.com/blue-jay/core/router&amp;quot;
 )
 
 var (
@@ -262,7 +264,8 @@ import (
     &amp;quot;net/http&amp;quot;
 
     &amp;quot;github.com/blue-jay/blueprint/controller/status&amp;quot;
-    &amp;quot;github.com/blue-jay/blueprint/lib/router&amp;quot;
+
+    &amp;quot;github.com/blue-jay/core/router&amp;quot;
 )
 
 var (

@@ -179,9 +179,9 @@
 
 
 
-<a  title="Toolkit Overview" href="http://blue-jay.github.io/">
+<a  title="Blue Jay Overview" href="http://blue-jay.github.io/">
 	
-	Toolkit Overview
+	Blue Jay Overview
 </a>
 
 
@@ -451,9 +451,10 @@
 retype or copy and paste the same code over again. It&rsquo;s especially useful when
 prototyping and need to see how something will look or work.</p>
 
-<p><strong>Note</strong>: The <code>jay migrate</code> commands requires the environment variable,
-JAYCONFIG, to point to the env.json file path. The <strong>generation</strong> folder must
-also be in the same folder.</p>
+<p><strong>Note</strong>: The <code>jay generate</code> commands requires the environment variable,
+<strong>JAYCONFIG</strong>, to point to the env.json file path. The generation folder
+containing the templates is specified in the env.json file under
+<strong>Generation.TemplateFolder</strong>.</p>
 
 <p><strong>Jay</strong> tries to make it easy to generate code by using tools that you already
 know: the <strong>text/template</strong> package from the standard Go library and JSON.</p>
@@ -633,7 +634,8 @@ import (
     &quot;net/http&quot;
 
     &quot;github.com/blue-jay/blueprint/controller/status&quot;
-    &quot;github.com/blue-jay/blueprint/lib/router&quot;
+
+    &quot;github.com/blue-jay/core/router&quot;
 )
 
 var (
@@ -691,7 +693,8 @@ import (
     &quot;net/http&quot;
 
     &quot;github.com/blue-jay/blueprint/controller/status&quot;
-    &quot;github.com/blue-jay/blueprint/lib/router&quot;
+
+    &quot;github.com/blue-jay/core/router&quot;
 )
 
 var (

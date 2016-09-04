@@ -26,13 +26,14 @@ components lives.&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;asset/
 |----dynamic/    - private assets like SASS files, single JavaScript files, and logo.png for favicon generation
 |----static/     - public assets like CSS, JavaScript, and favicon.ico for Android, Apple, etc
-bootstrap/       - package for initial set up of the application
+boot/            - package for initial set up of the application
 controller/      - packages with routes and application logic
-database/
-|----migration/  - SQL files for migration database up and down
+filestorage/     - files uploaded from an HTML form
 generate/        - template pairs (.gen and .json) for generating code using jay
-lib/             - packages with minimum dependencies
+lib/             - packages you&#39;ll build that are used by the application (recommended to build with minimum dependencies)
 middleware/      - packages that return a http.Handler to wrap around routes for ACL, request logging, etc
+migration/       - migration database files
+|----mysql/      - MySQL files for migrating database up and down
 model/           - packages with database queries and structs matching tables
 view/            - HTML templates parsed using the Go html/template package
 viewfunc/        - packages that return a template.FuncMap for use in views
@@ -63,29 +64,36 @@ golang.org/x/crypto/bcrypt              - password hashing algorithm
 
 &lt;h2 id=&#34;jay-structure&#34;&gt;Jay Structure&lt;/h2&gt;
 
-&lt;p&gt;The project is organized into the following folders:&lt;/p&gt;
+&lt;p&gt;The project is simply a command-line interface for packages in the Core library
+&lt;a href=&#34;https://github.com/blue-jay/core&#34;&gt;https://github.com/blue-jay/core&lt;/a&gt;. The packages that Jay uses from the Core
+library are:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;env/       - package that creates and updates the env.json config file
 find/      - package that finds case-sensitive matched text in files
 generate/  - package that generates code from template pairs
-lib/       - packages with minimum dependencies
 migrate/   - package that handles the database migrations
 replace/   - package that replaces case-sensitive matched text in files
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;The following file exists at the project root:&lt;/p&gt;
+&lt;p&gt;The following file exists at the project root of Jay:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;jay.go     - entrypoint for the application
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;jay-external-go-packages&#34;&gt;Jay External Go Packages&lt;/h2&gt;
 
-&lt;p&gt;There are a few external packages used in Jay:&lt;/p&gt;
+&lt;p&gt;There is only one external packages used in Jay (not including the Core
+library):&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;github.com/go-sql-driver/mysql    - MySQL driver
-github.com/jmoiron/sqlx           - MySQL general purpose extensions
-gopkg.in/alecthomas/kingpin.v2    - command-line and flag parser
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;gopkg.in/alecthomas/kingpin.v2    - command-line and flag parser
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;core-structure&#34;&gt;Core Structure&lt;/h2&gt;
+
+&lt;p&gt;The Core project contains many packages that are all divided into individual
+folders. Each is well documented so the
+&lt;a href=&#34;https://godoc.org/github.com/blue-jay/core&#34;&gt;GoDoc&lt;/a&gt; page should provide enough
+information on each one.&lt;/p&gt;
 </description>
     </item>
     

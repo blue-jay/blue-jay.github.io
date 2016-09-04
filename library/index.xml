@@ -18,17 +18,21 @@
 
 &lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
 
-&lt;p&gt;If you look through the &lt;strong&gt;lib&lt;/strong&gt; folder, you&amp;rsquo;ll see packages that provide
+&lt;p&gt;If you look through the &lt;a href=&#34;https://github.com/blue-jay/core&#34;&gt;&lt;strong&gt;Core&lt;/strong&gt;&lt;/a&gt; library,
+you&amp;rsquo;ll see packages that provide
 different functionality. These packages are designed to be shared and used
-through the application. Since Blueprint is a web application, the packages
-must be thread-safe to ensure they won&amp;rsquo;t throw any errors if they are accessed
-at the same time by two separate threads.&lt;/p&gt;
+through the application. Since Blueprint is a web application, some of the
+packages must be thread-safe to ensure they won&amp;rsquo;t throw any errors if they are
+accessed at the same time by two separate threads.&lt;/p&gt;
+
+&lt;p&gt;As you create your own packages, you can store them in the &lt;strong&gt;blueprint/lib&lt;/strong&gt;
+folder to keep them organized and separate.&lt;/p&gt;
 
 &lt;p&gt;It&amp;rsquo;s a good idea to keep them light on dependencies so you can reuse them again
 in later projects. Packages that are too tightly-coupled require time to rework
 so you might as well do it right from the start.&lt;/p&gt;
 
-&lt;p&gt;Let&amp;rsquo;s take a look at the &lt;strong&gt;lib/email&lt;/strong&gt; package in sections. The first of the
+&lt;p&gt;Let&amp;rsquo;s take a look at the &lt;strong&gt;email&lt;/strong&gt; package in sections. The first of the
 three sections is the package declaration and import section. Notice how the
 only packages the &lt;strong&gt;email&lt;/strong&gt; package uses are part of the standard library. This
 is a good indicator that the package could be moved to a different project
@@ -47,14 +51,14 @@ import (
 
 &lt;p&gt;The next section shows the thread-safe configuration that is used in many of
 the lib packages. The Info struct holds the details for the SMTP server and is
-public so it can be nested in the &lt;strong&gt;Info&lt;/strong&gt; struct of the &lt;strong&gt;bootstrap&lt;/strong&gt; package
+public so it can be nested in the &lt;strong&gt;Info&lt;/strong&gt; struct of the &lt;strong&gt;boot&lt;/strong&gt; package
 and then parsed from the env.json file. See the &lt;a href=&#34;http://blue-jay.github.io/configuration/&#34;&gt;Configuration&lt;/a&gt;
 section for more information about adding to env.json.&lt;/p&gt;
 
 &lt;p&gt;There are also a few methods standard to the lib packages:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;SetConfig() - allows the &lt;strong&gt;bootstrap&lt;/strong&gt; package to store the Info struct to a package level variable&lt;/li&gt;
+&lt;li&gt;SetConfig() - allows the &lt;strong&gt;boot&lt;/strong&gt; package to store the Info struct to a package level variable&lt;/li&gt;
 &lt;li&gt;ResetConfig() - allows test packages to reset the configuration&lt;/li&gt;
 &lt;li&gt;Config() - returns the configuration so the values can be accessed by other packages&lt;/li&gt;
 &lt;/ul&gt;

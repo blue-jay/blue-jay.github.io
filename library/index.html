@@ -179,9 +179,9 @@
 
 
 
-<a  title="Toolkit Overview" href="http://blue-jay.github.io/">
+<a  title="Blue Jay Overview" href="http://blue-jay.github.io/">
 	
-	Toolkit Overview
+	Blue Jay Overview
 </a>
 
 
@@ -447,17 +447,21 @@
 
 <h2 id="basic-usage">Basic Usage</h2>
 
-<p>If you look through the <strong>lib</strong> folder, you&rsquo;ll see packages that provide
+<p>If you look through the <a href="https://github.com/blue-jay/core"><strong>Core</strong></a> library,
+you&rsquo;ll see packages that provide
 different functionality. These packages are designed to be shared and used
-through the application. Since Blueprint is a web application, the packages
-must be thread-safe to ensure they won&rsquo;t throw any errors if they are accessed
-at the same time by two separate threads.</p>
+through the application. Since Blueprint is a web application, some of the
+packages must be thread-safe to ensure they won&rsquo;t throw any errors if they are
+accessed at the same time by two separate threads.</p>
+
+<p>As you create your own packages, you can store them in the <strong>blueprint/lib</strong>
+folder to keep them organized and separate.</p>
 
 <p>It&rsquo;s a good idea to keep them light on dependencies so you can reuse them again
 in later projects. Packages that are too tightly-coupled require time to rework
 so you might as well do it right from the start.</p>
 
-<p>Let&rsquo;s take a look at the <strong>lib/email</strong> package in sections. The first of the
+<p>Let&rsquo;s take a look at the <strong>email</strong> package in sections. The first of the
 three sections is the package declaration and import section. Notice how the
 only packages the <strong>email</strong> package uses are part of the standard library. This
 is a good indicator that the package could be moved to a different project
@@ -476,14 +480,14 @@ import (
 
 <p>The next section shows the thread-safe configuration that is used in many of
 the lib packages. The Info struct holds the details for the SMTP server and is
-public so it can be nested in the <strong>Info</strong> struct of the <strong>bootstrap</strong> package
+public so it can be nested in the <strong>Info</strong> struct of the <strong>boot</strong> package
 and then parsed from the env.json file. See the <a href="http://blue-jay.github.io/configuration/">Configuration</a>
 section for more information about adding to env.json.</p>
 
 <p>There are also a few methods standard to the lib packages:</p>
 
 <ul>
-<li>SetConfig() - allows the <strong>bootstrap</strong> package to store the Info struct to a package level variable</li>
+<li>SetConfig() - allows the <strong>boot</strong> package to store the Info struct to a package level variable</li>
 <li>ResetConfig() - allows test packages to reset the configuration</li>
 <li>Config() - returns the configuration so the values can be accessed by other packages</li>
 </ul>
