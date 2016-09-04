@@ -517,7 +517,7 @@ form validation, form repopulation, and URL parameters.</p>
 <li>view
 
 <ul>
-<li>base.json - creates four bare views with only a basic structure</li>
+<li>bare.json - creates four bare views with only a basic structure</li>
 <li>create.gen | create.json - creates a CRUD ready creation form view</li>
 <li>create_bare.gen | create_bare.json - creates a bare view with only a basic structure</li>
 <li>default.json - creates four views with CRUD ready code</li>
@@ -680,7 +680,7 @@ func Create(w http.ResponseWriter, r *http.Request) {
 <p>To generate this template, the command would look like this. Notice the second
 variable, <strong>url</strong>.</p>
 
-<pre><code class="language-bash">jay generate controller/base package:monkey url:banana
+<pre><code class="language-bash">jay generate controller/bare package:monkey url:banana
 </code></pre>
 
 <p>The final output would be to the file, <strong>controller/monkey/monkey.go</strong>, and
