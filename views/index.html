@@ -467,7 +467,7 @@
 
 <p>Since this view is stored at <strong>view/about/index.tmpl</strong>, we may render it using the <strong>view</strong> helper package like so:</p>
 
-<pre><code class="language-go">// import &quot;github.com/blue-jay/blueprint/lib/view&quot;
+<pre><code class="language-go">// import &quot;github.com/blue-jay/core/view&quot;
 v := view.New(&quot;about/index&quot;)
 // Variables would go here like this: v.Vars[&quot;first_name&quot;] = session.Values[&quot;first_name&quot;]
 v.Render(w, r)
@@ -475,7 +475,7 @@ v.Render(w, r)
 
 <p>If you don&rsquo;t have to pass any variables to the template, you could shorten it like this:</p>
 
-<pre><code class="language-go">// import &quot;github.com/blue-jay/blueprint/lib/view&quot;
+<pre><code class="language-go">// import &quot;github.com/blue-jay/core/view&quot;
 view.New(&quot;about/index&quot;).Render(w, r)
 </code></pre>
 
@@ -630,8 +630,8 @@ and static files easier:</p>
 <h2 id="view-variables">View Variables</h2>
 
 <p>There is an easy way to add variables so they are available in the views. The
-<strong>viewmodify</strong> folder contains packages that define variables and add them to
-the view.Vars map. Since you are editing the map right before it renders, it
+<strong>viewmodify</strong> folder contains packages that define variables in the view.Vars
+map. Since you are editing the map right before it renders, it
 will overwrite any other variables that were set in the controllers so it&rsquo;s best
 to choose names or pick a naming convention for your variables.</p>
 
@@ -824,7 +824,7 @@ package to change the HTTP method from a URL query string. The <strong>rest</str
 already applied to every request in the <strong>boot</strong> package.</p>
 
 <p>To change the method, add this line to your form action and change the value
-<strong>value</strong> to match a method like <strong>DELETE</strong> or <strong>PATCH</strong>. It will automatically
+to match a method like <strong>DELETE</strong> or <strong>PATCH</strong>. It will automatically
 be converted to uppercase.</p>
 
 <p>The query string key should be: <strong>_method</strong>.</p>

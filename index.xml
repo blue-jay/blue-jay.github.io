@@ -1468,7 +1468,7 @@ func StandardError(err error) error {
 
 &lt;p&gt;Since this view is stored at &lt;strong&gt;view/about/index.tmpl&lt;/strong&gt;, we may render it using the &lt;strong&gt;view&lt;/strong&gt; helper package like so:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// import &amp;quot;github.com/blue-jay/blueprint/lib/view&amp;quot;
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// import &amp;quot;github.com/blue-jay/core/view&amp;quot;
 v := view.New(&amp;quot;about/index&amp;quot;)
 // Variables would go here like this: v.Vars[&amp;quot;first_name&amp;quot;] = session.Values[&amp;quot;first_name&amp;quot;]
 v.Render(w, r)
@@ -1476,7 +1476,7 @@ v.Render(w, r)
 
 &lt;p&gt;If you don&amp;rsquo;t have to pass any variables to the template, you could shorten it like this:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// import &amp;quot;github.com/blue-jay/blueprint/lib/view&amp;quot;
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// import &amp;quot;github.com/blue-jay/core/view&amp;quot;
 view.New(&amp;quot;about/index&amp;quot;).Render(w, r)
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -1631,8 +1631,8 @@ and static files easier:&lt;/p&gt;
 &lt;h2 id=&#34;view-variables&#34;&gt;View Variables&lt;/h2&gt;
 
 &lt;p&gt;There is an easy way to add variables so they are available in the views. The
-&lt;strong&gt;viewmodify&lt;/strong&gt; folder contains packages that define variables and add them to
-the view.Vars map. Since you are editing the map right before it renders, it
+&lt;strong&gt;viewmodify&lt;/strong&gt; folder contains packages that define variables in the view.Vars
+map. Since you are editing the map right before it renders, it
 will overwrite any other variables that were set in the controllers so it&amp;rsquo;s best
 to choose names or pick a naming convention for your variables.&lt;/p&gt;
 
@@ -1825,7 +1825,7 @@ package to change the HTTP method from a URL query string. The &lt;strong&gt;res
 already applied to every request in the &lt;strong&gt;boot&lt;/strong&gt; package.&lt;/p&gt;
 
 &lt;p&gt;To change the method, add this line to your form action and change the value
-&lt;strong&gt;value&lt;/strong&gt; to match a method like &lt;strong&gt;DELETE&lt;/strong&gt; or &lt;strong&gt;PATCH&lt;/strong&gt;. It will automatically
+to match a method like &lt;strong&gt;DELETE&lt;/strong&gt; or &lt;strong&gt;PATCH&lt;/strong&gt;. It will automatically
 be converted to uppercase.&lt;/p&gt;
 
 &lt;p&gt;The query string key should be: &lt;strong&gt;_method&lt;/strong&gt;.&lt;/p&gt;
@@ -2360,6 +2360,7 @@ form validation, form repopulation, and URL parameters.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;bare.gen | bare.json - creates a bare controller with only placeholder functions&lt;/li&gt;
 &lt;li&gt;default.gen | default.json - creates a controller with CRUD ready code with the &lt;strong&gt;flight&lt;/strong&gt; package&lt;/li&gt;
+&lt;li&gt;nameonly.gen | nameonly.json - creates a controller with CRUD ready code with the &lt;strong&gt;flight&lt;/strong&gt; package and only a &lt;strong&gt;name&lt;/strong&gt; column&lt;/li&gt;
 &lt;li&gt;noflight.gen | noflight.json - creates a controller with CRUD ready code without the &lt;strong&gt;flight&lt;/strong&gt; package&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
 &lt;li&gt;crud
@@ -2367,6 +2368,7 @@ form validation, form repopulation, and URL parameters.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;bare.json - creates a bare controller, model, and four views&lt;/li&gt;
 &lt;li&gt;default.json - creates a controller, model, and four views CRUD ready with the &lt;strong&gt;flight&lt;/strong&gt; package&lt;/li&gt;
+&lt;li&gt;nameonly.json - creates a controller, model, and four views CRUD ready with the &lt;strong&gt;flight&lt;/strong&gt; package and only a &lt;strong&gt;name&lt;/strong&gt; column&lt;/li&gt;
 &lt;li&gt;noflight.json - creates a controller, model, and four views CRUD ready without the &lt;strong&gt;flight&lt;/strong&gt; package&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
 &lt;li&gt;lib
@@ -2384,6 +2386,7 @@ form validation, form repopulation, and URL parameters.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;bare.gen | bare.json - creates a bare model with only placeholder functions&lt;/li&gt;
 &lt;li&gt;default.gen | default.json - creates a model with CRUD ready code&lt;/li&gt;
+&lt;li&gt;nameonly.gen | nameonly.json - creates a model with CRUD ready code and only a &lt;strong&gt;name&lt;/strong&gt; column&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
 &lt;li&gt;view
 
