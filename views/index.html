@@ -710,18 +710,60 @@ You are not logged in.
 &lt;input type=&quot;hidden&quot; name=&quot;token&quot; value=&quot;{{.token}}&quot;&gt;
 </code></pre>
 
-<h2 id="forms">Forms</h2>
+<h2 id="repopulate-form-fields">Repopulate Form Fields</h2>
 
-<p>When a form is submitted and there are errors like a required field is missing,
+<p>When a form is submitted and there are errors like when a required field is missing,
 the same web page should reload. Unfortunately, forms are not refilled so there
 are a few helpers from the <strong>form</strong> package that will help you refill, select,
 and check.</p>
 
-<p>First, check out the <a href="http://blue-jay.github.io/controllers/#repopulate-form-fields">Repopulate Form Fields</a>
-section on the Controllers page. It will show you the single line of code needed
-in your controller.</p>
+<p>These functions actually do both form population (filling in a form from a
+database record) and form repopulation (filling in a form from a form submission
+where something went wrong like a required field was left blank). These functions
+will fill the form with values from the form submission over the values from the
+database record. If you refresh the page, the form submission values will be
+forgotten and the values from the database record will return.</p>
 
-<p>Then, use the blocks below in your templates. Notice that some of the HTML
+<p>For instance, say your form has two fields: name and age. Both are required fields.
+You type in your name, John Doe, forget to type in your age, and click the submit
+button. The page will reload, show an error message, and the functions will automatically
+refill the name field with your name. The record has not been saved in the database,
+but the name field is remembered from the form submission (form repopulation).
+You enter in your age as 30, click the submit button, and the record is
+successfully added to the database.</p>
+
+<p>Let&rsquo;s say you want to edit the database record and you want to enter in a new
+age. You load the edit page and the functions will automatically refill the
+name field and the age field with the values from the database (form population).
+You try to be sneaky and change your age to the word &ldquo;thirty&rdquo;, instead of the
+number 30. You click the submit button, the page reloads, shows an error message,
+and refills the name field and the age. The age field will be filled with the word
+&ldquo;thirty&rdquo; because the form submission values take priority over the values from the
+database. If you clicked the refresh button in your browser, the age field would
+then load the number 30 from the database instead.</p>
+
+<p>There are two views that benefit from these functions: create.tmpl and edit.tmpl.
+You don&rsquo;t have to use these names, but it&rsquo;s just an example to show you these
+functions will primarily be used in the the template to create a new record
+in the database (create.tmpl) and the template to edit an existing record in the
+database (edit.tmpl).</p>
+
+<p>In the create.tmpl view, there may be required fields. If the form requires typing
+in a long block of text for a couple answers and the user forgets one of the
+required fields, when the page reloads, all the text will not be there. These
+functions will refill, select, and check all the form inputs specified in the
+controller. The create.tmpl does not use the &ldquo;default value&rdquo; field in these
+functions so you can set them to an empty string (&ldquo;&rdquo;) or set them to a view
+variable so you can copy and paste the same code between create.tmpl and edit.tmpl.
+The edit.tmpl view requires the same logic, but also needs the &ldquo;default value&rdquo;
+to prefill, select, and check the form values from view variables (which will
+probably be pulled from a model struct).</p>
+
+<p>Check out the <a href="http://blue-jay.github.io/controllers/#repopulate-form-fields">Repopulate Form Fields</a>
+section on the Controllers page. It will show you the single line of code needed
+in your controller so these fields repopulate on form submission.</p>
+
+<p>These are the functions/blocks to use in your templates. Notice that some of the HTML
 attributes are missing like <strong>name</strong>, <strong>value</strong>, and <strong>type</strong> from the elements.
 The blocks will automatically fill these in for you so you don&rsquo;t have the write
 the name of the element multiple times. By the way, it took very little code to
@@ -729,49 +771,47 @@ add this functionality so check out the
 <a href="https://github.com/blue-jay/core/blob/master/form/form.go">form</a>
 package to see how it was accomplished.</p>
 
-<pre><code class="language-html">
-&lt;!-- TEXT accepts the element name and then a period --&gt;
-&lt;input {{TEXT &quot;email&quot; .}} type=&quot;email&quot; class=&quot;form-control&quot; id=&quot;email&quot; /&gt;
+<pre><code class="language-html">&lt;!-- TEXT accepts the element name, a default value, and then a period --&gt;
+&lt;input {{TEXT &quot;email&quot; .item.Email .}} type=&quot;email&quot; class=&quot;form-control&quot; id=&quot;email&quot; /&gt;
 &lt;!-- then parses to a name attribute when no repopulation value is passed --&gt;
 &lt;input name=&quot;email&quot; type=&quot;email&quot; class=&quot;form-control&quot; id=&quot;email&quot; /&gt;
 &lt;!-- and parses to a name and a value when a repopulation value is passed --&gt;
 &lt;input name=&quot;email&quot; value=&quot;me@example.com&quot; type=&quot;email&quot; class=&quot;form-control&quot; id=&quot;email&quot; /&gt;
 
-&lt;!-- TEXTAREA accepts the element name and then a period --&gt;
-&lt;textarea rows=&quot;5&quot; class=&quot;form-control&quot; id=&quot;name&quot; name=&quot;name&quot; /&gt;{{TEXTAREA &quot;name&quot; .}}&lt;/textarea&gt;
+&lt;!-- TEXTAREA accepts the element name, a default value, and then a period --&gt;
+&lt;textarea rows=&quot;5&quot; class=&quot;form-control&quot; id=&quot;name&quot; name=&quot;name&quot; /&gt;{{TEXTAREA &quot;name&quot; .item.Name .}}&lt;/textarea&gt;
 &lt;!-- then parses to nothing when no repopulation value is passed --&gt;
 &lt;textarea rows=&quot;5&quot; class=&quot;form-control&quot; id=&quot;name&quot; name=&quot;name&quot; /&gt;&lt;/textarea&gt;
 &lt;!-- and parses to a value when a repopulation value is passed --&gt;
 &lt;textarea rows=&quot;5&quot; class=&quot;form-control&quot; id=&quot;name&quot; name=&quot;name&quot; /&gt;Sample text&lt;/textarea&gt;
 
-&lt;!-- CHECKBOX accepts the element name, value, and then a period --&gt;
-&lt;label&gt;&lt;input {{CHECKBOX &quot;rememberme&quot; &quot;r1&quot; .}}&gt; Remember me&lt;/label&gt;
+&lt;!-- CHECKBOX accepts the element name, value, default value, and then a period --&gt;
+&lt;label&gt;&lt;input {{CHECKBOX &quot;rememberme&quot; &quot;r1&quot; .item.RememberMe .}}&gt; Remember me&lt;/label&gt;
 &lt;!-- then parses to a type, name, and value attribute when no repopulation value is passed --&gt;
 &lt;label&gt;&lt;input type=&quot;checkbox&quot; name=&quot;rememberme&quot; value=&quot;r1&quot;&gt; Remember me&lt;/label&gt;
 &lt;!-- and parses to a type, name, value, and the word 'checked' when a repopulation value is passed --&gt;
 &lt;label&gt;&lt;input type=&quot;checkbox&quot; name=&quot;rememberme&quot; value=&quot;r1&quot; checked&gt; Remember me&lt;/label&gt;
 
-&lt;!-- RADIO accepts the element name, value, and then a period --&gt;
-&lt;label&gt;&lt;input {{RADIO &quot;options&quot; &quot;burger&quot; .}}&gt; Burger&lt;/label&gt;
+&lt;!-- RADIO accepts the element name, value, default value, and then a period --&gt;
+&lt;label&gt;&lt;input {{RADIO &quot;options&quot; &quot;burger&quot; .item.Option .}}&gt; Burger&lt;/label&gt;
 &lt;!-- then parses to a type, name, and value attribute when no repopulation value is passed --&gt;
 &lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;options&quot; value=&quot;burger&quot;&gt; Burger&lt;/label&gt;
 &lt;!-- and parses to a type, name, value attribute, and the word 'checked' when a repopulation value is passed --&gt;
 &lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;options&quot; value=&quot;burger&quot; checked&gt; Burger&lt;/label&gt;
 
-&lt;!-- OPTION accepts the element name, value, and then a period --&gt;
-&lt;select name=&quot;select&quot;&gt;&lt;option {{OPTION &quot;select&quot; &quot;Apple&quot; .}}&gt;Apple&lt;/option&gt;&lt;/select&gt;
+&lt;!-- OPTION accepts the element name, value, default value, and then a period --&gt;
+&lt;select name=&quot;select&quot;&gt;&lt;option {{OPTION &quot;select&quot; &quot;Apple&quot; .item.Select .}}&gt;Apple&lt;/option&gt;&lt;/select&gt;
 &lt;!-- then parses to a value attribute when no repopulation value is passed --&gt;
 &lt;select name=&quot;select&quot;&gt;&lt;option value=&quot;Apple&quot;&gt;Apple&lt;/option&gt;&lt;/select&gt;
 &lt;!-- and parses to a value attribute and the word 'selected' when a repopulation value is passed --&gt;
 &lt;select name=&quot;select&quot;&gt;&lt;option value=&quot;Apple&quot; selected&gt;Apple&lt;/option&gt;&lt;/select&gt;
-
 </code></pre>
 
 <p>Here are examples of all the fields with the Bootrap structure and classes:</p>
 
 <pre><code class="language-html">&lt;div class=&quot;form-group&quot;&gt;
 	&lt;label for=&quot;email&quot;&gt;Email Address&lt;/label&gt;
-	&lt;div&gt;&lt;input {{TEXT &quot;email&quot; .}} type=&quot;email&quot; class=&quot;form-control&quot; id=&quot;email&quot; maxlength=&quot;48&quot; placeholder=&quot;Email&quot; /&gt;&lt;/div&gt;
+	&lt;div&gt;&lt;input {{TEXT &quot;email&quot; .item.Email .}} type=&quot;email&quot; class=&quot;form-control&quot; id=&quot;email&quot; maxlength=&quot;48&quot; placeholder=&quot;Email&quot; /&gt;&lt;/div&gt;
 &lt;/div&gt;
 
 &lt;div class=&quot;form-group&quot;&gt;
@@ -781,49 +821,49 @@ package to see how it was accomplished.</p>
 
 &lt;div class=&quot;checkbox&quot;&gt;
     &lt;label&gt;
-        &lt;input {{CHECKBOX &quot;rememberme&quot; &quot;r1&quot; .}}&gt; Remember me
+        &lt;input {{CHECKBOX &quot;rememberme&quot; &quot;r1&quot; .item.RememberMe .}}&gt; Remember me
     &lt;/label&gt;
 &lt;/div&gt;
 &lt;div class=&quot;checkbox&quot;&gt;
     &lt;label&gt;
-        &lt;input {{CHECKBOX &quot;rememberme&quot; &quot;r2&quot; .}}&gt; Remember me
+        &lt;input {{CHECKBOX &quot;rememberme&quot; &quot;r2&quot; .item.RememberMe .}}&gt; Remember me
     &lt;/label&gt;
 &lt;/div&gt;
 
 &lt;div class=&quot;radio&quot;&gt;
     &lt;label&gt;
-        &lt;input {{RADIO &quot;options&quot; &quot;burger&quot; .}}&gt; Burger
+        &lt;input {{RADIO &quot;options&quot; &quot;burger&quot; .item.Option .}}&gt; Burger
     &lt;/label&gt;
 &lt;/div&gt;
 &lt;div class=&quot;radio&quot;&gt;
     &lt;label&gt;
-        &lt;input {{RADIO &quot;options&quot; &quot;taco&quot; .}}&gt; Taco
+        &lt;input {{RADIO &quot;options&quot; &quot;taco&quot; .item.Option .}}&gt; Taco
     &lt;/label&gt;
 &lt;/div&gt;
 
 &lt;select class=&quot;form-control&quot; name=&quot;select&quot;&gt;
-    &lt;option {{OPTION &quot;select&quot; &quot;Apple&quot; .}}&gt;Apple&lt;/option&gt;
-    &lt;option {{OPTION &quot;select&quot; &quot;Banana&quot; .}}&gt;Banana&lt;/option&gt;
-    &lt;option {{OPTION &quot;select&quot; &quot;cherry&quot; .}}&gt;Cherry&lt;/option&gt;
+    &lt;option {{OPTION &quot;select&quot; &quot;Apple&quot; .item.Select .}}&gt;Apple&lt;/option&gt;
+    &lt;option {{OPTION &quot;select&quot; &quot;Banana&quot; .item.Select .}}&gt;Banana&lt;/option&gt;
+    &lt;option {{OPTION &quot;select&quot; &quot;cherry&quot; .item.Select .}}&gt;Cherry&lt;/option&gt;
 &lt;/select&gt;
 
 &lt;select multiple class=&quot;form-control&quot; name=&quot;mselect&quot;&gt;
-    &lt;option {{OPTION &quot;mselect&quot; &quot;red&quot; .}}&gt;Red&lt;/option&gt;
-    &lt;option {{OPTION &quot;mselect&quot; &quot;green&quot; .}}&gt;Green&lt;/option&gt;
-    &lt;option {{OPTION &quot;mselect&quot; &quot;blue&quot; .}}&gt;Blue&lt;/option&gt;
+    &lt;option {{OPTION &quot;mselect&quot; &quot;red&quot; .item.Select .}}&gt;Red&lt;/option&gt;
+    &lt;option {{OPTION &quot;mselect&quot; &quot;green&quot; .item.Select .}}&gt;Green&lt;/option&gt;
+    &lt;option {{OPTION &quot;mselect&quot; &quot;blue&quot; .item.Select .}}&gt;Blue&lt;/option&gt;
 &lt;/select&gt;
 </code></pre>
 
 <h2 id="change-http-methods">Change HTTP Methods</h2>
 
-<p>When you submit a form a a website, the site most likely it sends a POST
+<p>When you submit a form a a website, the site most likely sends a POST
 request to the server. In order for us to make our application more RESTful, we
 can use utilize the simple
 <a href="https://github.com/blue-jay/blueprint/blob/master/middleware/rest/rest.go"><strong>rest</strong></a>
 package to change the HTTP method from a URL query string. The <strong>rest</strong> middleware is
-already applied to every request in the <strong>boot</strong> package.</p>
+already applied to every request which is configured in the <strong>boot</strong> package.</p>
 
-<p>To change the method, add this line to your form action and change the value
+<p>To change the form method, add this line to your form action and change the value
 to match a method like <strong>DELETE</strong> or <strong>PATCH</strong>. It will automatically
 be converted to uppercase.</p>
 
@@ -842,12 +882,12 @@ PATCH HTTP method:</p>
 <pre><code class="language-html">&lt;form method=&quot;post&quot; action=&quot;{{$.CurrentURI}}?_method=patch&quot;&gt;
 	&lt;div class=&quot;form-group&quot;&gt;
 		&lt;label for=&quot;email&quot;&gt;Email Address&lt;/label&gt;
-		&lt;div&gt;&lt;input {{TEXT &quot;email&quot; .}} type=&quot;email&quot; class=&quot;form-control&quot; id=&quot;email&quot; /&gt;&lt;/div&gt;
+		&lt;div&gt;&lt;input {{TEXT &quot;email&quot; .item.Email .}} type=&quot;email&quot; class=&quot;form-control&quot; id=&quot;email&quot; /&gt;&lt;/div&gt;
 	&lt;/div&gt;
 	
 	&lt;div class=&quot;form-group&quot;&gt;
 		&lt;label for=&quot;password&quot;&gt;Password&lt;/label&gt;
-		&lt;div&gt;&lt;input {{TEXT &quot;password&quot; .}} type=&quot;password&quot; class=&quot;form-control&quot; id=&quot;password&quot; /&gt;&lt;/div&gt;
+		&lt;div&gt;&lt;input {{TEXT &quot;password&quot; .item.Password .}} type=&quot;password&quot; class=&quot;form-control&quot; id=&quot;password&quot; /&gt;&lt;/div&gt;
 	&lt;/div&gt;
 	
 	&lt;input type=&quot;submit&quot; class=&quot;btn btn-primary&quot; value=&quot;Change&quot; class=&quot;button&quot; /&gt;

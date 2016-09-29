@@ -167,8 +167,8 @@ as it is a variadic function.&lt;/p&gt;
 &lt;p&gt;The &lt;strong&gt;form&lt;/strong&gt; package can also repopulate the form fields after a submission that
 is missing information. It is also a
 variadic function so it can accepts more than one field. You&amp;rsquo;ll need to use
-blocks from the &lt;strong&gt;form&lt;/strong&gt; package in your view as well. Check out the &lt;a href=&#34;http://blue-jay.github.io/views&#34;&gt;Views&lt;/a&gt;
-page to see how to use them.&lt;/p&gt;
+blocks from the &lt;strong&gt;form&lt;/strong&gt; package in your view as well. Check out the
+&lt;a href=&#34;http://blue-jay.github.io/views/#repopulate-form-fields&#34;&gt;Views&lt;/a&gt; page to see how to use them.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Index displays the login page.
 func Index(w http.ResponseWriter, r *http.Request) {
