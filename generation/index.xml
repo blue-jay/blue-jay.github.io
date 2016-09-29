@@ -70,6 +70,7 @@ form validation, form repopulation, and URL parameters.&lt;/p&gt;
 &lt;li&gt;default.json - creates a controller, model, and four views CRUD ready with the &lt;strong&gt;flight&lt;/strong&gt; package&lt;/li&gt;
 &lt;li&gt;nameonly.json - creates a controller, model, and four views CRUD ready with the &lt;strong&gt;flight&lt;/strong&gt; package and only a &lt;strong&gt;name&lt;/strong&gt; column&lt;/li&gt;
 &lt;li&gt;noflight.json - creates a controller, model, and four views CRUD ready without the &lt;strong&gt;flight&lt;/strong&gt; package&lt;/li&gt;
+&lt;li&gt;table.json - creates a controller, model, and four views CRUD ready with the &lt;strong&gt;flight&lt;/strong&gt; package and only a &lt;strong&gt;name&lt;/strong&gt; column that displays in a table view&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
 &lt;li&gt;lib
 
@@ -97,11 +98,14 @@ form validation, form repopulation, and URL parameters.&lt;/p&gt;
 &lt;li&gt;default.json - creates four views with CRUD ready code&lt;/li&gt;
 &lt;li&gt;edit.gen | edit.json - creates a CRUD ready edit form view&lt;/li&gt;
 &lt;li&gt;edit_bare.gen | edit_bare.json - creates a bare view with only a basic structure&lt;/li&gt;
-&lt;li&gt;index.gen | index.json - creates a CRUD ready display view&lt;/li&gt;
+&lt;li&gt;index.gen | index.json - creates a CRUD ready display view for multiple items&lt;/li&gt;
 &lt;li&gt;index_bare.gen | index_bare.json - creates a bare view with only a basic structure&lt;/li&gt;
-&lt;li&gt;show.gen | show.json - creates a CRUD ready display view&lt;/li&gt;
+&lt;li&gt;index_table.gen | index_table.json - creates a CRUD ready table view for multiple items&lt;/li&gt;
+&lt;li&gt;show.gen | show.json - creates a CRUD ready display view for a single item&lt;/li&gt;
 &lt;li&gt;show_bare.gen | show_bare.json - creates a bare view with only a basic structure&lt;/li&gt;
+&lt;li&gt;show_table.gen | show_table.json - creates a CRUD ready table view for a single item&lt;/li&gt;
 &lt;li&gt;single.gen | single.json - creates a bare view with only a basic structure&lt;/li&gt;
+&lt;li&gt;table.json - creates four views with CRUD ready code in a table view&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
 &lt;li&gt;viewfunc
 

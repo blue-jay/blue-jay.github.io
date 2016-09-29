@@ -622,7 +622,7 @@ and static files easier:</p>
 {{.SomeVariable | NOESCAPE}}
 
 &lt;!-- Time format --&gt;
-{{.SomeTime | PRETTYTIME}}
+{{NULLTIME .SomeTime}}
 &lt;!-- parses to format --&gt;
 3:04 PM 01/02/2006
 </code></pre>
