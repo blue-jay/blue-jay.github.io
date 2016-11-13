@@ -45,39 +45,6 @@ func LoadRoutes() {
 
 &lt;p&gt;Here is the &lt;strong&gt;Load()&lt;/strong&gt; function from the &lt;strong&gt;controller/notepad&lt;/strong&gt; package:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func Load() {
-    // Add middleware that disallows anonymous access
-    c := router.Chain(acl.DisallowAnon)
-
-    // Map HTTP methods and URLs to functions with the middleware chain
-    router.Get(&amp;quot;/notepad&amp;quot;, Index, c...)
-    router.Get(&amp;quot;/notepad/create&amp;quot;, Create, c...)
-    router.Post(&amp;quot;/notepad/create&amp;quot;, Store, c...)
-    router.Get(&amp;quot;/notepad/view/:id&amp;quot;, Show, c...)
-    router.Get(&amp;quot;/notepad/edit/:id&amp;quot;, Edit, c...)
-    router.Patch(&amp;quot;/notepad/edit/:id&amp;quot;, Update, c...)
-    router.Delete(&amp;quot;/notepad/:id&amp;quot;, Destroy, c...)
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;There are a few things to note here. The &lt;strong&gt;router&lt;/strong&gt; references the
-&lt;strong&gt;lib/router&lt;/strong&gt; package which is a thread-safe wrapper for the
-&lt;a href=&#34;http://github.com/husobee/vestigo&#34;&gt;husobee/vestigo&lt;/a&gt; package.
-The &lt;strong&gt;router.Chain()&lt;/strong&gt; function uses the
-&lt;a href=&#34;http://github.com/justinas/alice&#34;&gt;justinas/alice&lt;/a&gt; package
-to help with middleware chaining.&lt;/p&gt;
-
-&lt;p&gt;This is one way to build your wrapper packages that live in the &lt;strong&gt;lib&lt;/strong&gt; folder.
-If you want to use a different router, you can modify the &lt;strong&gt;lib/router&lt;/strong&gt;
-package easily and will only have to change a few lines of code in your
-controllers.&lt;/p&gt;
-
-&lt;h2 id=&#34;static-assets&#34;&gt;Static Assets&lt;/h2&gt;
-
-&lt;p&gt;You can serve the &lt;strong&gt;asset/static&lt;/strong&gt; folder with your CSS, JavaScript, and images so
-they are accessible. You would access an asset like this:
-&lt;code&gt;http://example.com/static/favicon.ico&lt;/code&gt;&lt;/p&gt;
-
 &lt;p&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/controller/static/static.go&#34;&gt;Source&lt;/a&gt;&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Package static serves static files like CSS, JavaScript, and images.
@@ -89,8 +56,8 @@ import (
     &amp;quot;path&amp;quot;
 
     &amp;quot;github.com/blue-jay/blueprint/controller/status&amp;quot;
+    &amp;quot;github.com/blue-jay/blueprint/lib/flight&amp;quot;
 
-    &amp;quot;github.com/blue-jay/core/asset&amp;quot;
     &amp;quot;github.com/blue-jay/core/router&amp;quot;
 )
 
@@ -102,8 +69,10 @@ func Load() {
 
 // Index maps static files.
 func Index(w http.ResponseWriter, r *http.Request) {
+    c := flight.Context(w, r)
+
     // File path
-    path := path.Join(asset.Config().Folder, r.URL.Path[1:])
+    path := path.Join(c.Config.Asset.Folder, r.URL.Path[1:])
 
     // Only serve files
     if fi, err := os.Stat(path); err == nil &amp;amp;&amp;amp; !fi.IsDir() {
@@ -113,6 +82,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
     status.Error404(w, r)
 }
+
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;error-pages&#34;&gt;Error Pages&lt;/h2&gt;
@@ -129,8 +99,8 @@ package status
 import (
     &amp;quot;net/http&amp;quot;
 
+    &amp;quot;github.com/blue-jay/blueprint/lib/flight&amp;quot;
     &amp;quot;github.com/blue-jay/core/router&amp;quot;
-    &amp;quot;github.com/blue-jay/core/view&amp;quot;
 )
 
 // Load the routes.
@@ -141,8 +111,9 @@ func Load() {
 
 // Error404 - Page Not Found.
 func Error404(w http.ResponseWriter, r *http.Request) {
+    c := flight.Context(w, r)
     w.WriteHeader(http.StatusNotFound)
-    v := view.New(&amp;quot;status/index&amp;quot;)
+    v := c.View.New(&amp;quot;status/index&amp;quot;)
     v.Vars[&amp;quot;title&amp;quot;] = &amp;quot;404 Not Found&amp;quot;
     v.Vars[&amp;quot;message&amp;quot;] = &amp;quot;Page could not be found.&amp;quot;
     v.Render(w, r)
@@ -151,13 +122,15 @@ func Error404(w http.ResponseWriter, r *http.Request) {
 // Error405 - Method Not Allowed.
 func Error405(allowedMethods string) func(w http.ResponseWriter, r *http.Request) {
     return func(w http.ResponseWriter, r *http.Request) {
+        c := flight.Context(w, r)
         w.WriteHeader(http.StatusMethodNotAllowed)
-        v := view.New(&amp;quot;status/index&amp;quot;)
+        v := c.View.New(&amp;quot;status/index&amp;quot;)
         v.Vars[&amp;quot;title&amp;quot;] = &amp;quot;405 Method Not Allowed&amp;quot;
         v.Vars[&amp;quot;message&amp;quot;] = &amp;quot;Method is not allowed.&amp;quot;
         v.Render(w, r)
     }
 }
+...
 &lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>

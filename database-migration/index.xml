@@ -28,9 +28,13 @@ env.json) and recorded in the &lt;strong&gt;migration&lt;/strong&gt; table. This
 database you add features or fix bugs in your database. The &amp;lsquo;down&amp;rsquo; file contains
 the code to remove the change or undo it.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: The &lt;code&gt;jay migrate&lt;/code&gt; commands requires the environment variable,
+&lt;p&gt;&lt;strong&gt;Note 1&lt;/strong&gt;: The &lt;code&gt;jay migrate&lt;/code&gt; commands requires the environment variable,
 &lt;strong&gt;JAYCONFIG&lt;/strong&gt;, to point to the env.json file path. The migration folder is specified
 in the env.json file under &lt;strong&gt;MySQL.MigrationFolder&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Note 2&lt;/strong&gt;: Make sure you do not create any migrations with a date earlier than
+any applied migrations. Jay will not go back and apply them. They must be
+created sequentially.&lt;/p&gt;
 
 &lt;p&gt;When you start using &lt;strong&gt;Blueprint&lt;/strong&gt; you&amp;rsquo;ll see two migration files already exist
 in the &lt;strong&gt;migration/mysql&lt;/strong&gt; folder:&lt;/p&gt;

@@ -141,7 +141,7 @@
       
       <div class="name">
         <br><strong>blue-jay/blueprint</strong>
-        <br><span class="version">0.6-charlie</span>
+        <br><span class="version">0.8-delta</span>
       </div>
     </div>
   </a>
@@ -457,9 +457,13 @@ env.json) and recorded in the <strong>migration</strong> table. This is how the
 database you add features or fix bugs in your database. The &lsquo;down&rsquo; file contains
 the code to remove the change or undo it.</p>
 
-<p><strong>Note</strong>: The <code>jay migrate</code> commands requires the environment variable,
+<p><strong>Note 1</strong>: The <code>jay migrate</code> commands requires the environment variable,
 <strong>JAYCONFIG</strong>, to point to the env.json file path. The migration folder is specified
 in the env.json file under <strong>MySQL.MigrationFolder</strong>.</p>
+
+<p><strong>Note 2</strong>: Make sure you do not create any migrations with a date earlier than
+any applied migrations. Jay will not go back and apply them. They must be
+created sequentially.</p>
 
 <p>When you start using <strong>Blueprint</strong> you&rsquo;ll see two migration files already exist
 in the <strong>migration/mysql</strong> folder:</p>

@@ -141,7 +141,7 @@
       
       <div class="name">
         <br><strong>blue-jay/blueprint</strong>
-        <br><span class="version">0.6-charlie</span>
+        <br><span class="version">0.8-delta</span>
       </div>
     </div>
   </a>
@@ -474,39 +474,6 @@ func LoadRoutes() {
 
 <p>Here is the <strong>Load()</strong> function from the <strong>controller/notepad</strong> package:</p>
 
-<pre><code class="language-go">func Load() {
-    // Add middleware that disallows anonymous access
-    c := router.Chain(acl.DisallowAnon)
-
-    // Map HTTP methods and URLs to functions with the middleware chain
-    router.Get(&quot;/notepad&quot;, Index, c...)
-    router.Get(&quot;/notepad/create&quot;, Create, c...)
-    router.Post(&quot;/notepad/create&quot;, Store, c...)
-    router.Get(&quot;/notepad/view/:id&quot;, Show, c...)
-    router.Get(&quot;/notepad/edit/:id&quot;, Edit, c...)
-    router.Patch(&quot;/notepad/edit/:id&quot;, Update, c...)
-    router.Delete(&quot;/notepad/:id&quot;, Destroy, c...)
-}
-</code></pre>
-
-<p>There are a few things to note here. The <strong>router</strong> references the
-<strong>lib/router</strong> package which is a thread-safe wrapper for the
-<a href="http://github.com/husobee/vestigo">husobee/vestigo</a> package.
-The <strong>router.Chain()</strong> function uses the
-<a href="http://github.com/justinas/alice">justinas/alice</a> package
-to help with middleware chaining.</p>
-
-<p>This is one way to build your wrapper packages that live in the <strong>lib</strong> folder.
-If you want to use a different router, you can modify the <strong>lib/router</strong>
-package easily and will only have to change a few lines of code in your
-controllers.</p>
-
-<h2 id="static-assets">Static Assets</h2>
-
-<p>You can serve the <strong>asset/static</strong> folder with your CSS, JavaScript, and images so
-they are accessible. You would access an asset like this:
-<code>http://example.com/static/favicon.ico</code></p>
-
 <p><a href="https://github.com/blue-jay/blueprint/blob/master/controller/static/static.go">Source</a></p>
 
 <pre><code class="language-go">// Package static serves static files like CSS, JavaScript, and images.
@@ -518,8 +485,8 @@ import (
     &quot;path&quot;
 
     &quot;github.com/blue-jay/blueprint/controller/status&quot;
+    &quot;github.com/blue-jay/blueprint/lib/flight&quot;
 
-    &quot;github.com/blue-jay/core/asset&quot;
     &quot;github.com/blue-jay/core/router&quot;
 )
 
@@ -531,8 +498,10 @@ func Load() {
 
 // Index maps static files.
 func Index(w http.ResponseWriter, r *http.Request) {
+    c := flight.Context(w, r)
+
     // File path
-    path := path.Join(asset.Config().Folder, r.URL.Path[1:])
+    path := path.Join(c.Config.Asset.Folder, r.URL.Path[1:])
 
     // Only serve files
     if fi, err := os.Stat(path); err == nil &amp;&amp; !fi.IsDir() {
@@ -542,6 +511,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
     status.Error404(w, r)
 }
+
 </code></pre>
 
 <h2 id="error-pages">Error Pages</h2>
@@ -558,8 +528,8 @@ package status
 import (
     &quot;net/http&quot;
 
+    &quot;github.com/blue-jay/blueprint/lib/flight&quot;
     &quot;github.com/blue-jay/core/router&quot;
-    &quot;github.com/blue-jay/core/view&quot;
 )
 
 // Load the routes.
@@ -570,8 +540,9 @@ func Load() {
 
 // Error404 - Page Not Found.
 func Error404(w http.ResponseWriter, r *http.Request) {
+    c := flight.Context(w, r)
     w.WriteHeader(http.StatusNotFound)
-    v := view.New(&quot;status/index&quot;)
+    v := c.View.New(&quot;status/index&quot;)
     v.Vars[&quot;title&quot;] = &quot;404 Not Found&quot;
     v.Vars[&quot;message&quot;] = &quot;Page could not be found.&quot;
     v.Render(w, r)
@@ -580,13 +551,15 @@ func Error404(w http.ResponseWriter, r *http.Request) {
 // Error405 - Method Not Allowed.
 func Error405(allowedMethods string) func(w http.ResponseWriter, r *http.Request) {
     return func(w http.ResponseWriter, r *http.Request) {
+        c := flight.Context(w, r)
         w.WriteHeader(http.StatusMethodNotAllowed)
-        v := view.New(&quot;status/index&quot;)
+        v := c.View.New(&quot;status/index&quot;)
         v.Vars[&quot;title&quot;] = &quot;405 Method Not Allowed&quot;
         v.Vars[&quot;message&quot;] = &quot;Method is not allowed.&quot;
         v.Render(w, r)
     }
 }
+...
 </code></pre>
 
 			

@@ -141,7 +141,7 @@
       
       <div class="name">
         <br><strong>blue-jay/blueprint</strong>
-        <br><span class="version">0.6-charlie</span>
+        <br><span class="version">0.8-delta</span>
       </div>
     </div>
   </a>
@@ -451,8 +451,8 @@
 You are not using a framework so don&rsquo;t be afraid to change code. You don&rsquo;t need to
 use any of the components included with Blueprint, but it does give you a nice foundation to
 start from. If you want to use YAML instead of JSON, it&rsquo;s recommended to create a wrapper
-library in the <strong>lib</strong> folder and then load your env.yaml file via the <strong>boot</strong>
-package.</p>
+library in the <strong>lib</strong> folder and then load your env.yaml file via the <strong>blueprint.go</strong>
+file.</p>
 
 <h2 id="jay-command-env">Jay Command: env</h2>
 
@@ -478,7 +478,7 @@ env env keyupdate
 <p>The <strong>env.json</strong> file is a good place to set variables for the application so
 you don&rsquo;t have to hardcode them. If you want to add any of your own settings,
 you can add them to <strong>env.json</strong> and update the <strong>Info</strong> struct
-in the <strong>bootstrap</strong> package. Here is an example <strong>env.json</strong>:</p>
+in the <strong>lib/env</strong> package. Here is an example <strong>env.json</strong>:</p>
 
 <pre><code class="language-json">{
   &quot;Asset&quot;:{
@@ -565,8 +565,10 @@ changes:</p>
 
 <p>The <strong>env.json</strong> file contains the configuration for Blueprint and Jay. It removes the need
 to hardcode any of these values and makes it easy to move Blueprint to another system
-with a different setup. The <strong>env.json</strong> file is parsed and held in the
-<strong>Info</strong> struct from the <strong>boot</strong> package:</p>
+with a different setup. The <strong>env.json</strong> file is parsed to the
+<strong>Info</strong> struct from the <strong>lib/env</strong> package:</p>
+
+<p><a href="https://github.com/blue-jay/blueprint/blob/master/lib/env/env.go">Source</a></p>
 
 <pre><code class="language-go">// Info contains the application settings.
 type Info struct {
@@ -579,11 +581,11 @@ type Info struct {
   Session    session.Info  `json:&quot;Session&quot;`
   Template   view.Template `json:&quot;Template&quot;`
   View       view.Info     `json:&quot;View&quot;`
-  Path       string
+  path       string
 }
 </code></pre>
 
-<p>The <strong>Info</strong> struct is simply a container that nests structs from packages in
+<p>The <strong>Info</strong> struct is a container that nests structs from packages in
 the <strong>Core</strong> library that need variables configured. The <strong>Path</strong> variable is
 the location of the env.json file. Here is a list mapping the JSON keys to
 structs:</p>
@@ -595,7 +597,7 @@ Generate  - Info struct in core/generate
 MySQL     - Info struct in core/mysql
 Server    - Info struct in core/server
 Session   - Info struct in core/session
-Template  - Template struct in lib/view
+Template  - Template struct in core/view
 View      - Info struct in core/view
 </code></pre>
 
@@ -619,9 +621,10 @@ following:</p>
 <ol>
 <li>Create a new package in the <strong>lib</strong> folder called <strong>captcha</strong></li>
 <li>Create a struct called <strong>Info</strong> in the <strong>lib/captcha</strong> package</li>
+<li>Add the struct to the <strong>Info</strong> struct in the <strong>lib/env</strong> package</li>
 <li>Add the <strong>Captcha</strong> key and any values to the <strong>env.json</strong> file</li>
-<li>Add code to the <strong>RegisterServices()</strong> function in the <strong>boot</strong> package to pass the config to the <strong>lib/captcha</strong> package at start up</li>
-<li>Add code to your controllers that references your <strong>lib/captcha</strong> package</li>
+<li>Add code to the <strong>RegisterServices()</strong> function in the <strong>lib/boot</strong> package to pass the any additional settings to the <strong>lib/flight</strong> package at start up</li>
+<li>Add code to your controllers that references uses <strong>flight.Context()</strong> to retrieve your <strong>lib/captcha</strong> package settings</li>
 </ol>
 
 <h2 id="tip-remove-a-section">Tip: Remove a Section</h2>
@@ -630,7 +633,7 @@ following:</p>
 
 <ol>
 <li>Remove the <strong>Email</strong> key and value from the <strong>env.json</strong> file</li>
-<li>Remove the <strong>Email</strong> nested struct from the <strong>Info</strong> struct in the <strong>boot</strong> package</li>
+<li>Remove the <strong>Email</strong> nested struct from the <strong>Info</strong> struct in the <strong>lib/env</strong> package</li>
 <li>Remove any code setting up the package from the <strong>RegisterServices()</strong> function in the <strong>boot</strong> package</li>
 <li>Remove the <strong>lib/email</strong> package from the filesystem</li>
 <li>Find any references to the <strong>lib/email</strong> package in your code using the jay command line, <code>jay find . &quot;lib/email&quot;</code>,

@@ -35,7 +35,7 @@ register page, about page, and a simple notepad to demonstrate GET, POST,
 PATCH, and DELETE operations.&lt;/p&gt;
 
 &lt;p&gt;The entrypoint for the web app is &lt;strong&gt;blueprint.go&lt;/strong&gt; which uses the &lt;strong&gt;boot&lt;/strong&gt;
-package to load (at boot) the application settings, create the session store,
+package to load the application settings, create the session store,
 connect to the database, set up the views, load the routes, attach the
 middleware, and then start the web server.&lt;/p&gt;
 
@@ -222,15 +222,17 @@ components lives.&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;asset/
 |----dynamic/    - private assets like SASS files, single JavaScript files, and logo.png for favicon generation
 |----static/     - public assets like CSS, JavaScript, and favicon.ico for Android, Apple, etc
-boot/            - package for initial set up of the application
 controller/      - packages with routes and application logic
 filestorage/     - files uploaded from an HTML form
-generate/        - template pairs (.gen and .json) for generating code using jay
+generate/          - template pairs (.gen and .json) for generating code using jay
 lib/             - packages you&#39;ll build that are used by the application (recommended to build with minimum dependencies)
+|----boot/       - package for registering services and setting up all the components
+|----env/        - package that holds the structure for the application settings
+|----flight/     - package with a context that can be used by controllers to access application settings
 middleware/      - packages that return a http.Handler to wrap around routes for ACL, request logging, etc
 migration/       - migration database files
 |----mysql/      - MySQL files for migrating database up and down
-model/           - packages with database queries and structs matching tables
+model/             - packages with database queries and structs matching tables
 view/            - HTML templates parsed using the Go html/template package
 viewfunc/        - packages that return a template.FuncMap for use in views
 viewmodify/      - packages that modify view prior to rendering to add varibles like CSRF token and auth level
@@ -307,8 +309,8 @@ information on each one.&lt;/p&gt;
 You are not using a framework so don&amp;rsquo;t be afraid to change code. You don&amp;rsquo;t need to
 use any of the components included with Blueprint, but it does give you a nice foundation to
 start from. If you want to use YAML instead of JSON, it&amp;rsquo;s recommended to create a wrapper
-library in the &lt;strong&gt;lib&lt;/strong&gt; folder and then load your env.yaml file via the &lt;strong&gt;boot&lt;/strong&gt;
-package.&lt;/p&gt;
+library in the &lt;strong&gt;lib&lt;/strong&gt; folder and then load your env.yaml file via the &lt;strong&gt;blueprint.go&lt;/strong&gt;
+file.&lt;/p&gt;
 
 &lt;h2 id=&#34;jay-command-env&#34;&gt;Jay Command: env&lt;/h2&gt;
 
@@ -334,7 +336,7 @@ env env keyupdate
 &lt;p&gt;The &lt;strong&gt;env.json&lt;/strong&gt; file is a good place to set variables for the application so
 you don&amp;rsquo;t have to hardcode them. If you want to add any of your own settings,
 you can add them to &lt;strong&gt;env.json&lt;/strong&gt; and update the &lt;strong&gt;Info&lt;/strong&gt; struct
-in the &lt;strong&gt;bootstrap&lt;/strong&gt; package. Here is an example &lt;strong&gt;env.json&lt;/strong&gt;:&lt;/p&gt;
+in the &lt;strong&gt;lib/env&lt;/strong&gt; package. Here is an example &lt;strong&gt;env.json&lt;/strong&gt;:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
   &amp;quot;Asset&amp;quot;:{
@@ -421,8 +423,10 @@ changes:&lt;/p&gt;
 
 &lt;p&gt;The &lt;strong&gt;env.json&lt;/strong&gt; file contains the configuration for Blueprint and Jay. It removes the need
 to hardcode any of these values and makes it easy to move Blueprint to another system
-with a different setup. The &lt;strong&gt;env.json&lt;/strong&gt; file is parsed and held in the
-&lt;strong&gt;Info&lt;/strong&gt; struct from the &lt;strong&gt;boot&lt;/strong&gt; package:&lt;/p&gt;
+with a different setup. The &lt;strong&gt;env.json&lt;/strong&gt; file is parsed to the
+&lt;strong&gt;Info&lt;/strong&gt; struct from the &lt;strong&gt;lib/env&lt;/strong&gt; package:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/lib/env/env.go&#34;&gt;Source&lt;/a&gt;&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Info contains the application settings.
 type Info struct {
@@ -435,11 +439,11 @@ type Info struct {
   Session    session.Info  `json:&amp;quot;Session&amp;quot;`
   Template   view.Template `json:&amp;quot;Template&amp;quot;`
   View       view.Info     `json:&amp;quot;View&amp;quot;`
-  Path       string
+  path       string
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;The &lt;strong&gt;Info&lt;/strong&gt; struct is simply a container that nests structs from packages in
+&lt;p&gt;The &lt;strong&gt;Info&lt;/strong&gt; struct is a container that nests structs from packages in
 the &lt;strong&gt;Core&lt;/strong&gt; library that need variables configured. The &lt;strong&gt;Path&lt;/strong&gt; variable is
 the location of the env.json file. Here is a list mapping the JSON keys to
 structs:&lt;/p&gt;
@@ -451,7 +455,7 @@ Generate  - Info struct in core/generate
 MySQL     - Info struct in core/mysql
 Server    - Info struct in core/server
 Session   - Info struct in core/session
-Template  - Template struct in lib/view
+Template  - Template struct in core/view
 View      - Info struct in core/view
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -475,9 +479,10 @@ following:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Create a new package in the &lt;strong&gt;lib&lt;/strong&gt; folder called &lt;strong&gt;captcha&lt;/strong&gt;&lt;/li&gt;
 &lt;li&gt;Create a struct called &lt;strong&gt;Info&lt;/strong&gt; in the &lt;strong&gt;lib/captcha&lt;/strong&gt; package&lt;/li&gt;
+&lt;li&gt;Add the struct to the &lt;strong&gt;Info&lt;/strong&gt; struct in the &lt;strong&gt;lib/env&lt;/strong&gt; package&lt;/li&gt;
 &lt;li&gt;Add the &lt;strong&gt;Captcha&lt;/strong&gt; key and any values to the &lt;strong&gt;env.json&lt;/strong&gt; file&lt;/li&gt;
-&lt;li&gt;Add code to the &lt;strong&gt;RegisterServices()&lt;/strong&gt; function in the &lt;strong&gt;boot&lt;/strong&gt; package to pass the config to the &lt;strong&gt;lib/captcha&lt;/strong&gt; package at start up&lt;/li&gt;
-&lt;li&gt;Add code to your controllers that references your &lt;strong&gt;lib/captcha&lt;/strong&gt; package&lt;/li&gt;
+&lt;li&gt;Add code to the &lt;strong&gt;RegisterServices()&lt;/strong&gt; function in the &lt;strong&gt;lib/boot&lt;/strong&gt; package to pass the any additional settings to the &lt;strong&gt;lib/flight&lt;/strong&gt; package at start up&lt;/li&gt;
+&lt;li&gt;Add code to your controllers that references uses &lt;strong&gt;flight.Context()&lt;/strong&gt; to retrieve your &lt;strong&gt;lib/captcha&lt;/strong&gt; package settings&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;h2 id=&#34;tip-remove-a-section&#34;&gt;Tip: Remove a Section&lt;/h2&gt;
@@ -486,7 +491,7 @@ following:&lt;/p&gt;
 
 &lt;ol&gt;
 &lt;li&gt;Remove the &lt;strong&gt;Email&lt;/strong&gt; key and value from the &lt;strong&gt;env.json&lt;/strong&gt; file&lt;/li&gt;
-&lt;li&gt;Remove the &lt;strong&gt;Email&lt;/strong&gt; nested struct from the &lt;strong&gt;Info&lt;/strong&gt; struct in the &lt;strong&gt;boot&lt;/strong&gt; package&lt;/li&gt;
+&lt;li&gt;Remove the &lt;strong&gt;Email&lt;/strong&gt; nested struct from the &lt;strong&gt;Info&lt;/strong&gt; struct in the &lt;strong&gt;lib/env&lt;/strong&gt; package&lt;/li&gt;
 &lt;li&gt;Remove any code setting up the package from the &lt;strong&gt;RegisterServices()&lt;/strong&gt; function in the &lt;strong&gt;boot&lt;/strong&gt; package&lt;/li&gt;
 &lt;li&gt;Remove the &lt;strong&gt;lib/email&lt;/strong&gt; package from the filesystem&lt;/li&gt;
 &lt;li&gt;Find any references to the &lt;strong&gt;lib/email&lt;/strong&gt; package in your code using the jay command line, &lt;code&gt;jay find . &amp;quot;lib/email&amp;quot;&lt;/code&gt;,
@@ -642,39 +647,6 @@ func LoadRoutes() {
 
 &lt;p&gt;Here is the &lt;strong&gt;Load()&lt;/strong&gt; function from the &lt;strong&gt;controller/notepad&lt;/strong&gt; package:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func Load() {
-    // Add middleware that disallows anonymous access
-    c := router.Chain(acl.DisallowAnon)
-
-    // Map HTTP methods and URLs to functions with the middleware chain
-    router.Get(&amp;quot;/notepad&amp;quot;, Index, c...)
-    router.Get(&amp;quot;/notepad/create&amp;quot;, Create, c...)
-    router.Post(&amp;quot;/notepad/create&amp;quot;, Store, c...)
-    router.Get(&amp;quot;/notepad/view/:id&amp;quot;, Show, c...)
-    router.Get(&amp;quot;/notepad/edit/:id&amp;quot;, Edit, c...)
-    router.Patch(&amp;quot;/notepad/edit/:id&amp;quot;, Update, c...)
-    router.Delete(&amp;quot;/notepad/:id&amp;quot;, Destroy, c...)
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;There are a few things to note here. The &lt;strong&gt;router&lt;/strong&gt; references the
-&lt;strong&gt;lib/router&lt;/strong&gt; package which is a thread-safe wrapper for the
-&lt;a href=&#34;http://github.com/husobee/vestigo&#34;&gt;husobee/vestigo&lt;/a&gt; package.
-The &lt;strong&gt;router.Chain()&lt;/strong&gt; function uses the
-&lt;a href=&#34;http://github.com/justinas/alice&#34;&gt;justinas/alice&lt;/a&gt; package
-to help with middleware chaining.&lt;/p&gt;
-
-&lt;p&gt;This is one way to build your wrapper packages that live in the &lt;strong&gt;lib&lt;/strong&gt; folder.
-If you want to use a different router, you can modify the &lt;strong&gt;lib/router&lt;/strong&gt;
-package easily and will only have to change a few lines of code in your
-controllers.&lt;/p&gt;
-
-&lt;h2 id=&#34;static-assets&#34;&gt;Static Assets&lt;/h2&gt;
-
-&lt;p&gt;You can serve the &lt;strong&gt;asset/static&lt;/strong&gt; folder with your CSS, JavaScript, and images so
-they are accessible. You would access an asset like this:
-&lt;code&gt;http://example.com/static/favicon.ico&lt;/code&gt;&lt;/p&gt;
-
 &lt;p&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/controller/static/static.go&#34;&gt;Source&lt;/a&gt;&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Package static serves static files like CSS, JavaScript, and images.
@@ -686,8 +658,8 @@ import (
     &amp;quot;path&amp;quot;
 
     &amp;quot;github.com/blue-jay/blueprint/controller/status&amp;quot;
+    &amp;quot;github.com/blue-jay/blueprint/lib/flight&amp;quot;
 
-    &amp;quot;github.com/blue-jay/core/asset&amp;quot;
     &amp;quot;github.com/blue-jay/core/router&amp;quot;
 )
 
@@ -699,8 +671,10 @@ func Load() {
 
 // Index maps static files.
 func Index(w http.ResponseWriter, r *http.Request) {
+    c := flight.Context(w, r)
+
     // File path
-    path := path.Join(asset.Config().Folder, r.URL.Path[1:])
+    path := path.Join(c.Config.Asset.Folder, r.URL.Path[1:])
 
     // Only serve files
     if fi, err := os.Stat(path); err == nil &amp;amp;&amp;amp; !fi.IsDir() {
@@ -710,6 +684,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
     status.Error404(w, r)
 }
+
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;error-pages&#34;&gt;Error Pages&lt;/h2&gt;
@@ -726,8 +701,8 @@ package status
 import (
     &amp;quot;net/http&amp;quot;
 
+    &amp;quot;github.com/blue-jay/blueprint/lib/flight&amp;quot;
     &amp;quot;github.com/blue-jay/core/router&amp;quot;
-    &amp;quot;github.com/blue-jay/core/view&amp;quot;
 )
 
 // Load the routes.
@@ -738,8 +713,9 @@ func Load() {
 
 // Error404 - Page Not Found.
 func Error404(w http.ResponseWriter, r *http.Request) {
+    c := flight.Context(w, r)
     w.WriteHeader(http.StatusNotFound)
-    v := view.New(&amp;quot;status/index&amp;quot;)
+    v := c.View.New(&amp;quot;status/index&amp;quot;)
     v.Vars[&amp;quot;title&amp;quot;] = &amp;quot;404 Not Found&amp;quot;
     v.Vars[&amp;quot;message&amp;quot;] = &amp;quot;Page could not be found.&amp;quot;
     v.Render(w, r)
@@ -748,13 +724,15 @@ func Error404(w http.ResponseWriter, r *http.Request) {
 // Error405 - Method Not Allowed.
 func Error405(allowedMethods string) func(w http.ResponseWriter, r *http.Request) {
     return func(w http.ResponseWriter, r *http.Request) {
+        c := flight.Context(w, r)
         w.WriteHeader(http.StatusMethodNotAllowed)
-        v := view.New(&amp;quot;status/index&amp;quot;)
+        v := c.View.New(&amp;quot;status/index&amp;quot;)
         v.Vars[&amp;quot;title&amp;quot;] = &amp;quot;405 Method Not Allowed&amp;quot;
         v.Vars[&amp;quot;message&amp;quot;] = &amp;quot;Method is not allowed.&amp;quot;
         v.Render(w, r)
     }
 }
+...
 &lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>
@@ -843,7 +821,7 @@ where the controller uses the &lt;strong&gt;router.ChainHandler()&lt;/strong&gt;
 The function is a wrapper for
 the &lt;a href=&#34;https://github.com/justinas/alice&#34;&gt;justinas/alice&lt;/a&gt; package which makes
 using middleware more scalable and a little &amp;ldquo;prettier&amp;rdquo;. If you look at the
-&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/boot/boot.go&#34;&gt;boot&lt;/a&gt;
+&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/lib/boot/middleware.go&#34;&gt;lib/boot&lt;/a&gt;
 package, you&amp;rsquo;ll see the &lt;strong&gt;ChainHandler()&lt;/strong&gt; function. There is also a &lt;strong&gt;Chain()&lt;/strong&gt;
 function that can be used to chain middleware for routes or to pass to
 &lt;strong&gt;ChainHandler()&lt;/strong&gt;.&lt;/p&gt;
@@ -881,7 +859,7 @@ the application calls &lt;strong&gt;boot.SetUpMiddleware(router.Instance())&lt;/
 applies the middleware to the router. The middleware is called on every
 request.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/boot/boot.go&#34;&gt;Source&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/lib/boot/middleware.go&#34;&gt;Source&lt;/a&gt;&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// SetUpMiddleware contains the middleware that applies to every request.
 func SetUpMiddleware(h http.Handler) http.Handler {
@@ -1012,19 +990,17 @@ models in your controllers.&lt;/p&gt;
 	...
 }
 
-// &amp;quot;Index&amp;quot; is the Function
+// Index displays the items.
 func Index(w http.ResponseWriter, r *http.Request) {
 	c := flight.Context(w, r)
 
-	items, err := note.ByUserID(c.UserID)
+	items, _, err := note.ByUserID(c.DB, c.UserID)
 	if err != nil {
 		c.FlashError(err)
 		items = []note.Item{}
 	}
 
-	// &amp;quot;index&amp;quot; is the View
-	v := view.New(&amp;quot;note/index&amp;quot;)
-	v.Vars[&amp;quot;first_name&amp;quot;] = c.Sess.Values[&amp;quot;first_name&amp;quot;]
+	v := c.View.New(&amp;quot;note/index&amp;quot;)
 	v.Vars[&amp;quot;items&amp;quot;] = items
 	v.Render(w, r)
 }
@@ -1037,7 +1013,7 @@ login. You &lt;strong&gt;must&lt;/strong&gt; remember to save the sessions once 
 them.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Get the current session
-sess := session.Instance(r)
+sess, _ := session.Instance(r)
 ...
 // Save the session after you are finished making changes
 sess.Save(r, w)
@@ -1064,12 +1040,22 @@ sess.Save(r, w) // Ensure you save the session after making a change to it
 &lt;p&gt;The &lt;strong&gt;form&lt;/strong&gt; package makes it easy to validate required fields. It works on the
 inputs: text, textarea, checkbox, radio, and select. The function,
 &lt;strong&gt;form.Required()&lt;/strong&gt;, requires the request and then any number of fields
-as it is a variadic function.&lt;/p&gt;
+as it is a variadic function. You can use the &lt;code&gt;form&lt;/code&gt; package by itself it you
+want more control over the error message or you can use the &lt;code&gt;flight&lt;/code&gt; package
+which handles the error message for you:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;if valid, missingField := form.Required(r, &amp;quot;email&amp;quot;, &amp;quot;password&amp;quot;); !valid {
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Without flight
+if valid, missingField := form.Required(r, &amp;quot;email&amp;quot;, &amp;quot;password&amp;quot;); !valid {
 	sess.AddFlash(flash.Info{&amp;quot;Field missing: &amp;quot; + missingField, flash.Error})
 	sess.Save(r, w)
 	LoginGET(w, r)
+	return
+}
+
+// With flight
+c := flight.Context(w, r)
+if !c.FormValid(&amp;quot;name&amp;quot;, &amp;quot;email&amp;quot;, &amp;quot;password&amp;quot;) {
+	Create(w, r)
 	return
 }
 &lt;/code&gt;&lt;/pre&gt;
@@ -1082,12 +1068,17 @@ variadic function so it can accepts more than one field. You&amp;rsquo;ll need t
 blocks from the &lt;strong&gt;form&lt;/strong&gt; package in your view as well. Check out the
 &lt;a href=&#34;http://blue-jay.github.io/views/#repopulate-form-fields&#34;&gt;Views&lt;/a&gt; page to see how to use them.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Index displays the login page.
-func Index(w http.ResponseWriter, r *http.Request) {
-	v := view.New(&amp;quot;login/index&amp;quot;)
-	form.Repopulate(r.Form, v.Vars, &amp;quot;email&amp;quot;)
-	v.Render(w, r)
-}
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Without flight
+c := flight.Context(w, r)
+v := c.View.New(&amp;quot;note/create&amp;quot;)
+form.Repopulate(r.Form, v.Vars, &amp;quot;name&amp;quot;)
+v.Render(w, r)
+
+// With flight
+c := flight.Context(w, r)
+v := c.View.New(&amp;quot;note/create&amp;quot;)
+c.Repopulate(v.Vars, &amp;quot;name&amp;quot;)
+v.Render(w, r)
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;render-a-template&#34;&gt;Render a Template&lt;/h2&gt;
@@ -1096,16 +1087,18 @@ func Index(w http.ResponseWriter, r *http.Request) {
 page for more clarification):&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Render without adding any variables
-view.New(&amp;quot;about/index&amp;quot;).Render(w, r)
+c := flight.Context(w, r)
+c.View.New(&amp;quot;about/index&amp;quot;).Render(w, r)
 
 // Render with variables
-session := session.Instance(r)
-v := view.New(&amp;quot;home/index&amp;quot;)
-v.Vars[&amp;quot;first_name&amp;quot;] = session.Values[&amp;quot;first_name&amp;quot;]
+c := flight.Context(w, r)
+v := c.View.New(&amp;quot;home/index&amp;quot;)
+v.Vars[&amp;quot;first_name&amp;quot;] = c.Sess.Values[&amp;quot;first_name&amp;quot;]
 v.Render(w, r)
 
 // Render with different base template (base.tmpl is used by default)
-v := view.New(&amp;quot;home/index&amp;quot;).Base(&amp;quot;single&amp;quot;)
+c := flight.Context(w, r)
+v := c.View.New(&amp;quot;home/index&amp;quot;).Base(&amp;quot;single&amp;quot;)
 v.Render(w, r)
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -1126,12 +1119,11 @@ func Load() {
 
 // Index displays the flash messages in JSON.
 func Index(w http.ResponseWriter, r *http.Request) {
-	// Get session
-	sess := session.Instance(r)
+	c := flight.Context(w, r)
 
 	// Set the flash message
-	sess.AddFlash(flash.Info{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, flash.Error})
-	sess.Save(r, w)
+	c.Sess.AddFlash(flash.Info{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, flash.Error})
+	c.Sess.Save(r, w)
 
 	// Display the flash messages as JSON
 	flash.SendFlashes(w, r)
@@ -1151,14 +1143,14 @@ func Index(w http.ResponseWriter, r *http.Request) {
 functions to interact with the data.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Get database result
-result, err := user.ByEmail(email)
+result, norows, err := user.ByEmail(email)
 
-if err == model.ErrNoResult {
+if nowrows {
 	// User does not exist
 } else if err != nil {
 	// Display error message
 } else if passhash.MatchString(result.Password, password) {
-	// Password matches!	
+	// Password matches!
 } else {
 	// Password does not match
 }
@@ -1170,12 +1162,11 @@ if err == model.ErrNoResult {
 env.json point to your SMTP server.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Email a user
-err := email.Send(email.Config().From, &amp;quot;This is the subject&amp;quot;, &amp;quot;This is the body!&amp;quot;)
+c := flight.Context(w, r)
+err := c.Config.Email.Send(&amp;quot;This is the subject&amp;quot;, &amp;quot;This is the body!&amp;quot;)
 if err != nil {
-    log.Println(err)
-    sess.AddFlash(flash.Info{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, flash.Error})
-    sess.Save(r, w)
-    return
+	c.FlashError(err)
+	return
 }
 &lt;/code&gt;&lt;/pre&gt;
 </description>
@@ -1196,71 +1187,132 @@ changes, you don&amp;rsquo;t have to look through the controllers to find the qu
 the queries are stored in the &lt;strong&gt;model&lt;/strong&gt; folder.&lt;/p&gt;
 
 &lt;p&gt;Blue Jay supports MySQL by default, but can easily be expanded to use other
-database systems.&lt;/p&gt;
+database systems. There is also a PostgreSQL package you can use
+&lt;a href=&#34;https://github.com/blue-jay/core/blob/master/storage/driver/postgresql/postgresql.go&#34;&gt;here&lt;/a&gt;.
+The instructions are at the bottom of this page.&lt;/p&gt;
 
 &lt;h2 id=&#34;connect-to-the-database&#34;&gt;Connect to the database&lt;/h2&gt;
 
 &lt;p&gt;You only need to connect to the database once. The connection pool is
-automatically handled by the &lt;a href=&#34;https://github.com/go-sql-driver/mysql&#34;&gt;go-sql-driver/mysql&lt;/a&gt;
-package.&lt;/p&gt;
+handled by the &lt;a href=&#34;https://github.com/go-sql-driver/mysql&#34;&gt;go-sql-driver/mysql&lt;/a&gt;
+package. The connection is started by the &lt;strong&gt;lib/boot&lt;/strong&gt; package:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Connect to database
-database.Connect(config.Database)
+&lt;p&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/lib/boot/boot.go&#34;&gt;Source&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Connect to the MySQL database
+mysqlDB, _ := config.MySQL.Connect(true)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&#34;create-an-item&#34;&gt;Create an Item&lt;/h2&gt;
+&lt;h2 id=&#34;model-layout&#34;&gt;Model Layout&lt;/h2&gt;
 
-&lt;p&gt;Use &lt;strong&gt;database.SQL.Exec()&lt;/strong&gt; to create an item or a table.&lt;/p&gt;
+&lt;p&gt;Every model should have a table name, a struct to represent the columns, and a
+Connection interface. The interface makes the model much more testable so it can
+be easily mocked and interchanged.&lt;/p&gt;
 
-&lt;h3 id=&#34;controller&#34;&gt;Controller&lt;/h3&gt;
+&lt;p&gt;A good interface for each model looks like this:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;_, err := note.Create(r.FormValue(&amp;quot;note&amp;quot;), userID)
-if err != nil {
-    log.Println(err)
-    sess.AddFlash(flash.Info{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, flash.Error})
-    sess.Save(r, w)
-    Create(w, r)
-    return
+&lt;pre&gt;&lt;code&gt;// Connection is an interface for making queries.
+type Connection interface {
+    Exec(query string, args ...interface{}) (sql.Result, error)
+    Get(dest interface{}, query string, args ...interface{}) error
+    Select(dest interface{}, query string, args ...interface{}) error
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;model&#34;&gt;Model&lt;/h3&gt;
+&lt;p&gt;And a good create function looks like this:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Create adds an item.
-func Create(name string, userID string) (sql.Result, error) {
-    result, err := database.SQL.Exec(fmt.Sprintf(`
+&lt;pre&gt;&lt;code&gt;// Create adds an item.
+func Create(db Connection, name string, userID string) (sql.Result, error) {
+    result, err := db.Exec(fmt.Sprintf(`
         INSERT INTO %v
         (name, user_id)
         VALUES
         (?,?)
         `, table),
         name, userID)
-    return result, model.StandardError(err)
+    return result, err
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;crud-operations&#34;&gt;CRUD Operations&lt;/h1&gt;
+
+&lt;p&gt;Below are common operations and how controllers can interact with models.
+All the controller functions are from
+&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/controller/notepad/notepad.go&#34;&gt;notepad.go&lt;/a&gt;
+and the model functions
+are from &lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/model/note/note.go&#34;&gt;note.go&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;create-an-item&#34;&gt;Create an Item&lt;/h2&gt;
+
+&lt;p&gt;Use &lt;strong&gt;db.Exec()&lt;/strong&gt; to create an item or a table.&lt;/p&gt;
+
+&lt;h3 id=&#34;controller&#34;&gt;Controller&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Store handles the create form submission.
+func Store(w http.ResponseWriter, r *http.Request) {
+    c := flight.Context(w, r)
+
+    if !c.FormValid(&amp;quot;name&amp;quot;) {
+        Create(w, r)
+        return
+    }
+
+    _, err := note.Create(c.DB, r.FormValue(&amp;quot;name&amp;quot;), c.UserID)
+    if err != nil {
+        c.FlashError(err)
+        Create(w, r)
+        return
+    }
+
+    c.FlashSuccess(&amp;quot;Item added.&amp;quot;)
+    c.Redirect(uri)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;model&#34;&gt;Model&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Create adds an item.
+func Create(db Connection, name string, userID string) (sql.Result, error) {
+    result, err := db.Exec(fmt.Sprintf(`
+        INSERT INTO %v
+        (name, user_id)
+        VALUES
+        (?,?)
+        `, table),
+        name, userID)
+    return result, err
 }
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;get-an-item-by-item-id&#34;&gt;Get an Item by Item ID&lt;/h2&gt;
 
-&lt;p&gt;Use &lt;strong&gt;database.SQL.Get()&lt;/strong&gt; to get a single item.&lt;/p&gt;
+&lt;p&gt;Use &lt;strong&gt;db.Get()&lt;/strong&gt; to get a single item.&lt;/p&gt;
 
 &lt;h3 id=&#34;controller-1&#34;&gt;Controller&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;item, err := note.ByID(params.ByName(&amp;quot;id&amp;quot;), userID)
-if err != nil { // If the note doesn&#39;t exist
-    log.Println(err)
-    sess.AddFlash(flash.Info{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, flash.Error})
-    sess.Save(r, w)
-    http.Redirect(w, r, uri, http.StatusFound)
-    return
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Show displays a single item.
+func Show(w http.ResponseWriter, r *http.Request) {
+    c := flight.Context(w, r)
+
+    item, _, err := note.ByID(c.DB, c.Param(&amp;quot;id&amp;quot;), c.UserID)
+    if err != nil {
+        c.FlashError(err)
+        c.Redirect(uri)
+        return
+    }
+
+    v := c.View.New(&amp;quot;note/show&amp;quot;)
+    v.Vars[&amp;quot;item&amp;quot;] = item
+    v.Render(w, r)
 }
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h3 id=&#34;model-1&#34;&gt;Model&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// ByID gets item by ID.
-func ByID(ID string, userID string) (Item, error) {
+func ByID(db Connection, ID string, userID string) (Item, bool, error) {
     result := Item{}
-    err := database.SQL.Get(&amp;amp;result, fmt.Sprintf(`
+    err := db.Get(&amp;amp;result, fmt.Sprintf(`
         SELECT id, name, user_id, created_at, updated_at, deleted_at
         FROM %v
         WHERE id = ?
@@ -1269,62 +1321,80 @@ func ByID(ID string, userID string) (Item, error) {
         LIMIT 1
         `, table),
         ID, userID)
-    return result, model.StandardError(err)
+    return result, err == sql.ErrNoRows, err
 }
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;get-items-by-user-id&#34;&gt;Get Items by User ID&lt;/h2&gt;
 
-&lt;p&gt;Use &lt;strong&gt;database.SQL.Select()&lt;/strong&gt; to get multiple items.&lt;/p&gt;
+&lt;p&gt;Use &lt;strong&gt;db.Select()&lt;/strong&gt; to get multiple items.&lt;/p&gt;
 
 &lt;h3 id=&#34;controller-2&#34;&gt;Controller&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;items, err := note.ByUserID(userID)
-if err != nil {
-    log.Println(err)
-    sess.AddFlash(flash.Info{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, flash.Error})
-    sess.Save(r, w)
-    items = []note.Item{}
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Index displays the items.
+func Index(w http.ResponseWriter, r *http.Request) {
+    c := flight.Context(w, r)
+
+    items, _, err := note.ByUserID(c.DB, c.UserID)
+    if err != nil {
+        c.FlashError(err)
+        items = []note.Item{}
+    }
+
+    v := c.View.New(&amp;quot;note/index&amp;quot;)
+    v.Vars[&amp;quot;items&amp;quot;] = items
+    v.Render(w, r)
 }
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h3 id=&#34;model-2&#34;&gt;Model&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// ByUserID gets all entities for a user.
-func ByUserID(userID string) ([]Item, error) {
+func ByUserID(db Connection, userID string) ([]Item, bool, error) {
     var result []Item
-    err := database.SQL.Select(&amp;amp;result, fmt.Sprintf(`
+    err := db.Select(&amp;amp;result, fmt.Sprintf(`
         SELECT id, name, user_id, created_at, updated_at, deleted_at
         FROM %v
         WHERE user_id = ?
             AND deleted_at IS NULL
         `, table),
         userID)
-    return result, model.StandardError(err)
+    return result, err == sql.ErrNoRows, err
 }
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;update-an-item&#34;&gt;Update an Item&lt;/h2&gt;
 
-&lt;p&gt;Use &lt;strong&gt;database.SQL.Exec()&lt;/strong&gt; to update one or more items.&lt;/p&gt;
+&lt;p&gt;Use &lt;strong&gt;db.Exec()&lt;/strong&gt; to update one or more items.&lt;/p&gt;
 
 &lt;h3 id=&#34;controller-3&#34;&gt;Controller&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;_, err := note.Update(r.FormValue(&amp;quot;note&amp;quot;), params.ByName(&amp;quot;id&amp;quot;), userID)
-if err != nil {
-    log.Println(err)
-    sess.AddFlash(flash.Info{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, flash.Error})
-    sess.Save(r, w)
-    Edit(w, r)
-    return
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Update handles the edit form submission.
+func Update(w http.ResponseWriter, r *http.Request) {
+    c := flight.Context(w, r)
+
+    if !c.FormValid(&amp;quot;name&amp;quot;) {
+        Edit(w, r)
+        return
+    }
+
+    _, err := note.Update(c.DB, r.FormValue(&amp;quot;name&amp;quot;), c.Param(&amp;quot;id&amp;quot;), c.UserID)
+    if err != nil {
+        c.FlashError(err)
+        Edit(w, r)
+        return
+    }
+
+    c.FlashSuccess(&amp;quot;Item updated.&amp;quot;)
+    c.Redirect(uri)
 }
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h3 id=&#34;model-3&#34;&gt;Model&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Update makes changes to an existing item.
-func Update(name string, ID string, userID string) (sql.Result, error) {
-    result, err := database.SQL.Exec(fmt.Sprintf(`
+func Update(db Connection, name string, ID string, userID string) (sql.Result, error) {
+    result, err := db.Exec(fmt.Sprintf(`
         UPDATE %v
         SET name = ?
         WHERE id = ?
@@ -1333,7 +1403,7 @@ func Update(name string, ID string, userID string) (sql.Result, error) {
         LIMIT 1
         `, table),
         name, ID, userID)
-    return result, model.StandardError(err)
+    return result, err
 }
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -1344,22 +1414,26 @@ timestamp.&lt;/p&gt;
 
 &lt;h3 id=&#34;controller-4&#34;&gt;Controller&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;_, err := note.Delete(params.ByName(&amp;quot;id&amp;quot;), userID)
-if err != nil {
-    log.Println(err)
-    sess.AddFlash(flash.Info{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, flash.Error})
-    sess.Save(r, w)
-} else {
-    sess.AddFlash(flash.Info{&amp;quot;Item deleted.&amp;quot;, flash.Notice})
-    sess.Save(r, w)
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Destroy handles the delete form submission.
+func Destroy(w http.ResponseWriter, r *http.Request) {
+    c := flight.Context(w, r)
+
+    _, err := note.DeleteSoft(c.DB, c.Param(&amp;quot;id&amp;quot;), c.UserID)
+    if err != nil {
+        c.FlashError(err)
+    } else {
+        c.FlashNotice(&amp;quot;Item deleted.&amp;quot;)
+    }
+
+    c.Redirect(uri)
 }
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h3 id=&#34;model-4&#34;&gt;Model&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Delete marks an item as removed.
-func Delete(ID string, userID string) (sql.Result, error) {
-    result, err := database.SQL.Exec(fmt.Sprintf(`
+func DeleteSoft(db Connection, ID string, userID string) (sql.Result, error) {
+    result, err := db.Exec(fmt.Sprintf(`
         UPDATE %v
         SET deleted_at = NOW()
         WHERE id = ?
@@ -1368,7 +1442,7 @@ func Delete(ID string, userID string) (sql.Result, error) {
         LIMIT 1
         `, table),
         ID, userID)
-    return result, model.StandardError(err)
+    return result, err
 }
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -1378,63 +1452,80 @@ func Delete(ID string, userID string) (sql.Result, error) {
 
 &lt;h3 id=&#34;controller-5&#34;&gt;Controller&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;_, err := note.DeleteHard(params.ByName(&amp;quot;id&amp;quot;), userID)
-if err != nil {
-    log.Println(err)
-    sess.AddFlash(flash.Info{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, flash.Error})
-    sess.Save(r, w)
-} else {
-    sess.AddFlash(flash.Info{&amp;quot;Item deleted.&amp;quot;, flash.Notice})
-    sess.Save(r, w)
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Destroy handles the delete form submission.
+func Destroy(w http.ResponseWriter, r *http.Request) {
+    c := flight.Context(w, r)
+
+    _, err := note.DeleteHard(c.DB, c.Param(&amp;quot;id&amp;quot;), c.UserID)
+    if err != nil {
+        c.FlashError(err)
+    } else {
+        c.FlashNotice(&amp;quot;Item deleted.&amp;quot;)
+    }
+
+    c.Redirect(uri)
 }
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h3 id=&#34;model-5&#34;&gt;Model&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// DeleteHard removes an item.
-func DeleteHard(ID string, userID string) (sql.Result, error) {
-    result, err := database.SQL.Exec(fmt.Sprintf(`
+func DeleteHard(db Connection, ID string, userID string) (sql.Result, error) {
+    result, err := db.Exec(fmt.Sprintf(`
         DELETE FROM %v
         WHERE id = ?
             AND user_id = ?
             AND deleted_at IS NULL
         `, table),
         ID, userID)
-    return result, model.StandardError(err)
+    return result, err
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&#34;handling-errors&#34;&gt;Handling Errors&lt;/h2&gt;
+&lt;h2 id=&#34;postgresql-support&#34;&gt;PostgreSQL Support&lt;/h2&gt;
 
-&lt;p&gt;You can define your own errors for your models in the
-&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/model/model.go&#34;&gt;model&lt;/a&gt;
-package. This is another abstraction that makes it easy to change out database
-systems without having to rewrite code in your controllers.&lt;/p&gt;
+&lt;p&gt;To use PostgreSQL, you need to a few lines of code. The migration support is
+not built into &lt;a href=&#34;https://github.com/blue-jay/jay&#34;&gt;Jay&lt;/a&gt; yet so you&amp;rsquo;ll have to run
+them manually.&lt;/p&gt;
 
-&lt;p&gt;You can manage the errors like this:&lt;/p&gt;
+&lt;p&gt;Add the PostgreSQL structure to the env.json.example file:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;var (
-    // ErrNoResult is when no results are found.
-    ErrNoResult = errors.New(&amp;quot;Result not found.&amp;quot;)
-)
-
-// StandardError returns a model defined error.
-func StandardError(err error) error {
-    if err == sql.ErrNoRows {
-        return ErrNoResult
-    }
-
-    return err
-}
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;&amp;quot;PostgreSQL&amp;quot;:{
+    &amp;quot;Username&amp;quot;:&amp;quot;root&amp;quot;,
+    &amp;quot;Password&amp;quot;:&amp;quot;&amp;quot;,
+    &amp;quot;Database&amp;quot;:&amp;quot;blueprint&amp;quot;,
+    &amp;quot;Hostname&amp;quot;:&amp;quot;127.0.0.1&amp;quot;,
+    &amp;quot;Port&amp;quot;:5432,
+    &amp;quot;Parameter&amp;quot;:&amp;quot;&amp;quot;,
+    &amp;quot;MigrationFolder&amp;quot;:&amp;quot;migration/postgresql&amp;quot;,
+    &amp;quot;Extension&amp;quot;:&amp;quot;sql&amp;quot;
+},
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;In your controller, you can check the error like this:&lt;/p&gt;
+&lt;p&gt;Ensure the JSON is readable by to the &lt;strong&gt;Info&lt;/strong&gt; struct in &lt;strong&gt;lib/env&lt;/strong&gt; so add this
+line:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;if err == model.ErrNoResult {
-    sess.AddFlash(flash.Info{&amp;quot;Password is incorrect&amp;quot;, flash.Warning})
-    sess.Save(r, w)
-}
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;PostgreSQL postgresql.Info `json:&amp;quot;PostgreSQL&amp;quot;`
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Add these lines to the &lt;strong&gt;RegisterServices()&lt;/strong&gt; function in &lt;strong&gt;lib/boot&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Connect to the PostgreSQL database
+postgresqldb, _ := config.PostgreSQL.Connect(true)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you want to replace MySQL, you can change the line at the bottom of the
+&lt;strong&gt;RegisterServices()&lt;/strong&gt; function in &lt;strong&gt;lib/boot&lt;/strong&gt; to pass PostgreSQL instead of
+MySQL:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Store the database connection in flight
+flight.StoreDB(postgresqldb)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you want to add instead of replacing MySQL, you need to:
+- Add a new function to the &lt;strong&gt;lib/flight&lt;/strong&gt; package similar to &lt;strong&gt;StoreDB()&lt;/strong&gt;
+- And a new line to the &lt;strong&gt;Info&lt;/strong&gt; struct in the &lt;strong&gt;lib/flight&lt;/strong&gt;
+- Add the new variable to the &lt;strong&gt;Context()&lt;/strong&gt; function in &lt;strong&gt;lib/flight&lt;/strong&gt;&lt;/p&gt;
 </description>
     </item>
     
@@ -1455,21 +1546,20 @@ func StandardError(err error) error {
 &lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;{{define &amp;quot;title&amp;quot;}}About Blueprint{{end}}
 {{define &amp;quot;head&amp;quot;}}{{end}}
 {{define &amp;quot;content&amp;quot;}}
-&amp;lt;div class=&amp;quot;container&amp;quot;&amp;gt;
 	&amp;lt;div class=&amp;quot;page-header&amp;quot;&amp;gt;
 		&amp;lt;h1&amp;gt;{{template &amp;quot;title&amp;quot; .}}&amp;lt;/h1&amp;gt;
 	&amp;lt;/div&amp;gt;
 	&amp;lt;p&amp;gt;Blueprint lays the foundation for your web application using the Go language.&amp;lt;/p&amp;gt;
 	{{template &amp;quot;footer&amp;quot; .}}
-&amp;lt;/div&amp;gt;
 {{end}}
 {{define &amp;quot;foot&amp;quot;}}{{end}}
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Since this view is stored at &lt;strong&gt;view/about/index.tmpl&lt;/strong&gt;, we may render it using the &lt;strong&gt;view&lt;/strong&gt; helper package like so:&lt;/p&gt;
+&lt;p&gt;Since this view is stored at &lt;strong&gt;view/about/index.tmpl&lt;/strong&gt;, we render it using the &lt;strong&gt;view&lt;/strong&gt; helper package like so:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// import &amp;quot;github.com/blue-jay/core/view&amp;quot;
-v := view.New(&amp;quot;about/index&amp;quot;)
+c := flight.Context(w, r)
+v := c.View.New(&amp;quot;about/index&amp;quot;)
 // Variables would go here like this: v.Vars[&amp;quot;first_name&amp;quot;] = session.Values[&amp;quot;first_name&amp;quot;]
 v.Render(w, r)
 &lt;/code&gt;&lt;/pre&gt;
@@ -1477,7 +1567,8 @@ v.Render(w, r)
 &lt;p&gt;If you don&amp;rsquo;t have to pass any variables to the template, you could shorten it like this:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// import &amp;quot;github.com/blue-jay/core/view&amp;quot;
-view.New(&amp;quot;about/index&amp;quot;).Render(w, r)
+c := flight.Context(w, r)
+c.View.New(&amp;quot;about/index&amp;quot;).Render(w, r)
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;base-template&#34;&gt;Base Template&lt;/h2&gt;
@@ -1485,13 +1576,15 @@ view.New(&amp;quot;about/index&amp;quot;).Render(w, r)
 &lt;p&gt;By default, the &lt;strong&gt;view/base.tmpl&lt;/strong&gt; template is used as the base template (as specified in env.json). If you want to
 change the base template for a template, you can try this:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;v := view.New(&amp;quot;about/index&amp;quot;).Base(&amp;quot;alternate&amp;quot;)
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;c := flight.Context(w, r)
+v := c.View.New(&amp;quot;about/index&amp;quot;).Base(&amp;quot;alternate&amp;quot;)
 v.Render(w, r)
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;A shorter way to specify the view with a different base template and then render is like this:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;view.New(&amp;quot;about/about&amp;quot;).Base(&amp;quot;alternate&amp;quot;).Render(w, r)
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;c := flight.Context(w, r)
+c.View.New(&amp;quot;about/about&amp;quot;).Base(&amp;quot;alternate&amp;quot;).Render(w, r)
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;view-package&#34;&gt;View Package&lt;/h2&gt;
@@ -1506,28 +1599,31 @@ following:&lt;/p&gt;
 &lt;li&gt;ability to modify the variables available in templates&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;The set up of the &lt;strong&gt;view&lt;/strong&gt; package is handled by the &lt;strong&gt;boot&lt;/strong&gt; package:&lt;/p&gt;
+&lt;p&gt;The set up of the &lt;strong&gt;view&lt;/strong&gt; package is handled by the &lt;strong&gt;lib/boot&lt;/strong&gt; package. The
+config is then passed to &lt;code&gt;flight&lt;/code&gt; so it can be accessed by controllers.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Set up the views
-view.SetConfig(config.View)
-view.SetTemplates(config.Template.Root, config.Template.Children)
+config.View.SetTemplates(config.Template.Root, config.Template.Children)
 
 // Set up the functions for the views
-view.SetFuncMaps(
-	asset.Map(config.View.BaseURI),
+config.View.SetFuncMaps(
+	config.Asset.Map(config.View.BaseURI),
 	link.Map(config.View.BaseURI),
 	noescape.Map(),
 	prettytime.Map(),
 	form.Map(),
 )
 
-// Set up the variables for the views
-view.SetModifiers(
+// Set up the variables and modifiers for the views
+config.View.SetModifiers(
 	authlevel.Modify,
 	uri.Modify,
-	token.Modify,
+	xsrf.Token,
 	flash.Modify,
 )
+
+// Store the variables in flight
+flight.StoreConfig(*config)
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;organization&#34;&gt;Organization&lt;/h2&gt;
@@ -1550,10 +1646,10 @@ base.tmpl            - base template for all pages
 
 &lt;h2 id=&#34;view-functions&#34;&gt;View Functions&lt;/h2&gt;
 
-&lt;p&gt;The Go template packages supports passing in a FuncMap which maps names to a
+&lt;p&gt;The Go template packages supports passing a FuncMap which maps names to a
 function. This means you can add functions so they are available to the views.
 These functions are stored in the &lt;strong&gt;viewfunc&lt;/strong&gt; folder. Here is an example of a
-LINK function that can be used to create hyperlinks and the code is stored in
+&lt;strong&gt;LINK&lt;/strong&gt; function that can be used to create hyperlinks and the code is stored in
 &lt;strong&gt;viewfunc/link/link.go&lt;/strong&gt;:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Package link provides a funcmap for html/template to generate a hyperlink.
@@ -1587,11 +1683,11 @@ func Map(baseURI string) template.FuncMap {
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Once you create a new funcmap, you make it available to the views by adding it
-to the &lt;strong&gt;view.SetFuncMaps()&lt;/strong&gt; function in the &lt;strong&gt;boot/boot.go&lt;/strong&gt; file:&lt;/p&gt;
+to the &lt;strong&gt;view.SetFuncMaps()&lt;/strong&gt; function in the &lt;strong&gt;lib/boot/boot.go&lt;/strong&gt; file:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Set up the functions for the views
-view.SetFuncMaps(
-	asset.Map(config.View.BaseURI),
+config.View.SetFuncMaps(
+	config.Asset.Map(config.View.BaseURI),
 	link.Map(config.View.BaseURI),
 	noescape.Map(),
 	prettytime.Map(),
@@ -1622,8 +1718,13 @@ and static files easier:&lt;/p&gt;
 &amp;lt;!-- Output an unescaped variable (not a safe idea, but it is useful when troubleshooting) --&amp;gt;
 {{.SomeVariable | NOESCAPE}}
 
-&amp;lt;!-- Time format --&amp;gt;
+&amp;lt;!-- Time format for mysql.NullTime --&amp;gt;
 {{NULLTIME .SomeTime}}
+&amp;lt;!-- parses to format --&amp;gt;
+3:04 PM 01/02/2006
+
+&amp;lt;!-- Time format helper for mysql.NullTime that shows the latest of the two variables --&amp;gt;
+{{PRETTYTIME .CreatedAt .UpdatedAt}}
 &amp;lt;!-- parses to format --&amp;gt;
 3:04 PM 01/02/2006
 &lt;/code&gt;&lt;/pre&gt;
@@ -1642,28 +1743,31 @@ if you need to display a different view or use a different base template.&lt;/p&
 &lt;p&gt;In the &lt;strong&gt;viewmodify/authlevel/authlevel.go&lt;/strong&gt; file, the &lt;strong&gt;AuthLevel&lt;/strong&gt; variable is
 made available so the views can determine if the user is authenticated or not:&lt;/p&gt;
 
+&lt;p&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/viewmodify/authlevel/authlevel.go&#34;&gt;Source&lt;/a&gt;&lt;/p&gt;
+
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Package authlevel adds an AuthLevel variable to the view template.
 package authlevel
 
 import (
 	&amp;quot;net/http&amp;quot;
 
-	&amp;quot;github.com/blue-jay/core/session&amp;quot;
+	&amp;quot;github.com/blue-jay/blueprint/lib/flight&amp;quot;
 	&amp;quot;github.com/blue-jay/core/view&amp;quot;
 )
 
 // Modify sets AuthLevel in the template to auth if the user is authenticated.
 // Sets AuthLevel to anon if not authenticated.
 func Modify(w http.ResponseWriter, r *http.Request, v *view.Info) {
-	sess := session.Instance(r)
+	c := flight.Context(w, r)
 
 	// Set the AuthLevel to auth if the user is logged in
-	if sess.Values[&amp;quot;id&amp;quot;] != nil {
+	if c.Sess.Values[&amp;quot;id&amp;quot;] != nil {
 		v.Vars[&amp;quot;AuthLevel&amp;quot;] = &amp;quot;auth&amp;quot;
 	} else {
 		v.Vars[&amp;quot;AuthLevel&amp;quot;] = &amp;quot;anon&amp;quot;
 	}
 }
+
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;To use the variable, you could write this type of logic into your view:&lt;/p&gt;
@@ -1676,10 +1780,10 @@ You are not logged in.
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Once you create a new package, you make it available to the views by adding it
-to the &lt;strong&gt;view.SetModifiers()&lt;/strong&gt; function in the &lt;strong&gt;boot/boot.go&lt;/strong&gt; file:&lt;/p&gt;
+to the &lt;strong&gt;view.SetModifiers()&lt;/strong&gt; function in the &lt;strong&gt;lib/boot/boot.go&lt;/strong&gt; file:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Set up the variables and modifiers for the views
-view.SetModifiers(
+config.View.SetModifiers(
 	authlevel.Modify,
 	uri.Modify,
 	xsrf.Token,
@@ -1885,14 +1989,14 @@ PATCH HTTP method:&lt;/p&gt;
 		&amp;lt;label for=&amp;quot;email&amp;quot;&amp;gt;Email Address&amp;lt;/label&amp;gt;
 		&amp;lt;div&amp;gt;&amp;lt;input {{TEXT &amp;quot;email&amp;quot; .item.Email .}} type=&amp;quot;email&amp;quot; class=&amp;quot;form-control&amp;quot; id=&amp;quot;email&amp;quot; /&amp;gt;&amp;lt;/div&amp;gt;
 	&amp;lt;/div&amp;gt;
-	
+
 	&amp;lt;div class=&amp;quot;form-group&amp;quot;&amp;gt;
 		&amp;lt;label for=&amp;quot;password&amp;quot;&amp;gt;Password&amp;lt;/label&amp;gt;
 		&amp;lt;div&amp;gt;&amp;lt;input {{TEXT &amp;quot;password&amp;quot; .item.Password .}} type=&amp;quot;password&amp;quot; class=&amp;quot;form-control&amp;quot; id=&amp;quot;password&amp;quot; /&amp;gt;&amp;lt;/div&amp;gt;
 	&amp;lt;/div&amp;gt;
-	
+
 	&amp;lt;input type=&amp;quot;submit&amp;quot; class=&amp;quot;btn btn-primary&amp;quot; value=&amp;quot;Change&amp;quot; class=&amp;quot;button&amp;quot; /&amp;gt;
-	
+
 	&amp;lt;input type=&amp;quot;hidden&amp;quot; name=&amp;quot;_token&amp;quot; value=&amp;quot;{{$.token}}&amp;quot;&amp;gt;
 &amp;lt;/form&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
@@ -1964,6 +2068,8 @@ only packages the &lt;strong&gt;email&lt;/strong&gt; package uses are part of th
 is a good indicator that the package could be moved to a different project
 without rewriting.&lt;/p&gt;
 
+&lt;p&gt;&lt;a href=&#34;https://github.com/blue-jay/core/blob/master/email/email.go&#34;&gt;Source&lt;/a&gt;&lt;/p&gt;
+
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Package email provides email sending via SMTP.
 package email
 
@@ -1971,37 +2077,15 @@ import (
     &amp;quot;encoding/base64&amp;quot;
     &amp;quot;fmt&amp;quot;
     &amp;quot;net/smtp&amp;quot;
-    &amp;quot;sync&amp;quot;
 )
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;The next section shows the thread-safe configuration that is used in many of
-the lib packages. The Info struct holds the details for the SMTP server and is
-public so it can be nested in the &lt;strong&gt;Info&lt;/strong&gt; struct of the &lt;strong&gt;boot&lt;/strong&gt; package
+&lt;p&gt;The Info struct holds the details for the SMTP server and it should be
+added to the &lt;strong&gt;Info&lt;/strong&gt; struct of the &lt;strong&gt;lib/env&lt;/strong&gt; package
 and then parsed from the env.json file. See the &lt;a href=&#34;http://blue-jay.github.io/configuration/&#34;&gt;Configuration&lt;/a&gt;
 section for more information about adding to env.json.&lt;/p&gt;
 
-&lt;p&gt;There are also a few methods standard to the lib packages:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;SetConfig() - allows the &lt;strong&gt;boot&lt;/strong&gt; package to store the Info struct to a package level variable&lt;/li&gt;
-&lt;li&gt;ResetConfig() - allows test packages to reset the configuration&lt;/li&gt;
-&lt;li&gt;Config() - returns the configuration so the values can be accessed by other packages&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;All of these methods are thread-safe so they can be called by external packages
-and by the functions within the package itself.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// *****************************************************************************
-// Thread-Safe Configuration
-// *****************************************************************************
-
-var (
-    info      Info
-    infoMutex sync.RWMutex
-)
-
-// Info holds the details for the SMTP server.
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Info holds the details for the SMTP server.
 type Info struct {
     Username string
     Password string
@@ -2009,47 +2093,26 @@ type Info struct {
     Port     int
     From     string
 }
-
-// SetConfig stores the config.
-func SetConfig(i Info) {
-    infoMutex.Lock()
-    info = i
-    infoMutex.Unlock()
-}
-
-// ResetConfig removes the config.
-func ResetConfig() {
-    infoMutex.Lock()
-    info = Info{}
-    infoMutex.Unlock()
-}
-
-// Config returns the config.
-func Config() Info {
-    infoMutex.RLock()
-    defer infoMutex.RUnlock()
-    return info
-}
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;The final section of the &lt;strong&gt;email&lt;/strong&gt; package contains the ability to send an
-email using the configuration settings. You&amp;rsquo;ll notice the &lt;strong&gt;Config()&lt;/strong&gt; function
-through the code. This ensures the values are accessed in a thread-safe manner
-so there is no problem if another package tries to change a value at the same
-time.&lt;/p&gt;
+&lt;p&gt;The final section of the &lt;strong&gt;email&lt;/strong&gt; package sends an
+email using the configuration settings. You&amp;rsquo;ll notice the function is a
+struct method which makes it really easy to use from the &lt;strong&gt;flight&lt;/strong&gt; package.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Send mails an email.
-func Send(to, subject, body string) error {
-    auth := smtp.PlainAuth(&amp;quot;&amp;quot;, Config().Username, Config().Password, Config().Hostname)
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Send an email.
+func (c Info) Send(to, subject, body string) error {
+    auth := smtp.PlainAuth(&amp;quot;&amp;quot;, c.Username, c.Password, c.Hostname)
 
+    // Create the header
     header := make(map[string]string)
-    header[&amp;quot;From&amp;quot;] = Config().From
+    header[&amp;quot;From&amp;quot;] = c.From
     header[&amp;quot;To&amp;quot;] = to
     header[&amp;quot;Subject&amp;quot;] = subject
     header[&amp;quot;MIME-Version&amp;quot;] = &amp;quot;1.0&amp;quot;
     header[&amp;quot;Content-Type&amp;quot;] = `text/plain; charset=&amp;quot;utf-8&amp;quot;`
     header[&amp;quot;Content-Transfer-Encoding&amp;quot;] = &amp;quot;base64&amp;quot;
 
+    // Set the message
     message := &amp;quot;&amp;quot;
     for k, v := range header {
         message += fmt.Sprintf(&amp;quot;%s: %s\r\n&amp;quot;, k, v)
@@ -2058,9 +2121,9 @@ func Send(to, subject, body string) error {
 
     // Send the email
     err := smtp.SendMail(
-        fmt.Sprintf(&amp;quot;%s:%d&amp;quot;, Config().Hostname, Config().Port),
+        fmt.Sprintf(&amp;quot;%s:%d&amp;quot;, c.Hostname, c.Port),
         auth,
-        Config().From,
+        c.From,
         []string{to},
         []byte(message),
     )
@@ -2069,10 +2132,25 @@ func Send(to, subject, body string) error {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;p&gt;To use in a controller, you would get the context from the &lt;strong&gt;flight&lt;/strong&gt; package
+and then from the &lt;strong&gt;Config&lt;/strong&gt; variable, you could access the &lt;strong&gt;email&lt;/strong&gt; struct and then
+the &lt;code&gt;Send()&lt;/code&gt; function.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Index sends an email.
+func Index(w http.ResponseWriter, r *http.Request) {
+    c := flight.Context(w, r)
+
+    err := c.Config.Email.Send(&amp;quot;This is the subject&amp;quot;, &amp;quot;This is the body!&amp;quot;)
+    if err != nil {
+        c.FlashError(err)
+        return
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
 &lt;h2 id=&#34;code-generation&#34;&gt;Code Generation&lt;/h2&gt;
 
-&lt;p&gt;A new &lt;strong&gt;lib&lt;/strong&gt; package can be generated with the thread-safe configuration using
-this command: &lt;code&gt;jay generate lib/default package:value&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;A new &lt;strong&gt;lib&lt;/strong&gt; package can be generated using this command: &lt;code&gt;jay generate lib/default package:value&lt;/code&gt;&lt;/p&gt;
 </description>
     </item>
     
@@ -2253,9 +2331,13 @@ env.json) and recorded in the &lt;strong&gt;migration&lt;/strong&gt; table. This
 database you add features or fix bugs in your database. The &amp;lsquo;down&amp;rsquo; file contains
 the code to remove the change or undo it.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: The &lt;code&gt;jay migrate&lt;/code&gt; commands requires the environment variable,
+&lt;p&gt;&lt;strong&gt;Note 1&lt;/strong&gt;: The &lt;code&gt;jay migrate&lt;/code&gt; commands requires the environment variable,
 &lt;strong&gt;JAYCONFIG&lt;/strong&gt;, to point to the env.json file path. The migration folder is specified
 in the env.json file under &lt;strong&gt;MySQL.MigrationFolder&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Note 2&lt;/strong&gt;: Make sure you do not create any migrations with a date earlier than
+any applied migrations. Jay will not go back and apply them. They must be
+created sequentially.&lt;/p&gt;
 
 &lt;p&gt;When you start using &lt;strong&gt;Blueprint&lt;/strong&gt; you&amp;rsquo;ll see two migration files already exist
 in the &lt;strong&gt;migration/mysql&lt;/strong&gt; folder:&lt;/p&gt;
@@ -2390,7 +2472,7 @@ not have a .gen pair in the same folder, then it has a &lt;strong&gt;config.pars
 of &lt;strong&gt;collection&lt;/strong&gt; which means it references other .json files with a
 &lt;strong&gt;config.parse&lt;/strong&gt; value of &lt;strong&gt;single&lt;/strong&gt;.&lt;/p&gt;
 
-&lt;p&gt;The &lt;strong&gt;flight&lt;/strong&gt; package is a helper package that reduces a lot of code from the
+&lt;p&gt;The &lt;strong&gt;lib/flight&lt;/strong&gt; package is a helper package that reduces a lot of code from the
 controller. It contains functions to simplify the use of flash messages,
 form validation, form repopulation, and URL parameters.&lt;/p&gt;
 
@@ -2654,15 +2736,13 @@ not to parse in the single.json file by setting the value of &lt;strong&gt;confi
 &lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;{{define &amp;quot;title&amp;quot;}}{{end}}
 {{define &amp;quot;head&amp;quot;}}{{end}}
 {{define &amp;quot;content&amp;quot;}}
-&amp;lt;div class=&amp;quot;container&amp;quot;&amp;gt;
     &amp;lt;div class=&amp;quot;page-header&amp;quot;&amp;gt;
         &amp;lt;h1&amp;gt;{{template &amp;quot;title&amp;quot; .}}&amp;lt;/h1&amp;gt;
     &amp;lt;/div&amp;gt;
-    
+
     &amp;lt;p&amp;gt;Not Implemented&amp;lt;/p&amp;gt;
-    
+
     {{template &amp;quot;footer&amp;quot; .}}
-&amp;lt;/div&amp;gt;
 {{end}}
 {{define &amp;quot;foot&amp;quot;}}{{end}}
 &lt;/code&gt;&lt;/pre&gt;
@@ -2694,15 +2774,13 @@ parsed, just copied.&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;{{define &amp;quot;title&amp;quot;}}{{end}}
 {{define &amp;quot;head&amp;quot;}}{{end}}
 {{define &amp;quot;content&amp;quot;}}
-&amp;lt;div class=&amp;quot;container&amp;quot;&amp;gt;
     &amp;lt;div class=&amp;quot;page-header&amp;quot;&amp;gt;
         &amp;lt;h1&amp;gt;{{template &amp;quot;title&amp;quot; .}}&amp;lt;/h1&amp;gt;
     &amp;lt;/div&amp;gt;
-    
+
     &amp;lt;p&amp;gt;Not Implemented&amp;lt;/p&amp;gt;
-    
+
     {{template &amp;quot;footer&amp;quot; .}}
-&amp;lt;/div&amp;gt;
 {{end}}
 {{define &amp;quot;foot&amp;quot;}}{{end}}
 &lt;/code&gt;&lt;/pre&gt;

@@ -141,7 +141,7 @@
       
       <div class="name">
         <br><strong>blue-jay/blueprint</strong>
-        <br><span class="version">0.6-charlie</span>
+        <br><span class="version">0.8-delta</span>
       </div>
     </div>
   </a>
@@ -467,6 +467,8 @@ only packages the <strong>email</strong> package uses are part of the standard l
 is a good indicator that the package could be moved to a different project
 without rewriting.</p>
 
+<p><a href="https://github.com/blue-jay/core/blob/master/email/email.go">Source</a></p>
+
 <pre><code class="language-go">// Package email provides email sending via SMTP.
 package email
 
@@ -474,37 +476,15 @@ import (
     &quot;encoding/base64&quot;
     &quot;fmt&quot;
     &quot;net/smtp&quot;
-    &quot;sync&quot;
 )
 </code></pre>
 
-<p>The next section shows the thread-safe configuration that is used in many of
-the lib packages. The Info struct holds the details for the SMTP server and is
-public so it can be nested in the <strong>Info</strong> struct of the <strong>boot</strong> package
+<p>The Info struct holds the details for the SMTP server and it should be
+added to the <strong>Info</strong> struct of the <strong>lib/env</strong> package
 and then parsed from the env.json file. See the <a href="http://blue-jay.github.io/configuration/">Configuration</a>
 section for more information about adding to env.json.</p>
 
-<p>There are also a few methods standard to the lib packages:</p>
-
-<ul>
-<li>SetConfig() - allows the <strong>boot</strong> package to store the Info struct to a package level variable</li>
-<li>ResetConfig() - allows test packages to reset the configuration</li>
-<li>Config() - returns the configuration so the values can be accessed by other packages</li>
-</ul>
-
-<p>All of these methods are thread-safe so they can be called by external packages
-and by the functions within the package itself.</p>
-
-<pre><code class="language-go">// *****************************************************************************
-// Thread-Safe Configuration
-// *****************************************************************************
-
-var (
-    info      Info
-    infoMutex sync.RWMutex
-)
-
-// Info holds the details for the SMTP server.
+<pre><code class="language-go">// Info holds the details for the SMTP server.
 type Info struct {
     Username string
     Password string
@@ -512,47 +492,26 @@ type Info struct {
     Port     int
     From     string
 }
-
-// SetConfig stores the config.
-func SetConfig(i Info) {
-    infoMutex.Lock()
-    info = i
-    infoMutex.Unlock()
-}
-
-// ResetConfig removes the config.
-func ResetConfig() {
-    infoMutex.Lock()
-    info = Info{}
-    infoMutex.Unlock()
-}
-
-// Config returns the config.
-func Config() Info {
-    infoMutex.RLock()
-    defer infoMutex.RUnlock()
-    return info
-}
 </code></pre>
 
-<p>The final section of the <strong>email</strong> package contains the ability to send an
-email using the configuration settings. You&rsquo;ll notice the <strong>Config()</strong> function
-through the code. This ensures the values are accessed in a thread-safe manner
-so there is no problem if another package tries to change a value at the same
-time.</p>
+<p>The final section of the <strong>email</strong> package sends an
+email using the configuration settings. You&rsquo;ll notice the function is a
+struct method which makes it really easy to use from the <strong>flight</strong> package.</p>
 
-<pre><code class="language-go">// Send mails an email.
-func Send(to, subject, body string) error {
-    auth := smtp.PlainAuth(&quot;&quot;, Config().Username, Config().Password, Config().Hostname)
+<pre><code class="language-go">// Send an email.
+func (c Info) Send(to, subject, body string) error {
+    auth := smtp.PlainAuth(&quot;&quot;, c.Username, c.Password, c.Hostname)
 
+    // Create the header
     header := make(map[string]string)
-    header[&quot;From&quot;] = Config().From
+    header[&quot;From&quot;] = c.From
     header[&quot;To&quot;] = to
     header[&quot;Subject&quot;] = subject
     header[&quot;MIME-Version&quot;] = &quot;1.0&quot;
     header[&quot;Content-Type&quot;] = `text/plain; charset=&quot;utf-8&quot;`
     header[&quot;Content-Transfer-Encoding&quot;] = &quot;base64&quot;
 
+    // Set the message
     message := &quot;&quot;
     for k, v := range header {
         message += fmt.Sprintf(&quot;%s: %s\r\n&quot;, k, v)
@@ -561,9 +520,9 @@ func Send(to, subject, body string) error {
 
     // Send the email
     err := smtp.SendMail(
-        fmt.Sprintf(&quot;%s:%d&quot;, Config().Hostname, Config().Port),
+        fmt.Sprintf(&quot;%s:%d&quot;, c.Hostname, c.Port),
         auth,
-        Config().From,
+        c.From,
         []string{to},
         []byte(message),
     )
@@ -572,10 +531,25 @@ func Send(to, subject, body string) error {
 }
 </code></pre>
 
+<p>To use in a controller, you would get the context from the <strong>flight</strong> package
+and then from the <strong>Config</strong> variable, you could access the <strong>email</strong> struct and then
+the <code>Send()</code> function.</p>
+
+<pre><code class="language-go">// Index sends an email.
+func Index(w http.ResponseWriter, r *http.Request) {
+    c := flight.Context(w, r)
+
+    err := c.Config.Email.Send(&quot;This is the subject&quot;, &quot;This is the body!&quot;)
+    if err != nil {
+        c.FlashError(err)
+        return
+    }
+}
+</code></pre>
+
 <h2 id="code-generation">Code Generation</h2>
 
-<p>A new <strong>lib</strong> package can be generated with the thread-safe configuration using
-this command: <code>jay generate lib/default package:value</code></p>
+<p>A new <strong>lib</strong> package can be generated using this command: <code>jay generate lib/default package:value</code></p>
 
 			
 			<aside class="copyright" role="note">

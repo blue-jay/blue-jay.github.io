@@ -22,8 +22,8 @@
 You are not using a framework so don&amp;rsquo;t be afraid to change code. You don&amp;rsquo;t need to
 use any of the components included with Blueprint, but it does give you a nice foundation to
 start from. If you want to use YAML instead of JSON, it&amp;rsquo;s recommended to create a wrapper
-library in the &lt;strong&gt;lib&lt;/strong&gt; folder and then load your env.yaml file via the &lt;strong&gt;boot&lt;/strong&gt;
-package.&lt;/p&gt;
+library in the &lt;strong&gt;lib&lt;/strong&gt; folder and then load your env.yaml file via the &lt;strong&gt;blueprint.go&lt;/strong&gt;
+file.&lt;/p&gt;
 
 &lt;h2 id=&#34;jay-command-env&#34;&gt;Jay Command: env&lt;/h2&gt;
 
@@ -49,7 +49,7 @@ env env keyupdate
 &lt;p&gt;The &lt;strong&gt;env.json&lt;/strong&gt; file is a good place to set variables for the application so
 you don&amp;rsquo;t have to hardcode them. If you want to add any of your own settings,
 you can add them to &lt;strong&gt;env.json&lt;/strong&gt; and update the &lt;strong&gt;Info&lt;/strong&gt; struct
-in the &lt;strong&gt;bootstrap&lt;/strong&gt; package. Here is an example &lt;strong&gt;env.json&lt;/strong&gt;:&lt;/p&gt;
+in the &lt;strong&gt;lib/env&lt;/strong&gt; package. Here is an example &lt;strong&gt;env.json&lt;/strong&gt;:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
   &amp;quot;Asset&amp;quot;:{
@@ -136,8 +136,10 @@ changes:&lt;/p&gt;
 
 &lt;p&gt;The &lt;strong&gt;env.json&lt;/strong&gt; file contains the configuration for Blueprint and Jay. It removes the need
 to hardcode any of these values and makes it easy to move Blueprint to another system
-with a different setup. The &lt;strong&gt;env.json&lt;/strong&gt; file is parsed and held in the
-&lt;strong&gt;Info&lt;/strong&gt; struct from the &lt;strong&gt;boot&lt;/strong&gt; package:&lt;/p&gt;
+with a different setup. The &lt;strong&gt;env.json&lt;/strong&gt; file is parsed to the
+&lt;strong&gt;Info&lt;/strong&gt; struct from the &lt;strong&gt;lib/env&lt;/strong&gt; package:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/lib/env/env.go&#34;&gt;Source&lt;/a&gt;&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Info contains the application settings.
 type Info struct {
@@ -150,11 +152,11 @@ type Info struct {
   Session    session.Info  `json:&amp;quot;Session&amp;quot;`
   Template   view.Template `json:&amp;quot;Template&amp;quot;`
   View       view.Info     `json:&amp;quot;View&amp;quot;`
-  Path       string
+  path       string
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;The &lt;strong&gt;Info&lt;/strong&gt; struct is simply a container that nests structs from packages in
+&lt;p&gt;The &lt;strong&gt;Info&lt;/strong&gt; struct is a container that nests structs from packages in
 the &lt;strong&gt;Core&lt;/strong&gt; library that need variables configured. The &lt;strong&gt;Path&lt;/strong&gt; variable is
 the location of the env.json file. Here is a list mapping the JSON keys to
 structs:&lt;/p&gt;
@@ -166,7 +168,7 @@ Generate  - Info struct in core/generate
 MySQL     - Info struct in core/mysql
 Server    - Info struct in core/server
 Session   - Info struct in core/session
-Template  - Template struct in lib/view
+Template  - Template struct in core/view
 View      - Info struct in core/view
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -190,9 +192,10 @@ following:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Create a new package in the &lt;strong&gt;lib&lt;/strong&gt; folder called &lt;strong&gt;captcha&lt;/strong&gt;&lt;/li&gt;
 &lt;li&gt;Create a struct called &lt;strong&gt;Info&lt;/strong&gt; in the &lt;strong&gt;lib/captcha&lt;/strong&gt; package&lt;/li&gt;
+&lt;li&gt;Add the struct to the &lt;strong&gt;Info&lt;/strong&gt; struct in the &lt;strong&gt;lib/env&lt;/strong&gt; package&lt;/li&gt;
 &lt;li&gt;Add the &lt;strong&gt;Captcha&lt;/strong&gt; key and any values to the &lt;strong&gt;env.json&lt;/strong&gt; file&lt;/li&gt;
-&lt;li&gt;Add code to the &lt;strong&gt;RegisterServices()&lt;/strong&gt; function in the &lt;strong&gt;boot&lt;/strong&gt; package to pass the config to the &lt;strong&gt;lib/captcha&lt;/strong&gt; package at start up&lt;/li&gt;
-&lt;li&gt;Add code to your controllers that references your &lt;strong&gt;lib/captcha&lt;/strong&gt; package&lt;/li&gt;
+&lt;li&gt;Add code to the &lt;strong&gt;RegisterServices()&lt;/strong&gt; function in the &lt;strong&gt;lib/boot&lt;/strong&gt; package to pass the any additional settings to the &lt;strong&gt;lib/flight&lt;/strong&gt; package at start up&lt;/li&gt;
+&lt;li&gt;Add code to your controllers that references uses &lt;strong&gt;flight.Context()&lt;/strong&gt; to retrieve your &lt;strong&gt;lib/captcha&lt;/strong&gt; package settings&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;h2 id=&#34;tip-remove-a-section&#34;&gt;Tip: Remove a Section&lt;/h2&gt;
@@ -201,7 +204,7 @@ following:&lt;/p&gt;
 
 &lt;ol&gt;
 &lt;li&gt;Remove the &lt;strong&gt;Email&lt;/strong&gt; key and value from the &lt;strong&gt;env.json&lt;/strong&gt; file&lt;/li&gt;
-&lt;li&gt;Remove the &lt;strong&gt;Email&lt;/strong&gt; nested struct from the &lt;strong&gt;Info&lt;/strong&gt; struct in the &lt;strong&gt;boot&lt;/strong&gt; package&lt;/li&gt;
+&lt;li&gt;Remove the &lt;strong&gt;Email&lt;/strong&gt; nested struct from the &lt;strong&gt;Info&lt;/strong&gt; struct in the &lt;strong&gt;lib/env&lt;/strong&gt; package&lt;/li&gt;
 &lt;li&gt;Remove any code setting up the package from the &lt;strong&gt;RegisterServices()&lt;/strong&gt; function in the &lt;strong&gt;boot&lt;/strong&gt; package&lt;/li&gt;
 &lt;li&gt;Remove the &lt;strong&gt;lib/email&lt;/strong&gt; package from the filesystem&lt;/li&gt;
 &lt;li&gt;Find any references to the &lt;strong&gt;lib/email&lt;/strong&gt; package in your code using the jay command line, &lt;code&gt;jay find . &amp;quot;lib/email&amp;quot;&lt;/code&gt;,

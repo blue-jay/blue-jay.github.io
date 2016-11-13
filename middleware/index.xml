@@ -92,7 +92,7 @@ where the controller uses the &lt;strong&gt;router.ChainHandler()&lt;/strong&gt;
 The function is a wrapper for
 the &lt;a href=&#34;https://github.com/justinas/alice&#34;&gt;justinas/alice&lt;/a&gt; package which makes
 using middleware more scalable and a little &amp;ldquo;prettier&amp;rdquo;. If you look at the
-&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/boot/boot.go&#34;&gt;boot&lt;/a&gt;
+&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/lib/boot/middleware.go&#34;&gt;lib/boot&lt;/a&gt;
 package, you&amp;rsquo;ll see the &lt;strong&gt;ChainHandler()&lt;/strong&gt; function. There is also a &lt;strong&gt;Chain()&lt;/strong&gt;
 function that can be used to chain middleware for routes or to pass to
 &lt;strong&gt;ChainHandler()&lt;/strong&gt;.&lt;/p&gt;
@@ -130,7 +130,7 @@ the application calls &lt;strong&gt;boot.SetUpMiddleware(router.Instance())&lt;/
 applies the middleware to the router. The middleware is called on every
 request.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/boot/boot.go&#34;&gt;Source&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/lib/boot/middleware.go&#34;&gt;Source&lt;/a&gt;&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// SetUpMiddleware contains the middleware that applies to every request.
 func SetUpMiddleware(h http.Handler) http.Handler {

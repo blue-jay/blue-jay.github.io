@@ -50,7 +50,7 @@ not have a .gen pair in the same folder, then it has a &lt;strong&gt;config.pars
 of &lt;strong&gt;collection&lt;/strong&gt; which means it references other .json files with a
 &lt;strong&gt;config.parse&lt;/strong&gt; value of &lt;strong&gt;single&lt;/strong&gt;.&lt;/p&gt;
 
-&lt;p&gt;The &lt;strong&gt;flight&lt;/strong&gt; package is a helper package that reduces a lot of code from the
+&lt;p&gt;The &lt;strong&gt;lib/flight&lt;/strong&gt; package is a helper package that reduces a lot of code from the
 controller. It contains functions to simplify the use of flash messages,
 form validation, form repopulation, and URL parameters.&lt;/p&gt;
 
@@ -314,15 +314,13 @@ not to parse in the single.json file by setting the value of &lt;strong&gt;confi
 &lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;{{define &amp;quot;title&amp;quot;}}{{end}}
 {{define &amp;quot;head&amp;quot;}}{{end}}
 {{define &amp;quot;content&amp;quot;}}
-&amp;lt;div class=&amp;quot;container&amp;quot;&amp;gt;
     &amp;lt;div class=&amp;quot;page-header&amp;quot;&amp;gt;
         &amp;lt;h1&amp;gt;{{template &amp;quot;title&amp;quot; .}}&amp;lt;/h1&amp;gt;
     &amp;lt;/div&amp;gt;
-    
+
     &amp;lt;p&amp;gt;Not Implemented&amp;lt;/p&amp;gt;
-    
+
     {{template &amp;quot;footer&amp;quot; .}}
-&amp;lt;/div&amp;gt;
 {{end}}
 {{define &amp;quot;foot&amp;quot;}}{{end}}
 &lt;/code&gt;&lt;/pre&gt;
@@ -354,15 +352,13 @@ parsed, just copied.&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;{{define &amp;quot;title&amp;quot;}}{{end}}
 {{define &amp;quot;head&amp;quot;}}{{end}}
 {{define &amp;quot;content&amp;quot;}}
-&amp;lt;div class=&amp;quot;container&amp;quot;&amp;gt;
     &amp;lt;div class=&amp;quot;page-header&amp;quot;&amp;gt;
         &amp;lt;h1&amp;gt;{{template &amp;quot;title&amp;quot; .}}&amp;lt;/h1&amp;gt;
     &amp;lt;/div&amp;gt;
-    
+
     &amp;lt;p&amp;gt;Not Implemented&amp;lt;/p&amp;gt;
-    
+
     {{template &amp;quot;footer&amp;quot; .}}
-&amp;lt;/div&amp;gt;
 {{end}}
 {{define &amp;quot;foot&amp;quot;}}{{end}}
 &lt;/code&gt;&lt;/pre&gt;

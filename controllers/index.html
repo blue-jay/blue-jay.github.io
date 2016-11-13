@@ -141,7 +141,7 @@
       
       <div class="name">
         <br><strong>blue-jay/blueprint</strong>
-        <br><span class="version">0.6-charlie</span>
+        <br><span class="version">0.8-delta</span>
       </div>
     </div>
   </a>
@@ -529,19 +529,17 @@ models in your controllers.</p>
 	...
 }
 
-// &quot;Index&quot; is the Function
+// Index displays the items.
 func Index(w http.ResponseWriter, r *http.Request) {
 	c := flight.Context(w, r)
 
-	items, err := note.ByUserID(c.UserID)
+	items, _, err := note.ByUserID(c.DB, c.UserID)
 	if err != nil {
 		c.FlashError(err)
 		items = []note.Item{}
 	}
 
-	// &quot;index&quot; is the View
-	v := view.New(&quot;note/index&quot;)
-	v.Vars[&quot;first_name&quot;] = c.Sess.Values[&quot;first_name&quot;]
+	v := c.View.New(&quot;note/index&quot;)
 	v.Vars[&quot;items&quot;] = items
 	v.Render(w, r)
 }
@@ -554,7 +552,7 @@ login. You <strong>must</strong> remember to save the sessions once you make a c
 them.</p>
 
 <pre><code class="language-go">// Get the current session
-sess := session.Instance(r)
+sess, _ := session.Instance(r)
 ...
 // Save the session after you are finished making changes
 sess.Save(r, w)
@@ -581,12 +579,22 @@ sess.Save(r, w) // Ensure you save the session after making a change to it
 <p>The <strong>form</strong> package makes it easy to validate required fields. It works on the
 inputs: text, textarea, checkbox, radio, and select. The function,
 <strong>form.Required()</strong>, requires the request and then any number of fields
-as it is a variadic function.</p>
+as it is a variadic function. You can use the <code>form</code> package by itself it you
+want more control over the error message or you can use the <code>flight</code> package
+which handles the error message for you:</p>
 
-<pre><code class="language-go">if valid, missingField := form.Required(r, &quot;email&quot;, &quot;password&quot;); !valid {
+<pre><code class="language-go">// Without flight
+if valid, missingField := form.Required(r, &quot;email&quot;, &quot;password&quot;); !valid {
 	sess.AddFlash(flash.Info{&quot;Field missing: &quot; + missingField, flash.Error})
 	sess.Save(r, w)
 	LoginGET(w, r)
+	return
+}
+
+// With flight
+c := flight.Context(w, r)
+if !c.FormValid(&quot;name&quot;, &quot;email&quot;, &quot;password&quot;) {
+	Create(w, r)
 	return
 }
 </code></pre>
@@ -599,12 +607,17 @@ variadic function so it can accepts more than one field. You&rsquo;ll need to us
 blocks from the <strong>form</strong> package in your view as well. Check out the
 <a href="http://blue-jay.github.io/views/#repopulate-form-fields">Views</a> page to see how to use them.</p>
 
-<pre><code class="language-go">// Index displays the login page.
-func Index(w http.ResponseWriter, r *http.Request) {
-	v := view.New(&quot;login/index&quot;)
-	form.Repopulate(r.Form, v.Vars, &quot;email&quot;)
-	v.Render(w, r)
-}
+<pre><code class="language-go">// Without flight
+c := flight.Context(w, r)
+v := c.View.New(&quot;note/create&quot;)
+form.Repopulate(r.Form, v.Vars, &quot;name&quot;)
+v.Render(w, r)
+
+// With flight
+c := flight.Context(w, r)
+v := c.View.New(&quot;note/create&quot;)
+c.Repopulate(v.Vars, &quot;name&quot;)
+v.Render(w, r)
 </code></pre>
 
 <h2 id="render-a-template">Render a Template</h2>
@@ -613,16 +626,18 @@ func Index(w http.ResponseWriter, r *http.Request) {
 page for more clarification):</p>
 
 <pre><code class="language-go">// Render without adding any variables
-view.New(&quot;about/index&quot;).Render(w, r)
+c := flight.Context(w, r)
+c.View.New(&quot;about/index&quot;).Render(w, r)
 
 // Render with variables
-session := session.Instance(r)
-v := view.New(&quot;home/index&quot;)
-v.Vars[&quot;first_name&quot;] = session.Values[&quot;first_name&quot;]
+c := flight.Context(w, r)
+v := c.View.New(&quot;home/index&quot;)
+v.Vars[&quot;first_name&quot;] = c.Sess.Values[&quot;first_name&quot;]
 v.Render(w, r)
 
 // Render with different base template (base.tmpl is used by default)
-v := view.New(&quot;home/index&quot;).Base(&quot;single&quot;)
+c := flight.Context(w, r)
+v := c.View.New(&quot;home/index&quot;).Base(&quot;single&quot;)
 v.Render(w, r)
 </code></pre>
 
@@ -643,12 +658,11 @@ func Load() {
 
 // Index displays the flash messages in JSON.
 func Index(w http.ResponseWriter, r *http.Request) {
-	// Get session
-	sess := session.Instance(r)
+	c := flight.Context(w, r)
 
 	// Set the flash message
-	sess.AddFlash(flash.Info{&quot;An error occurred on the server. Please try again later.&quot;, flash.Error})
-	sess.Save(r, w)
+	c.Sess.AddFlash(flash.Info{&quot;An error occurred on the server. Please try again later.&quot;, flash.Error})
+	c.Sess.Save(r, w)
 
 	// Display the flash messages as JSON
 	flash.SendFlashes(w, r)
@@ -668,14 +682,14 @@ func Index(w http.ResponseWriter, r *http.Request) {
 functions to interact with the data.</p>
 
 <pre><code class="language-go">// Get database result
-result, err := user.ByEmail(email)
+result, norows, err := user.ByEmail(email)
 
-if err == model.ErrNoResult {
+if nowrows {
 	// User does not exist
 } else if err != nil {
 	// Display error message
 } else if passhash.MatchString(result.Password, password) {
-	// Password matches!	
+	// Password matches!
 } else {
 	// Password does not match
 }
@@ -687,12 +701,11 @@ if err == model.ErrNoResult {
 env.json point to your SMTP server.</p>
 
 <pre><code class="language-go">// Email a user
-err := email.Send(email.Config().From, &quot;This is the subject&quot;, &quot;This is the body!&quot;)
+c := flight.Context(w, r)
+err := c.Config.Email.Send(&quot;This is the subject&quot;, &quot;This is the body!&quot;)
 if err != nil {
-    log.Println(err)
-    sess.AddFlash(flash.Info{&quot;An error occurred on the server. Please try again later.&quot;, flash.Error})
-    sess.Save(r, w)
-    return
+	c.FlashError(err)
+	return
 }
 </code></pre>
 

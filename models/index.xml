@@ -23,71 +23,132 @@ changes, you don&amp;rsquo;t have to look through the controllers to find the qu
 the queries are stored in the &lt;strong&gt;model&lt;/strong&gt; folder.&lt;/p&gt;
 
 &lt;p&gt;Blue Jay supports MySQL by default, but can easily be expanded to use other
-database systems.&lt;/p&gt;
+database systems. There is also a PostgreSQL package you can use
+&lt;a href=&#34;https://github.com/blue-jay/core/blob/master/storage/driver/postgresql/postgresql.go&#34;&gt;here&lt;/a&gt;.
+The instructions are at the bottom of this page.&lt;/p&gt;
 
 &lt;h2 id=&#34;connect-to-the-database&#34;&gt;Connect to the database&lt;/h2&gt;
 
 &lt;p&gt;You only need to connect to the database once. The connection pool is
-automatically handled by the &lt;a href=&#34;https://github.com/go-sql-driver/mysql&#34;&gt;go-sql-driver/mysql&lt;/a&gt;
-package.&lt;/p&gt;
+handled by the &lt;a href=&#34;https://github.com/go-sql-driver/mysql&#34;&gt;go-sql-driver/mysql&lt;/a&gt;
+package. The connection is started by the &lt;strong&gt;lib/boot&lt;/strong&gt; package:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Connect to database
-database.Connect(config.Database)
+&lt;p&gt;&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/lib/boot/boot.go&#34;&gt;Source&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Connect to the MySQL database
+mysqlDB, _ := config.MySQL.Connect(true)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&#34;create-an-item&#34;&gt;Create an Item&lt;/h2&gt;
+&lt;h2 id=&#34;model-layout&#34;&gt;Model Layout&lt;/h2&gt;
 
-&lt;p&gt;Use &lt;strong&gt;database.SQL.Exec()&lt;/strong&gt; to create an item or a table.&lt;/p&gt;
+&lt;p&gt;Every model should have a table name, a struct to represent the columns, and a
+Connection interface. The interface makes the model much more testable so it can
+be easily mocked and interchanged.&lt;/p&gt;
 
-&lt;h3 id=&#34;controller&#34;&gt;Controller&lt;/h3&gt;
+&lt;p&gt;A good interface for each model looks like this:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;_, err := note.Create(r.FormValue(&amp;quot;note&amp;quot;), userID)
-if err != nil {
-    log.Println(err)
-    sess.AddFlash(flash.Info{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, flash.Error})
-    sess.Save(r, w)
-    Create(w, r)
-    return
+&lt;pre&gt;&lt;code&gt;// Connection is an interface for making queries.
+type Connection interface {
+    Exec(query string, args ...interface{}) (sql.Result, error)
+    Get(dest interface{}, query string, args ...interface{}) error
+    Select(dest interface{}, query string, args ...interface{}) error
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;model&#34;&gt;Model&lt;/h3&gt;
+&lt;p&gt;And a good create function looks like this:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Create adds an item.
-func Create(name string, userID string) (sql.Result, error) {
-    result, err := database.SQL.Exec(fmt.Sprintf(`
+&lt;pre&gt;&lt;code&gt;// Create adds an item.
+func Create(db Connection, name string, userID string) (sql.Result, error) {
+    result, err := db.Exec(fmt.Sprintf(`
         INSERT INTO %v
         (name, user_id)
         VALUES
         (?,?)
         `, table),
         name, userID)
-    return result, model.StandardError(err)
+    return result, err
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;crud-operations&#34;&gt;CRUD Operations&lt;/h1&gt;
+
+&lt;p&gt;Below are common operations and how controllers can interact with models.
+All the controller functions are from
+&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/controller/notepad/notepad.go&#34;&gt;notepad.go&lt;/a&gt;
+and the model functions
+are from &lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/model/note/note.go&#34;&gt;note.go&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;create-an-item&#34;&gt;Create an Item&lt;/h2&gt;
+
+&lt;p&gt;Use &lt;strong&gt;db.Exec()&lt;/strong&gt; to create an item or a table.&lt;/p&gt;
+
+&lt;h3 id=&#34;controller&#34;&gt;Controller&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Store handles the create form submission.
+func Store(w http.ResponseWriter, r *http.Request) {
+    c := flight.Context(w, r)
+
+    if !c.FormValid(&amp;quot;name&amp;quot;) {
+        Create(w, r)
+        return
+    }
+
+    _, err := note.Create(c.DB, r.FormValue(&amp;quot;name&amp;quot;), c.UserID)
+    if err != nil {
+        c.FlashError(err)
+        Create(w, r)
+        return
+    }
+
+    c.FlashSuccess(&amp;quot;Item added.&amp;quot;)
+    c.Redirect(uri)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;model&#34;&gt;Model&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Create adds an item.
+func Create(db Connection, name string, userID string) (sql.Result, error) {
+    result, err := db.Exec(fmt.Sprintf(`
+        INSERT INTO %v
+        (name, user_id)
+        VALUES
+        (?,?)
+        `, table),
+        name, userID)
+    return result, err
 }
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;get-an-item-by-item-id&#34;&gt;Get an Item by Item ID&lt;/h2&gt;
 
-&lt;p&gt;Use &lt;strong&gt;database.SQL.Get()&lt;/strong&gt; to get a single item.&lt;/p&gt;
+&lt;p&gt;Use &lt;strong&gt;db.Get()&lt;/strong&gt; to get a single item.&lt;/p&gt;
 
 &lt;h3 id=&#34;controller-1&#34;&gt;Controller&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;item, err := note.ByID(params.ByName(&amp;quot;id&amp;quot;), userID)
-if err != nil { // If the note doesn&#39;t exist
-    log.Println(err)
-    sess.AddFlash(flash.Info{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, flash.Error})
-    sess.Save(r, w)
-    http.Redirect(w, r, uri, http.StatusFound)
-    return
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Show displays a single item.
+func Show(w http.ResponseWriter, r *http.Request) {
+    c := flight.Context(w, r)
+
+    item, _, err := note.ByID(c.DB, c.Param(&amp;quot;id&amp;quot;), c.UserID)
+    if err != nil {
+        c.FlashError(err)
+        c.Redirect(uri)
+        return
+    }
+
+    v := c.View.New(&amp;quot;note/show&amp;quot;)
+    v.Vars[&amp;quot;item&amp;quot;] = item
+    v.Render(w, r)
 }
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h3 id=&#34;model-1&#34;&gt;Model&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// ByID gets item by ID.
-func ByID(ID string, userID string) (Item, error) {
+func ByID(db Connection, ID string, userID string) (Item, bool, error) {
     result := Item{}
-    err := database.SQL.Get(&amp;amp;result, fmt.Sprintf(`
+    err := db.Get(&amp;amp;result, fmt.Sprintf(`
         SELECT id, name, user_id, created_at, updated_at, deleted_at
         FROM %v
         WHERE id = ?
@@ -96,62 +157,80 @@ func ByID(ID string, userID string) (Item, error) {
         LIMIT 1
         `, table),
         ID, userID)
-    return result, model.StandardError(err)
+    return result, err == sql.ErrNoRows, err
 }
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;get-items-by-user-id&#34;&gt;Get Items by User ID&lt;/h2&gt;
 
-&lt;p&gt;Use &lt;strong&gt;database.SQL.Select()&lt;/strong&gt; to get multiple items.&lt;/p&gt;
+&lt;p&gt;Use &lt;strong&gt;db.Select()&lt;/strong&gt; to get multiple items.&lt;/p&gt;
 
 &lt;h3 id=&#34;controller-2&#34;&gt;Controller&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;items, err := note.ByUserID(userID)
-if err != nil {
-    log.Println(err)
-    sess.AddFlash(flash.Info{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, flash.Error})
-    sess.Save(r, w)
-    items = []note.Item{}
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Index displays the items.
+func Index(w http.ResponseWriter, r *http.Request) {
+    c := flight.Context(w, r)
+
+    items, _, err := note.ByUserID(c.DB, c.UserID)
+    if err != nil {
+        c.FlashError(err)
+        items = []note.Item{}
+    }
+
+    v := c.View.New(&amp;quot;note/index&amp;quot;)
+    v.Vars[&amp;quot;items&amp;quot;] = items
+    v.Render(w, r)
 }
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h3 id=&#34;model-2&#34;&gt;Model&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// ByUserID gets all entities for a user.
-func ByUserID(userID string) ([]Item, error) {
+func ByUserID(db Connection, userID string) ([]Item, bool, error) {
     var result []Item
-    err := database.SQL.Select(&amp;amp;result, fmt.Sprintf(`
+    err := db.Select(&amp;amp;result, fmt.Sprintf(`
         SELECT id, name, user_id, created_at, updated_at, deleted_at
         FROM %v
         WHERE user_id = ?
             AND deleted_at IS NULL
         `, table),
         userID)
-    return result, model.StandardError(err)
+    return result, err == sql.ErrNoRows, err
 }
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;update-an-item&#34;&gt;Update an Item&lt;/h2&gt;
 
-&lt;p&gt;Use &lt;strong&gt;database.SQL.Exec()&lt;/strong&gt; to update one or more items.&lt;/p&gt;
+&lt;p&gt;Use &lt;strong&gt;db.Exec()&lt;/strong&gt; to update one or more items.&lt;/p&gt;
 
 &lt;h3 id=&#34;controller-3&#34;&gt;Controller&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;_, err := note.Update(r.FormValue(&amp;quot;note&amp;quot;), params.ByName(&amp;quot;id&amp;quot;), userID)
-if err != nil {
-    log.Println(err)
-    sess.AddFlash(flash.Info{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, flash.Error})
-    sess.Save(r, w)
-    Edit(w, r)
-    return
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Update handles the edit form submission.
+func Update(w http.ResponseWriter, r *http.Request) {
+    c := flight.Context(w, r)
+
+    if !c.FormValid(&amp;quot;name&amp;quot;) {
+        Edit(w, r)
+        return
+    }
+
+    _, err := note.Update(c.DB, r.FormValue(&amp;quot;name&amp;quot;), c.Param(&amp;quot;id&amp;quot;), c.UserID)
+    if err != nil {
+        c.FlashError(err)
+        Edit(w, r)
+        return
+    }
+
+    c.FlashSuccess(&amp;quot;Item updated.&amp;quot;)
+    c.Redirect(uri)
 }
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h3 id=&#34;model-3&#34;&gt;Model&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Update makes changes to an existing item.
-func Update(name string, ID string, userID string) (sql.Result, error) {
-    result, err := database.SQL.Exec(fmt.Sprintf(`
+func Update(db Connection, name string, ID string, userID string) (sql.Result, error) {
+    result, err := db.Exec(fmt.Sprintf(`
         UPDATE %v
         SET name = ?
         WHERE id = ?
@@ -160,7 +239,7 @@ func Update(name string, ID string, userID string) (sql.Result, error) {
         LIMIT 1
         `, table),
         name, ID, userID)
-    return result, model.StandardError(err)
+    return result, err
 }
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -171,22 +250,26 @@ timestamp.&lt;/p&gt;
 
 &lt;h3 id=&#34;controller-4&#34;&gt;Controller&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;_, err := note.Delete(params.ByName(&amp;quot;id&amp;quot;), userID)
-if err != nil {
-    log.Println(err)
-    sess.AddFlash(flash.Info{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, flash.Error})
-    sess.Save(r, w)
-} else {
-    sess.AddFlash(flash.Info{&amp;quot;Item deleted.&amp;quot;, flash.Notice})
-    sess.Save(r, w)
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Destroy handles the delete form submission.
+func Destroy(w http.ResponseWriter, r *http.Request) {
+    c := flight.Context(w, r)
+
+    _, err := note.DeleteSoft(c.DB, c.Param(&amp;quot;id&amp;quot;), c.UserID)
+    if err != nil {
+        c.FlashError(err)
+    } else {
+        c.FlashNotice(&amp;quot;Item deleted.&amp;quot;)
+    }
+
+    c.Redirect(uri)
 }
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h3 id=&#34;model-4&#34;&gt;Model&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Delete marks an item as removed.
-func Delete(ID string, userID string) (sql.Result, error) {
-    result, err := database.SQL.Exec(fmt.Sprintf(`
+func DeleteSoft(db Connection, ID string, userID string) (sql.Result, error) {
+    result, err := db.Exec(fmt.Sprintf(`
         UPDATE %v
         SET deleted_at = NOW()
         WHERE id = ?
@@ -195,7 +278,7 @@ func Delete(ID string, userID string) (sql.Result, error) {
         LIMIT 1
         `, table),
         ID, userID)
-    return result, model.StandardError(err)
+    return result, err
 }
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -205,63 +288,80 @@ func Delete(ID string, userID string) (sql.Result, error) {
 
 &lt;h3 id=&#34;controller-5&#34;&gt;Controller&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;_, err := note.DeleteHard(params.ByName(&amp;quot;id&amp;quot;), userID)
-if err != nil {
-    log.Println(err)
-    sess.AddFlash(flash.Info{&amp;quot;An error occurred on the server. Please try again later.&amp;quot;, flash.Error})
-    sess.Save(r, w)
-} else {
-    sess.AddFlash(flash.Info{&amp;quot;Item deleted.&amp;quot;, flash.Notice})
-    sess.Save(r, w)
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Destroy handles the delete form submission.
+func Destroy(w http.ResponseWriter, r *http.Request) {
+    c := flight.Context(w, r)
+
+    _, err := note.DeleteHard(c.DB, c.Param(&amp;quot;id&amp;quot;), c.UserID)
+    if err != nil {
+        c.FlashError(err)
+    } else {
+        c.FlashNotice(&amp;quot;Item deleted.&amp;quot;)
+    }
+
+    c.Redirect(uri)
 }
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h3 id=&#34;model-5&#34;&gt;Model&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// DeleteHard removes an item.
-func DeleteHard(ID string, userID string) (sql.Result, error) {
-    result, err := database.SQL.Exec(fmt.Sprintf(`
+func DeleteHard(db Connection, ID string, userID string) (sql.Result, error) {
+    result, err := db.Exec(fmt.Sprintf(`
         DELETE FROM %v
         WHERE id = ?
             AND user_id = ?
             AND deleted_at IS NULL
         `, table),
         ID, userID)
-    return result, model.StandardError(err)
+    return result, err
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&#34;handling-errors&#34;&gt;Handling Errors&lt;/h2&gt;
+&lt;h2 id=&#34;postgresql-support&#34;&gt;PostgreSQL Support&lt;/h2&gt;
 
-&lt;p&gt;You can define your own errors for your models in the
-&lt;a href=&#34;https://github.com/blue-jay/blueprint/blob/master/model/model.go&#34;&gt;model&lt;/a&gt;
-package. This is another abstraction that makes it easy to change out database
-systems without having to rewrite code in your controllers.&lt;/p&gt;
+&lt;p&gt;To use PostgreSQL, you need to a few lines of code. The migration support is
+not built into &lt;a href=&#34;https://github.com/blue-jay/jay&#34;&gt;Jay&lt;/a&gt; yet so you&amp;rsquo;ll have to run
+them manually.&lt;/p&gt;
 
-&lt;p&gt;You can manage the errors like this:&lt;/p&gt;
+&lt;p&gt;Add the PostgreSQL structure to the env.json.example file:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;var (
-    // ErrNoResult is when no results are found.
-    ErrNoResult = errors.New(&amp;quot;Result not found.&amp;quot;)
-)
-
-// StandardError returns a model defined error.
-func StandardError(err error) error {
-    if err == sql.ErrNoRows {
-        return ErrNoResult
-    }
-
-    return err
-}
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;&amp;quot;PostgreSQL&amp;quot;:{
+    &amp;quot;Username&amp;quot;:&amp;quot;root&amp;quot;,
+    &amp;quot;Password&amp;quot;:&amp;quot;&amp;quot;,
+    &amp;quot;Database&amp;quot;:&amp;quot;blueprint&amp;quot;,
+    &amp;quot;Hostname&amp;quot;:&amp;quot;127.0.0.1&amp;quot;,
+    &amp;quot;Port&amp;quot;:5432,
+    &amp;quot;Parameter&amp;quot;:&amp;quot;&amp;quot;,
+    &amp;quot;MigrationFolder&amp;quot;:&amp;quot;migration/postgresql&amp;quot;,
+    &amp;quot;Extension&amp;quot;:&amp;quot;sql&amp;quot;
+},
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;In your controller, you can check the error like this:&lt;/p&gt;
+&lt;p&gt;Ensure the JSON is readable by to the &lt;strong&gt;Info&lt;/strong&gt; struct in &lt;strong&gt;lib/env&lt;/strong&gt; so add this
+line:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;if err == model.ErrNoResult {
-    sess.AddFlash(flash.Info{&amp;quot;Password is incorrect&amp;quot;, flash.Warning})
-    sess.Save(r, w)
-}
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;PostgreSQL postgresql.Info `json:&amp;quot;PostgreSQL&amp;quot;`
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Add these lines to the &lt;strong&gt;RegisterServices()&lt;/strong&gt; function in &lt;strong&gt;lib/boot&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Connect to the PostgreSQL database
+postgresqldb, _ := config.PostgreSQL.Connect(true)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you want to replace MySQL, you can change the line at the bottom of the
+&lt;strong&gt;RegisterServices()&lt;/strong&gt; function in &lt;strong&gt;lib/boot&lt;/strong&gt; to pass PostgreSQL instead of
+MySQL:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Store the database connection in flight
+flight.StoreDB(postgresqldb)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you want to add instead of replacing MySQL, you need to:
+- Add a new function to the &lt;strong&gt;lib/flight&lt;/strong&gt; package similar to &lt;strong&gt;StoreDB()&lt;/strong&gt;
+- And a new line to the &lt;strong&gt;Info&lt;/strong&gt; struct in the &lt;strong&gt;lib/flight&lt;/strong&gt;
+- Add the new variable to the &lt;strong&gt;Context()&lt;/strong&gt; function in &lt;strong&gt;lib/flight&lt;/strong&gt;&lt;/p&gt;
 </description>
     </item>
     

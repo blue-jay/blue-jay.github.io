@@ -141,7 +141,7 @@
       
       <div class="name">
         <br><strong>blue-jay/blueprint</strong>
-        <br><span class="version">0.6-charlie</span>
+        <br><span class="version">0.8-delta</span>
       </div>
     </div>
   </a>
@@ -479,7 +479,7 @@ not have a .gen pair in the same folder, then it has a <strong>config.parse</str
 of <strong>collection</strong> which means it references other .json files with a
 <strong>config.parse</strong> value of <strong>single</strong>.</p>
 
-<p>The <strong>flight</strong> package is a helper package that reduces a lot of code from the
+<p>The <strong>lib/flight</strong> package is a helper package that reduces a lot of code from the
 controller. It contains functions to simplify the use of flash messages,
 form validation, form repopulation, and URL parameters.</p>
 
@@ -743,15 +743,13 @@ not to parse in the single.json file by setting the value of <strong>config.pars
 <pre><code class="language-html">{{define &quot;title&quot;}}{{end}}
 {{define &quot;head&quot;}}{{end}}
 {{define &quot;content&quot;}}
-&lt;div class=&quot;container&quot;&gt;
     &lt;div class=&quot;page-header&quot;&gt;
         &lt;h1&gt;{{template &quot;title&quot; .}}&lt;/h1&gt;
     &lt;/div&gt;
-    
+
     &lt;p&gt;Not Implemented&lt;/p&gt;
-    
+
     {{template &quot;footer&quot; .}}
-&lt;/div&gt;
 {{end}}
 {{define &quot;foot&quot;}}{{end}}
 </code></pre>
@@ -783,15 +781,13 @@ parsed, just copied.</p>
 <pre><code class="language-html">{{define &quot;title&quot;}}{{end}}
 {{define &quot;head&quot;}}{{end}}
 {{define &quot;content&quot;}}
-&lt;div class=&quot;container&quot;&gt;
     &lt;div class=&quot;page-header&quot;&gt;
         &lt;h1&gt;{{template &quot;title&quot; .}}&lt;/h1&gt;
     &lt;/div&gt;
-    
+
     &lt;p&gt;Not Implemented&lt;/p&gt;
-    
+
     {{template &quot;footer&quot; .}}
-&lt;/div&gt;
 {{end}}
 {{define &quot;foot&quot;}}{{end}}
 </code></pre>

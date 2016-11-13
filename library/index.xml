@@ -38,6 +38,8 @@ only packages the &lt;strong&gt;email&lt;/strong&gt; package uses are part of th
 is a good indicator that the package could be moved to a different project
 without rewriting.&lt;/p&gt;
 
+&lt;p&gt;&lt;a href=&#34;https://github.com/blue-jay/core/blob/master/email/email.go&#34;&gt;Source&lt;/a&gt;&lt;/p&gt;
+
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Package email provides email sending via SMTP.
 package email
 
@@ -45,37 +47,15 @@ import (
     &amp;quot;encoding/base64&amp;quot;
     &amp;quot;fmt&amp;quot;
     &amp;quot;net/smtp&amp;quot;
-    &amp;quot;sync&amp;quot;
 )
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;The next section shows the thread-safe configuration that is used in many of
-the lib packages. The Info struct holds the details for the SMTP server and is
-public so it can be nested in the &lt;strong&gt;Info&lt;/strong&gt; struct of the &lt;strong&gt;boot&lt;/strong&gt; package
+&lt;p&gt;The Info struct holds the details for the SMTP server and it should be
+added to the &lt;strong&gt;Info&lt;/strong&gt; struct of the &lt;strong&gt;lib/env&lt;/strong&gt; package
 and then parsed from the env.json file. See the &lt;a href=&#34;http://blue-jay.github.io/configuration/&#34;&gt;Configuration&lt;/a&gt;
 section for more information about adding to env.json.&lt;/p&gt;
 
-&lt;p&gt;There are also a few methods standard to the lib packages:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;SetConfig() - allows the &lt;strong&gt;boot&lt;/strong&gt; package to store the Info struct to a package level variable&lt;/li&gt;
-&lt;li&gt;ResetConfig() - allows test packages to reset the configuration&lt;/li&gt;
-&lt;li&gt;Config() - returns the configuration so the values can be accessed by other packages&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;All of these methods are thread-safe so they can be called by external packages
-and by the functions within the package itself.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// *****************************************************************************
-// Thread-Safe Configuration
-// *****************************************************************************
-
-var (
-    info      Info
-    infoMutex sync.RWMutex
-)
-
-// Info holds the details for the SMTP server.
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Info holds the details for the SMTP server.
 type Info struct {
     Username string
     Password string
@@ -83,47 +63,26 @@ type Info struct {
     Port     int
     From     string
 }
-
-// SetConfig stores the config.
-func SetConfig(i Info) {
-    infoMutex.Lock()
-    info = i
-    infoMutex.Unlock()
-}
-
-// ResetConfig removes the config.
-func ResetConfig() {
-    infoMutex.Lock()
-    info = Info{}
-    infoMutex.Unlock()
-}
-
-// Config returns the config.
-func Config() Info {
-    infoMutex.RLock()
-    defer infoMutex.RUnlock()
-    return info
-}
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;The final section of the &lt;strong&gt;email&lt;/strong&gt; package contains the ability to send an
-email using the configuration settings. You&amp;rsquo;ll notice the &lt;strong&gt;Config()&lt;/strong&gt; function
-through the code. This ensures the values are accessed in a thread-safe manner
-so there is no problem if another package tries to change a value at the same
-time.&lt;/p&gt;
+&lt;p&gt;The final section of the &lt;strong&gt;email&lt;/strong&gt; package sends an
+email using the configuration settings. You&amp;rsquo;ll notice the function is a
+struct method which makes it really easy to use from the &lt;strong&gt;flight&lt;/strong&gt; package.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Send mails an email.
-func Send(to, subject, body string) error {
-    auth := smtp.PlainAuth(&amp;quot;&amp;quot;, Config().Username, Config().Password, Config().Hostname)
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Send an email.
+func (c Info) Send(to, subject, body string) error {
+    auth := smtp.PlainAuth(&amp;quot;&amp;quot;, c.Username, c.Password, c.Hostname)
 
+    // Create the header
     header := make(map[string]string)
-    header[&amp;quot;From&amp;quot;] = Config().From
+    header[&amp;quot;From&amp;quot;] = c.From
     header[&amp;quot;To&amp;quot;] = to
     header[&amp;quot;Subject&amp;quot;] = subject
     header[&amp;quot;MIME-Version&amp;quot;] = &amp;quot;1.0&amp;quot;
     header[&amp;quot;Content-Type&amp;quot;] = `text/plain; charset=&amp;quot;utf-8&amp;quot;`
     header[&amp;quot;Content-Transfer-Encoding&amp;quot;] = &amp;quot;base64&amp;quot;
 
+    // Set the message
     message := &amp;quot;&amp;quot;
     for k, v := range header {
         message += fmt.Sprintf(&amp;quot;%s: %s\r\n&amp;quot;, k, v)
@@ -132,9 +91,9 @@ func Send(to, subject, body string) error {
 
     // Send the email
     err := smtp.SendMail(
-        fmt.Sprintf(&amp;quot;%s:%d&amp;quot;, Config().Hostname, Config().Port),
+        fmt.Sprintf(&amp;quot;%s:%d&amp;quot;, c.Hostname, c.Port),
         auth,
-        Config().From,
+        c.From,
         []string{to},
         []byte(message),
     )
@@ -143,10 +102,25 @@ func Send(to, subject, body string) error {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;p&gt;To use in a controller, you would get the context from the &lt;strong&gt;flight&lt;/strong&gt; package
+and then from the &lt;strong&gt;Config&lt;/strong&gt; variable, you could access the &lt;strong&gt;email&lt;/strong&gt; struct and then
+the &lt;code&gt;Send()&lt;/code&gt; function.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Index sends an email.
+func Index(w http.ResponseWriter, r *http.Request) {
+    c := flight.Context(w, r)
+
+    err := c.Config.Email.Send(&amp;quot;This is the subject&amp;quot;, &amp;quot;This is the body!&amp;quot;)
+    if err != nil {
+        c.FlashError(err)
+        return
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
 &lt;h2 id=&#34;code-generation&#34;&gt;Code Generation&lt;/h2&gt;
 
-&lt;p&gt;A new &lt;strong&gt;lib&lt;/strong&gt; package can be generated with the thread-safe configuration using
-this command: &lt;code&gt;jay generate lib/default package:value&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;A new &lt;strong&gt;lib&lt;/strong&gt; package can be generated using this command: &lt;code&gt;jay generate lib/default package:value&lt;/code&gt;&lt;/p&gt;
 </description>
     </item>
     
