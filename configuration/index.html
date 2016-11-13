@@ -601,6 +601,55 @@ Template  - Template struct in core/view
 View      - Info struct in core/view
 </code></pre>
 
+<h2 id="using-flight">Using Flight</h2>
+
+<p>The <strong>flight</strong> package provides access to the session variables, env.json settings,
+database connections, views, and general shortcuts. It&rsquo;s mostly designed for
+controllers, but it can be used by other packages as well.</p>
+
+<p>To use package, you would call the <strong>flight.Context()</strong> function like this:</p>
+
+<pre><code class="language-go">// Index displays the items.
+func Index(w http.ResponseWriter, r *http.Request) {
+	c := flight.Context(w, r)
+
+	items, _, err := note.ByUserID(c.DB, c.UserID)
+	if err != nil {
+		c.FlashError(err)
+		items = []note.Item{}
+	}
+
+	v := c.View.New(&quot;note/index&quot;)
+	v.Vars[&quot;items&quot;] = items
+	v.Render(w, r)
+}
+</code></pre>
+
+<p>Flight needs a <strong>http.ResponseWriter</strong> and a <strong>http.Request</strong> so it can access
+the sessions variables and provide shortcuts for the following tasks:</p>
+
+<ul>
+<li>reading URL parameters: c.Param(name string)</li>
+<li>redirecting to a page: c.Redirect(urlStr string)</li>
+<li>validation a form and sets a flash message: c.FormValid(fields &hellip;string)</li>
+<li>repopulating a form: c.Repopulate(v map[string]interface{}, fields &hellip;string)</li>
+<li>setting flash messages and then saving the session: c.FlashSuccess(message string)</li>
+</ul>
+
+<p>Flight also provides access to the following:</p>
+
+<ul>
+<li>configuration settings from env.json: <code>c.Config.Asset.Folder</code></li>
+<li>session: <code>c.Sess.Values[&quot;email&quot;]</code></li>
+<li>current user ID: <code>c.UserID</code></li>
+<li>view package: <code>c.View.New(&quot;home/index&quot;)</code></li>
+<li>database connection: <code>items, _, err := note.ByUserID(c.DB, c.UserID)</code></li>
+</ul>
+
+<p>It is not a requirement to use the <strong>flight</strong> package, but it makes working
+with the different web components much easier. Feel free to modify the package
+to fit your needs. Just make sure it is thread-safe.</p>
+
 <h2 id="enable-https">Enable HTTPS</h2>
 
 <p>To enable HTTPS:</p>

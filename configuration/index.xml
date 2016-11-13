@@ -172,6 +172,55 @@ Template  - Template struct in core/view
 View      - Info struct in core/view
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;h2 id=&#34;using-flight&#34;&gt;Using Flight&lt;/h2&gt;
+
+&lt;p&gt;The &lt;strong&gt;flight&lt;/strong&gt; package provides access to the session variables, env.json settings,
+database connections, views, and general shortcuts. It&amp;rsquo;s mostly designed for
+controllers, but it can be used by other packages as well.&lt;/p&gt;
+
+&lt;p&gt;To use package, you would call the &lt;strong&gt;flight.Context()&lt;/strong&gt; function like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Index displays the items.
+func Index(w http.ResponseWriter, r *http.Request) {
+	c := flight.Context(w, r)
+
+	items, _, err := note.ByUserID(c.DB, c.UserID)
+	if err != nil {
+		c.FlashError(err)
+		items = []note.Item{}
+	}
+
+	v := c.View.New(&amp;quot;note/index&amp;quot;)
+	v.Vars[&amp;quot;items&amp;quot;] = items
+	v.Render(w, r)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Flight needs a &lt;strong&gt;http.ResponseWriter&lt;/strong&gt; and a &lt;strong&gt;http.Request&lt;/strong&gt; so it can access
+the sessions variables and provide shortcuts for the following tasks:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;reading URL parameters: c.Param(name string)&lt;/li&gt;
+&lt;li&gt;redirecting to a page: c.Redirect(urlStr string)&lt;/li&gt;
+&lt;li&gt;validation a form and sets a flash message: c.FormValid(fields &amp;hellip;string)&lt;/li&gt;
+&lt;li&gt;repopulating a form: c.Repopulate(v map[string]interface{}, fields &amp;hellip;string)&lt;/li&gt;
+&lt;li&gt;setting flash messages and then saving the session: c.FlashSuccess(message string)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Flight also provides access to the following:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;configuration settings from env.json: &lt;code&gt;c.Config.Asset.Folder&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;session: &lt;code&gt;c.Sess.Values[&amp;quot;email&amp;quot;]&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;current user ID: &lt;code&gt;c.UserID&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;view package: &lt;code&gt;c.View.New(&amp;quot;home/index&amp;quot;)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;database connection: &lt;code&gt;items, _, err := note.ByUserID(c.DB, c.UserID)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;It is not a requirement to use the &lt;strong&gt;flight&lt;/strong&gt; package, but it makes working
+with the different web components much easier. Feel free to modify the package
+to fit your needs. Just make sure it is thread-safe.&lt;/p&gt;
+
 &lt;h2 id=&#34;enable-https&#34;&gt;Enable HTTPS&lt;/h2&gt;
 
 &lt;p&gt;To enable HTTPS:&lt;/p&gt;
