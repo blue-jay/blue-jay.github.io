@@ -608,14 +608,14 @@ config.View.SetFuncMaps(
 <p>There are a few functions that are included to make working with the templates
 and static files easier:</p>
 
-<pre><code class="language-html">&lt;!-- CSS files with timestamps --&gt;
-{{CSS &quot;static/css/normalize3.0.0.min.css&quot;}}
-&lt;!-- parses to --&gt;
-&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;/static/css/normalize3.0.0.min.css?1435528339&quot; /&gt;
+<pre><code class="language-html">&lt;!-- CSS file with media attribute --&gt;
+{{CSS &quot;static/css/normalize3.0.0.min.css&quot; &quot;all&quot;}}
+&lt;!-- parses with timestamp to --&gt;
+&lt;link media=&quot;all&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;/static/css/normalize3.0.0.min.css?1435528339&quot; /&gt;
 
-&lt;!-- JS files with timestamps --&gt;
+&lt;!-- JS file --&gt;
 {{JS &quot;static/js/jquery1.11.0.min.js&quot;}}
-&lt;!-- parses to --&gt;
+&lt;!-- parses with timestamp to --&gt;
 &lt;script type=&quot;text/javascript&quot; src=&quot;/static/js/jquery1.11.0.min.js?1435528404&quot;&gt;&lt;/script&gt;
 
 &lt;!-- Hyperlinks --&gt;

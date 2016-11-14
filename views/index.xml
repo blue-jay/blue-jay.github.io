@@ -180,14 +180,14 @@ config.View.SetFuncMaps(
 &lt;p&gt;There are a few functions that are included to make working with the templates
 and static files easier:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;!-- CSS files with timestamps --&amp;gt;
-{{CSS &amp;quot;static/css/normalize3.0.0.min.css&amp;quot;}}
-&amp;lt;!-- parses to --&amp;gt;
-&amp;lt;link rel=&amp;quot;stylesheet&amp;quot; type=&amp;quot;text/css&amp;quot; href=&amp;quot;/static/css/normalize3.0.0.min.css?1435528339&amp;quot; /&amp;gt;
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;!-- CSS file with media attribute --&amp;gt;
+{{CSS &amp;quot;static/css/normalize3.0.0.min.css&amp;quot; &amp;quot;all&amp;quot;}}
+&amp;lt;!-- parses with timestamp to --&amp;gt;
+&amp;lt;link media=&amp;quot;all&amp;quot; rel=&amp;quot;stylesheet&amp;quot; type=&amp;quot;text/css&amp;quot; href=&amp;quot;/static/css/normalize3.0.0.min.css?1435528339&amp;quot; /&amp;gt;
 
-&amp;lt;!-- JS files with timestamps --&amp;gt;
+&amp;lt;!-- JS file --&amp;gt;
 {{JS &amp;quot;static/js/jquery1.11.0.min.js&amp;quot;}}
-&amp;lt;!-- parses to --&amp;gt;
+&amp;lt;!-- parses with timestamp to --&amp;gt;
 &amp;lt;script type=&amp;quot;text/javascript&amp;quot; src=&amp;quot;/static/js/jquery1.11.0.min.js?1435528404&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
 
 &amp;lt;!-- Hyperlinks --&amp;gt;
