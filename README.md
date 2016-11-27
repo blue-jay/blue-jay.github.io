@@ -2,7 +2,7 @@
 
 Website for Blue Jay - Go Toolkit for the Web
 
-http://blue-jay.github.io/
+https://blue-jay.github.io/
 
 ## Contributions
 
