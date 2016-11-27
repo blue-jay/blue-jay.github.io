@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Views on Blue Jay | Go Toolkit for the Web</title>
-    <link>http://blue-jay.github.io/views/</link>
+    <link>https://blue-jay.github.io/views/</link>
     <description>Recent content in Views on Blue Jay | Go Toolkit for the Web</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 08 Mar 2016 21:07:13 +0100</lastBuildDate>
-    <atom:link href="http://blue-jay.github.io/views/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://blue-jay.github.io/views/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Views</title>
-      <link>http://blue-jay.github.io/views/</link>
+      <link>https://blue-jay.github.io/views/</link>
       <pubDate>Tue, 08 Mar 2016 21:07:13 +0100</pubDate>
       
-      <guid>http://blue-jay.github.io/views/</guid>
+      <guid>https://blue-jay.github.io/views/</guid>
       <description>
 
 &lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
@@ -344,7 +344,7 @@ The edit.tmpl view requires the same logic, but also needs the &amp;ldquo;defaul
 to prefill, select, and check the form values from view variables (which will
 probably be pulled from a model struct).&lt;/p&gt;
 
-&lt;p&gt;Check out the &lt;a href=&#34;http://blue-jay.github.io/controllers/#repopulate-form-fields&#34;&gt;Repopulate Form Fields&lt;/a&gt;
+&lt;p&gt;Check out the &lt;a href=&#34;https://blue-jay.github.io/controllers/#repopulate-form-fields&#34;&gt;Repopulate Form Fields&lt;/a&gt;
 section on the Controllers page. It will show you the single line of code needed
 in your controller so these fields repopulate on form submission.&lt;/p&gt;
 

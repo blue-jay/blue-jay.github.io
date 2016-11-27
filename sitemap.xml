@@ -2,66 +2,66 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://blue-jay.github.io/</loc>
+    <loc>https://blue-jay.github.io/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://blue-jay.github.io/</loc>
+    <loc>https://blue-jay.github.io/</loc>
   </url>
   
   <url>
-    <loc>http://blue-jay.github.io/structure/</loc>
+    <loc>https://blue-jay.github.io/structure/</loc>
   </url>
   
   <url>
-    <loc>http://blue-jay.github.io/configuration/</loc>
+    <loc>https://blue-jay.github.io/configuration/</loc>
   </url>
   
   <url>
-    <loc>http://blue-jay.github.io/assets/</loc>
+    <loc>https://blue-jay.github.io/assets/</loc>
     <lastmod>2016-06-30T21:07:13+01:00</lastmod>
   </url>
   
   <url>
-    <loc>http://blue-jay.github.io/routing/</loc>
+    <loc>https://blue-jay.github.io/routing/</loc>
   </url>
   
   <url>
-    <loc>http://blue-jay.github.io/middleware/</loc>
+    <loc>https://blue-jay.github.io/middleware/</loc>
   </url>
   
   <url>
-    <loc>http://blue-jay.github.io/controllers/</loc>
+    <loc>https://blue-jay.github.io/controllers/</loc>
   </url>
   
   <url>
-    <loc>http://blue-jay.github.io/models/</loc>
+    <loc>https://blue-jay.github.io/models/</loc>
   </url>
   
   <url>
-    <loc>http://blue-jay.github.io/views/</loc>
+    <loc>https://blue-jay.github.io/views/</loc>
     <lastmod>2016-03-08T21:07:13+01:00</lastmod>
   </url>
   
   <url>
-    <loc>http://blue-jay.github.io/library/</loc>
+    <loc>https://blue-jay.github.io/library/</loc>
   </url>
   
   <url>
-    <loc>http://blue-jay.github.io/jay/</loc>
+    <loc>https://blue-jay.github.io/jay/</loc>
   </url>
   
   <url>
-    <loc>http://blue-jay.github.io/find-replace/</loc>
+    <loc>https://blue-jay.github.io/find-replace/</loc>
   </url>
   
   <url>
-    <loc>http://blue-jay.github.io/database-migration/</loc>
+    <loc>https://blue-jay.github.io/database-migration/</loc>
   </url>
   
   <url>
-    <loc>http://blue-jay.github.io/generation/</loc>
+    <loc>https://blue-jay.github.io/generation/</loc>
   </url>
   
 </urlset>

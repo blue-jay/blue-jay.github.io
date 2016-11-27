@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Structures on Blue Jay | Go Toolkit for the Web</title>
-    <link>http://blue-jay.github.io/structure/</link>
+    <link>https://blue-jay.github.io/structure/</link>
     <description>Recent content in Structures on Blue Jay | Go Toolkit for the Web</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://blue-jay.github.io/structure/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://blue-jay.github.io/structure/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Structure</title>
-      <link>http://blue-jay.github.io/structure/</link>
+      <link>https://blue-jay.github.io/structure/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://blue-jay.github.io/structure/</guid>
+      <guid>https://blue-jay.github.io/structure/</guid>
       <description>
 
 &lt;p&gt;It helps to understand the folder structure so you know where each of the

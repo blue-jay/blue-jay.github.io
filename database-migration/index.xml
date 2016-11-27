@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Database-migrations on Blue Jay | Go Toolkit for the Web</title>
-    <link>http://blue-jay.github.io/database-migration/</link>
+    <link>https://blue-jay.github.io/database-migration/</link>
     <description>Recent content in Database-migrations on Blue Jay | Go Toolkit for the Web</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://blue-jay.github.io/database-migration/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://blue-jay.github.io/database-migration/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Database Migration</title>
-      <link>http://blue-jay.github.io/database-migration/</link>
+      <link>https://blue-jay.github.io/database-migration/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://blue-jay.github.io/database-migration/</guid>
+      <guid>https://blue-jay.github.io/database-migration/</guid>
       <description>
 
 &lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;

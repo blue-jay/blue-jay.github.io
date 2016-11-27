@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Blue Jay | Go Toolkit for the Web</title>
-    <link>http://blue-jay.github.io/</link>
+    <link>https://blue-jay.github.io/</link>
     <description>Recent content on Blue Jay | Go Toolkit for the Web</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://blue-jay.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://blue-jay.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Blue Jay Overview</title>
-      <link>http://blue-jay.github.io/</link>
+      <link>https://blue-jay.github.io/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://blue-jay.github.io/</guid>
+      <guid>https://blue-jay.github.io/</guid>
       <description>
 
 &lt;p&gt;Blue Jay is a web toolkit for &lt;a href=&#34;https://golang.org/&#34;&gt;Go&lt;/a&gt;. It&amp;rsquo;s a collection of command-line tools and a web blueprint that allows you to easily structure your web application. There is no rigid framework to which you have to conform and the tools are easy to start using.&lt;/p&gt;
@@ -163,39 +163,39 @@ language.&lt;/p&gt;
 
 &lt;h3 id=&#34;public-home&#34;&gt;Public Home&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://blue-jay.github.io/images/home_anon.png&#34; alt=&#34;Image of Public Home&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://blue-jay.github.io/images/home_anon.png&#34; alt=&#34;Image of Public Home&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;about&#34;&gt;About&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://blue-jay.github.io/images/about.png&#34; alt=&#34;Image of About&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://blue-jay.github.io/images/about.png&#34; alt=&#34;Image of About&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;register&#34;&gt;Register&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://blue-jay.github.io/images/register.png&#34; alt=&#34;Image of Register&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://blue-jay.github.io/images/register.png&#34; alt=&#34;Image of Register&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;login&#34;&gt;Login&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://blue-jay.github.io/images/login.png&#34; alt=&#34;Image of Login&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://blue-jay.github.io/images/login.png&#34; alt=&#34;Image of Login&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;authenticated-home&#34;&gt;Authenticated Home&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://blue-jay.github.io/images/home_auth.png&#34; alt=&#34;Image of Auth Home&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://blue-jay.github.io/images/home_auth.png&#34; alt=&#34;Image of Auth Home&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;view-all-notes&#34;&gt;View All Notes&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://blue-jay.github.io/images/notepad_index.png&#34; alt=&#34;Image of Notepad View&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://blue-jay.github.io/images/notepad_index.png&#34; alt=&#34;Image of Notepad View&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;add-note&#34;&gt;Add Note&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://blue-jay.github.io/images/notepad_create.png&#34; alt=&#34;Image of Notepad Add&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://blue-jay.github.io/images/notepad_create.png&#34; alt=&#34;Image of Notepad Add&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;view-one-note&#34;&gt;View One Note&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://blue-jay.github.io/images/notepad_view.png&#34; alt=&#34;Image of Notepad Edit&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://blue-jay.github.io/images/notepad_view.png&#34; alt=&#34;Image of Notepad Edit&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;edit-note&#34;&gt;Edit Note&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://blue-jay.github.io/images/notepad_edit.png&#34; alt=&#34;Image of Notepad Edit&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://blue-jay.github.io/images/notepad_edit.png&#34; alt=&#34;Image of Notepad Edit&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;feedback&#34;&gt;Feedback&lt;/h2&gt;
 
@@ -206,10 +206,10 @@ If something is not idiomatic to Go, please let me know know so we can make it b
     
     <item>
       <title>Structure</title>
-      <link>http://blue-jay.github.io/structure/</link>
+      <link>https://blue-jay.github.io/structure/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://blue-jay.github.io/structure/</guid>
+      <guid>https://blue-jay.github.io/structure/</guid>
       <description>
 
 &lt;p&gt;It helps to understand the folder structure so you know where each of the
@@ -297,10 +297,10 @@ information on each one.&lt;/p&gt;
     
     <item>
       <title>Configuration</title>
-      <link>http://blue-jay.github.io/configuration/</link>
+      <link>https://blue-jay.github.io/configuration/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://blue-jay.github.io/configuration/</guid>
+      <guid>https://blue-jay.github.io/configuration/</guid>
       <description>
 
 &lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
@@ -551,10 +551,10 @@ then delete the imports and referencing code&lt;/li&gt;
     
     <item>
       <title>Assets</title>
-      <link>http://blue-jay.github.io/assets/</link>
+      <link>https://blue-jay.github.io/assets/</link>
       <pubDate>Thu, 30 Jun 2016 21:07:13 +0100</pubDate>
       
-      <guid>http://blue-jay.github.io/assets/</guid>
+      <guid>https://blue-jay.github.io/assets/</guid>
       <description>
 
 &lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
@@ -584,8 +584,8 @@ so the files can be accessed like this:&lt;/p&gt;
 &amp;lt;link media=&amp;quot;all&amp;quot; rel=&amp;quot;stylesheet&amp;quot; type=&amp;quot;text/css&amp;quot; href=&amp;quot;/static/css/all.css?1466973904&amp;quot; /&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Check out the &lt;a href=&#34;http://blue-jay.github.io/controllers&#34;&gt;Controllers&lt;/a&gt; and
-&lt;a href=&#34;http://blue-jay.github.io/views/#included-functions&#34;&gt;Views&lt;/a&gt; pages for how
+&lt;p&gt;Check out the &lt;a href=&#34;https://blue-jay.github.io/controllers&#34;&gt;Controllers&lt;/a&gt; and
+&lt;a href=&#34;https://blue-jay.github.io/views/#included-functions&#34;&gt;Views&lt;/a&gt; pages for how
 the files are served and how timestamps are append to them for cach management.&lt;/p&gt;
 
 &lt;p&gt;If you make changes to any of the files in the &lt;strong&gt;dynamic&lt;/strong&gt; folder, you still
@@ -661,10 +661,10 @@ for you.&lt;/p&gt;
     
     <item>
       <title>Routing</title>
-      <link>http://blue-jay.github.io/routing/</link>
+      <link>https://blue-jay.github.io/routing/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://blue-jay.github.io/routing/</guid>
+      <guid>https://blue-jay.github.io/routing/</guid>
       <description>
 
 &lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
@@ -788,10 +788,10 @@ func Error405(allowedMethods string) func(w http.ResponseWriter, r *http.Request
     
     <item>
       <title>Middleware</title>
-      <link>http://blue-jay.github.io/middleware/</link>
+      <link>https://blue-jay.github.io/middleware/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://blue-jay.github.io/middleware/</guid>
+      <guid>https://blue-jay.github.io/middleware/</guid>
       <description>
 
 &lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
@@ -949,10 +949,10 @@ accessible if the user is authenticated.&lt;/p&gt;
     
     <item>
       <title>Controllers</title>
-      <link>http://blue-jay.github.io/controllers/</link>
+      <link>https://blue-jay.github.io/controllers/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://blue-jay.github.io/controllers/</guid>
+      <guid>https://blue-jay.github.io/controllers/</guid>
       <description>
 
 &lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
@@ -1115,7 +1115,7 @@ if !c.FormValid(&amp;quot;name&amp;quot;, &amp;quot;email&amp;quot;, &amp;quot;p
 is missing information. It is also a
 variadic function so it can accepts more than one field. You&amp;rsquo;ll need to use
 blocks from the &lt;strong&gt;form&lt;/strong&gt; package in your view as well. Check out the
-&lt;a href=&#34;http://blue-jay.github.io/views/#repopulate-form-fields&#34;&gt;Views&lt;/a&gt; page to see how to use them.&lt;/p&gt;
+&lt;a href=&#34;https://blue-jay.github.io/views/#repopulate-form-fields&#34;&gt;Views&lt;/a&gt; page to see how to use them.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Without flight
 c := flight.Context(w, r)
@@ -1132,7 +1132,7 @@ v.Render(w, r)
 
 &lt;h2 id=&#34;render-a-template&#34;&gt;Render a Template&lt;/h2&gt;
 
-&lt;p&gt;You can render a template a few ways (check out the &lt;a href=&#34;http://blue-jay.github.io/views&#34;&gt;Views&lt;/a&gt;
+&lt;p&gt;You can render a template a few ways (check out the &lt;a href=&#34;https://blue-jay.github.io/views&#34;&gt;Views&lt;/a&gt;
 page for more clarification):&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Render without adding any variables
@@ -1223,10 +1223,10 @@ if err != nil {
     
     <item>
       <title>Models</title>
-      <link>http://blue-jay.github.io/models/</link>
+      <link>https://blue-jay.github.io/models/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://blue-jay.github.io/models/</guid>
+      <guid>https://blue-jay.github.io/models/</guid>
       <description>
 
 &lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
@@ -1580,10 +1580,10 @@ flight.StoreDB(postgresqldb)
     
     <item>
       <title>Views</title>
-      <link>http://blue-jay.github.io/views/</link>
+      <link>https://blue-jay.github.io/views/</link>
       <pubDate>Tue, 08 Mar 2016 21:07:13 +0100</pubDate>
       
-      <guid>http://blue-jay.github.io/views/</guid>
+      <guid>https://blue-jay.github.io/views/</guid>
       <description>
 
 &lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
@@ -1913,7 +1913,7 @@ The edit.tmpl view requires the same logic, but also needs the &amp;ldquo;defaul
 to prefill, select, and check the form values from view variables (which will
 probably be pulled from a model struct).&lt;/p&gt;
 
-&lt;p&gt;Check out the &lt;a href=&#34;http://blue-jay.github.io/controllers/#repopulate-form-fields&#34;&gt;Repopulate Form Fields&lt;/a&gt;
+&lt;p&gt;Check out the &lt;a href=&#34;https://blue-jay.github.io/controllers/#repopulate-form-fields&#34;&gt;Repopulate Form Fields&lt;/a&gt;
 section on the Controllers page. It will show you the single line of code needed
 in your controller so these fields repopulate on form submission.&lt;/p&gt;
 
@@ -2089,10 +2089,10 @@ flashWarning(&amp;quot;Field missing: email&amp;quot;);
     
     <item>
       <title>Library</title>
-      <link>http://blue-jay.github.io/library/</link>
+      <link>https://blue-jay.github.io/library/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://blue-jay.github.io/library/</guid>
+      <guid>https://blue-jay.github.io/library/</guid>
       <description>
 
 &lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
@@ -2131,7 +2131,7 @@ import (
 
 &lt;p&gt;The Info struct holds the details for the SMTP server and it should be
 added to the &lt;strong&gt;Info&lt;/strong&gt; struct of the &lt;strong&gt;lib/env&lt;/strong&gt; package
-and then parsed from the env.json file. See the &lt;a href=&#34;http://blue-jay.github.io/configuration/&#34;&gt;Configuration&lt;/a&gt;
+and then parsed from the env.json file. See the &lt;a href=&#34;https://blue-jay.github.io/configuration/&#34;&gt;Configuration&lt;/a&gt;
 section for more information about adding to env.json.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Info holds the details for the SMTP server.
@@ -2205,10 +2205,10 @@ func Index(w http.ResponseWriter, r *http.Request) {
     
     <item>
       <title>Jay Overview</title>
-      <link>http://blue-jay.github.io/jay/</link>
+      <link>https://blue-jay.github.io/jay/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://blue-jay.github.io/jay/</guid>
+      <guid>https://blue-jay.github.io/jay/</guid>
       <description>
 
 &lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
@@ -2276,10 +2276,10 @@ arguments that make the help documents easy to follow.&lt;/p&gt;
     
     <item>
       <title>Find and Replace</title>
-      <link>http://blue-jay.github.io/find-replace/</link>
+      <link>https://blue-jay.github.io/find-replace/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://blue-jay.github.io/find-replace/</guid>
+      <guid>https://blue-jay.github.io/find-replace/</guid>
       <description>
 
 &lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
@@ -2362,10 +2362,10 @@ jay replace . &amp;quot;blue-jay/blueprint&amp;quot; &amp;quot;user/project&amp;
     
     <item>
       <title>Database Migration</title>
-      <link>http://blue-jay.github.io/database-migration/</link>
+      <link>https://blue-jay.github.io/database-migration/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://blue-jay.github.io/database-migration/</guid>
+      <guid>https://blue-jay.github.io/database-migration/</guid>
       <description>
 
 &lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
@@ -2481,10 +2481,10 @@ the modification of the &lt;strong&gt;migration&lt;/strong&gt; table.&lt;/p&gt;
     
     <item>
       <title>Code Generation</title>
-      <link>http://blue-jay.github.io/generation/</link>
+      <link>https://blue-jay.github.io/generation/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://blue-jay.github.io/generation/</guid>
+      <guid>https://blue-jay.github.io/generation/</guid>
       <description>
 
 &lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;

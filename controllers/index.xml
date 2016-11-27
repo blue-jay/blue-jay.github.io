@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Controllers on Blue Jay | Go Toolkit for the Web</title>
-    <link>http://blue-jay.github.io/controllers/</link>
+    <link>https://blue-jay.github.io/controllers/</link>
     <description>Recent content in Controllers on Blue Jay | Go Toolkit for the Web</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://blue-jay.github.io/controllers/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://blue-jay.github.io/controllers/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Controllers</title>
-      <link>http://blue-jay.github.io/controllers/</link>
+      <link>https://blue-jay.github.io/controllers/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://blue-jay.github.io/controllers/</guid>
+      <guid>https://blue-jay.github.io/controllers/</guid>
       <description>
 
 &lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
@@ -176,7 +176,7 @@ if !c.FormValid(&amp;quot;name&amp;quot;, &amp;quot;email&amp;quot;, &amp;quot;p
 is missing information. It is also a
 variadic function so it can accepts more than one field. You&amp;rsquo;ll need to use
 blocks from the &lt;strong&gt;form&lt;/strong&gt; package in your view as well. Check out the
-&lt;a href=&#34;http://blue-jay.github.io/views/#repopulate-form-fields&#34;&gt;Views&lt;/a&gt; page to see how to use them.&lt;/p&gt;
+&lt;a href=&#34;https://blue-jay.github.io/views/#repopulate-form-fields&#34;&gt;Views&lt;/a&gt; page to see how to use them.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Without flight
 c := flight.Context(w, r)
@@ -193,7 +193,7 @@ v.Render(w, r)
 
 &lt;h2 id=&#34;render-a-template&#34;&gt;Render a Template&lt;/h2&gt;
 
-&lt;p&gt;You can render a template a few ways (check out the &lt;a href=&#34;http://blue-jay.github.io/views&#34;&gt;Views&lt;/a&gt;
+&lt;p&gt;You can render a template a few ways (check out the &lt;a href=&#34;https://blue-jay.github.io/views&#34;&gt;Views&lt;/a&gt;
 page for more clarification):&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Render without adding any variables

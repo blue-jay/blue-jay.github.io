@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Middlewares on Blue Jay | Go Toolkit for the Web</title>
-    <link>http://blue-jay.github.io/middleware/</link>
+    <link>https://blue-jay.github.io/middleware/</link>
     <description>Recent content in Middlewares on Blue Jay | Go Toolkit for the Web</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://blue-jay.github.io/middleware/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://blue-jay.github.io/middleware/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Middleware</title>
-      <link>http://blue-jay.github.io/middleware/</link>
+      <link>https://blue-jay.github.io/middleware/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://blue-jay.github.io/middleware/</guid>
+      <guid>https://blue-jay.github.io/middleware/</guid>
       <description>
 
 &lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;

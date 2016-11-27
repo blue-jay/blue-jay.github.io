@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Libraries on Blue Jay | Go Toolkit for the Web</title>
-    <link>http://blue-jay.github.io/library/</link>
+    <link>https://blue-jay.github.io/library/</link>
     <description>Recent content in Libraries on Blue Jay | Go Toolkit for the Web</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://blue-jay.github.io/library/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://blue-jay.github.io/library/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Library</title>
-      <link>http://blue-jay.github.io/library/</link>
+      <link>https://blue-jay.github.io/library/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://blue-jay.github.io/library/</guid>
+      <guid>https://blue-jay.github.io/library/</guid>
       <description>
 
 &lt;h2 id=&#34;basic-usage&#34;&gt;Basic Usage&lt;/h2&gt;
@@ -52,7 +52,7 @@ import (
 
 &lt;p&gt;The Info struct holds the details for the SMTP server and it should be
 added to the &lt;strong&gt;Info&lt;/strong&gt; struct of the &lt;strong&gt;lib/env&lt;/strong&gt; package
-and then parsed from the env.json file. See the &lt;a href=&#34;http://blue-jay.github.io/configuration/&#34;&gt;Configuration&lt;/a&gt;
+and then parsed from the env.json file. See the &lt;a href=&#34;https://blue-jay.github.io/configuration/&#34;&gt;Configuration&lt;/a&gt;
 section for more information about adding to env.json.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// Info holds the details for the SMTP server.
