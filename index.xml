@@ -2389,7 +2389,7 @@ a different table value in the env.json file under the MySQL.Migration.Table key
 
 &lt;p&gt;&lt;strong&gt;Note 1&lt;/strong&gt;: The &lt;code&gt;jay migrate&lt;/code&gt; commands requires the environment variable,
 &lt;strong&gt;JAYCONFIG&lt;/strong&gt;, to point to the env.json file path. The migration folder is specified
-in the env.json file under &lt;strong&gt;MySQL.MigrationFolder&lt;/strong&gt;. If the environment variable
+in the env.json file under &lt;strong&gt;MySQL.Migration.Folder&lt;/strong&gt;. If the environment variable
 is not set, you can specify the &amp;ndash;config or -c flag and pass the path to env.json.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Note 2&lt;/strong&gt;: Make sure you do not create any migrations with a date earlier than
@@ -2504,7 +2504,8 @@ prototyping and need to see how something will look or work.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: The &lt;code&gt;jay generate&lt;/code&gt; commands requires the environment variable,
 &lt;strong&gt;JAYCONFIG&lt;/strong&gt;, to point to the env.json file path. The generation folder
 containing the templates is specified in the env.json file under
-&lt;strong&gt;Generation.TemplateFolder&lt;/strong&gt;.&lt;/p&gt;
+&lt;strong&gt;Generation.TemplateFolder&lt;/strong&gt;.  If the environment variable
+is not set, you can specify the &amp;ndash;config or -c flag and pass the path to env.json.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Jay&lt;/strong&gt; tries to make it easy to generate code by using tools that you already
 know: the &lt;strong&gt;text/template&lt;/strong&gt; package from the standard Go library and JSON.&lt;/p&gt;

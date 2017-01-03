@@ -454,7 +454,8 @@ prototyping and need to see how something will look or work.</p>
 <p><strong>Note</strong>: The <code>jay generate</code> commands requires the environment variable,
 <strong>JAYCONFIG</strong>, to point to the env.json file path. The generation folder
 containing the templates is specified in the env.json file under
-<strong>Generation.TemplateFolder</strong>.</p>
+<strong>Generation.TemplateFolder</strong>.  If the environment variable
+is not set, you can specify the &ndash;config or -c flag and pass the path to env.json.</p>
 
 <p><strong>Jay</strong> tries to make it easy to generate code by using tools that you already
 know: the <strong>text/template</strong> package from the standard Go library and JSON.</p>

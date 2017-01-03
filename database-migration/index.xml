@@ -33,7 +33,7 @@ a different table value in the env.json file under the MySQL.Migration.Table key
 
 &lt;p&gt;&lt;strong&gt;Note 1&lt;/strong&gt;: The &lt;code&gt;jay migrate&lt;/code&gt; commands requires the environment variable,
 &lt;strong&gt;JAYCONFIG&lt;/strong&gt;, to point to the env.json file path. The migration folder is specified
-in the env.json file under &lt;strong&gt;MySQL.MigrationFolder&lt;/strong&gt;. If the environment variable
+in the env.json file under &lt;strong&gt;MySQL.Migration.Folder&lt;/strong&gt;. If the environment variable
 is not set, you can specify the &amp;ndash;config or -c flag and pass the path to env.json.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Note 2&lt;/strong&gt;: Make sure you do not create any migrations with a date earlier than
