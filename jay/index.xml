@@ -38,6 +38,7 @@ If you are still having problems, check out the
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;-h&lt;/code&gt; or &lt;code&gt;--help&lt;/code&gt; for help documentation&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;-v&lt;/code&gt; or &lt;code&gt;--version&lt;/code&gt; for version information&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-c&lt;/code&gt; or &lt;code&gt;--config&lt;/code&gt; to specify the env.json config file (otherwise JAYCONFIG environment variable will be used)&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;The available commands are:&lt;/p&gt;

@@ -481,71 +481,74 @@ you can add them to <strong>env.json</strong> and update the <strong>Info</stron
 in the <strong>lib/env</strong> package. Here is an example <strong>env.json</strong>:</p>
 
 <pre><code class="language-json">{
-  &quot;Asset&quot;:{
-    &quot;Folder&quot;:&quot;asset&quot;
-  },
-  &quot;Email&quot;:{
-    &quot;Username&quot;:&quot;&quot;,
-    &quot;Password&quot;:&quot;&quot;,
-    &quot;Hostname&quot;:&quot;&quot;,
-    &quot;Port&quot;:25,
-    &quot;From&quot;:&quot;&quot;
-  },
-  &quot;Form&quot;:{
-    &quot;FileStorageFolder&quot;:&quot;filestorage&quot;
-  },
-  &quot;Generation&quot;:{
-    &quot;TemplateFolder&quot;:&quot;generate&quot;
-  },
-  &quot;MySQL&quot;:{  
-    &quot;Username&quot;:&quot;root&quot;,
-    &quot;Password&quot;:&quot;&quot;,
-    &quot;Database&quot;:&quot;blueprint&quot;,
-    &quot;Charset&quot;:&quot;utf8mb4&quot;,
-    &quot;Collation&quot;:&quot;utf8mb4_unicode_ci&quot;,
-    &quot;Hostname&quot;:&quot;127.0.0.1&quot;,
-    &quot;Port&quot;:3306,
-    &quot;Parameter&quot;:&quot;parseTime=true&quot;,
-    &quot;MigrationFolder&quot;:&quot;migration/mysql&quot;,
-    &quot;Extension&quot;:&quot;sql&quot;
-  },
-  &quot;Server&quot;:{
-    &quot;Hostname&quot;:&quot;&quot;,
-    &quot;UseHTTP&quot;:true,
-    &quot;UseHTTPS&quot;:false,
-    &quot;RedirectToHTTPS&quot;:false,
-    &quot;HTTPPort&quot;:80,
-    &quot;HTTPSPort&quot;:443,
-    &quot;CertFile&quot;:&quot;tls/server.crt&quot;,
-    &quot;KeyFile&quot;:&quot;tls/server.key&quot;
-  },
-  &quot;Session&quot;:{
-    &quot;AuthKey&quot;:&quot;PzCh6FNAB7/jhmlUQ0+25sjJ+WgcJeKR2bAOtnh9UnfVN+WJSBvY/YC80Rs+rbMtwfmSP4FUSxKPtpYKzKFqFA==&quot;,
-    &quot;EncryptKey&quot;:&quot;3oTKCcKjDHMUlV+qur2Ve664SPpSuviyGQ/UqnroUD8=&quot;,
-  &quot;CSRFKey&quot;:&quot;xULAGF5FcWvqHsXaovNFJYfgCt6pedRPROqNvsZjU18=&quot;,
-    &quot;Name&quot;:&quot;sess&quot;,
-    &quot;Options&quot;:{  
-      &quot;Path&quot;:&quot;/&quot;,
-      &quot;Domain&quot;:&quot;&quot;,
-      &quot;MaxAge&quot;:28800,
-      &quot;Secure&quot;:false,
-      &quot;HttpOnly&quot;:true
-    }
-  },
-  &quot;Template&quot;:{
-    &quot;Root&quot;:&quot;base&quot;,
-    &quot;Children&quot;:[
-      &quot;partial/favicon&quot;,
-    &quot;partial/menu&quot;,
-      &quot;partial/footer&quot;
-    ]
-  },
-  &quot;View&quot;:{
-    &quot;BaseURI&quot;:&quot;/&quot;,
-    &quot;Extension&quot;:&quot;tmpl&quot;,
-    &quot;Folder&quot;:&quot;view&quot;,
-    &quot;Caching&quot;:true
-  }
+	&quot;Asset&quot;:{
+		&quot;Folder&quot;:&quot;asset&quot;
+	},
+	&quot;Email&quot;:{
+		&quot;Username&quot;:&quot;&quot;,
+		&quot;Password&quot;:&quot;&quot;,
+		&quot;Hostname&quot;:&quot;&quot;,
+		&quot;Port&quot;:25,
+		&quot;From&quot;:&quot;&quot;
+	},
+	&quot;Form&quot;:{
+		&quot;FileStorageFolder&quot;:&quot;filestorage&quot;
+	},
+	&quot;Generation&quot;:{
+		&quot;TemplateFolder&quot;:&quot;generate&quot;
+	},
+	&quot;MySQL&quot;:{
+		&quot;Username&quot;:&quot;root&quot;,
+		&quot;Password&quot;:&quot;&quot;,
+		&quot;Database&quot;:&quot;blueprint&quot;,
+		&quot;Charset&quot;:&quot;utf8mb4&quot;,
+		&quot;Collation&quot;:&quot;utf8mb4_unicode_ci&quot;,
+		&quot;Hostname&quot;:&quot;127.0.0.1&quot;,
+		&quot;Port&quot;:3306,
+		&quot;Parameter&quot;:&quot;parseTime=true&quot;,
+		&quot;Migration&quot;:{
+			&quot;Folder&quot;:&quot;migration/mysql&quot;,
+			&quot;Table&quot;:&quot;migration_blueprint&quot;,
+			&quot;Extension&quot;:&quot;sql&quot;
+		}
+	},
+	&quot;Server&quot;:{
+		&quot;Hostname&quot;:&quot;&quot;,
+		&quot;UseHTTP&quot;:true,
+		&quot;UseHTTPS&quot;:false,
+		&quot;RedirectToHTTPS&quot;:false,
+		&quot;HTTPPort&quot;:80,
+		&quot;HTTPSPort&quot;:443,
+		&quot;CertFile&quot;:&quot;tls/server.crt&quot;,
+		&quot;KeyFile&quot;:&quot;tls/server.key&quot;
+	},
+	&quot;Session&quot;:{
+		&quot;AuthKey&quot;:&quot;PzCh6FNAB7/jhmlUQ0+25sjJ+WgcJeKR2bAOtnh9UnfVN+WJSBvY/YC80Rs+rbMtwfmSP4FUSxKPtpYKzKFqFA==&quot;,
+		&quot;EncryptKey&quot;:&quot;3oTKCcKjDHMUlV+qur2Ve664SPpSuviyGQ/UqnroUD8=&quot;,
+		&quot;CSRFKey&quot;:&quot;xULAGF5FcWvqHsXaovNFJYfgCt6pedRPROqNvsZjU18=&quot;,
+		&quot;Name&quot;:&quot;sess&quot;,
+		&quot;Options&quot;:{
+			&quot;Path&quot;:&quot;/&quot;,
+			&quot;Domain&quot;:&quot;&quot;,
+			&quot;MaxAge&quot;:28800,
+			&quot;Secure&quot;:false,
+			&quot;HttpOnly&quot;:true
+		}
+	},
+	&quot;Template&quot;:{
+		&quot;Root&quot;:&quot;base&quot;,
+		&quot;Children&quot;:[
+			&quot;partial/favicon&quot;,
+			&quot;partial/menu&quot;,
+			&quot;partial/footer&quot;
+		]
+	},
+	&quot;View&quot;:{
+		&quot;BaseURI&quot;:&quot;/&quot;,
+		&quot;Extension&quot;:&quot;tmpl&quot;,
+		&quot;Folder&quot;:&quot;view&quot;,
+		&quot;Caching&quot;:true
+	}
 }
 </code></pre>
 
@@ -692,7 +695,7 @@ then delete the imports and referencing code</li>
 			
 			<aside class="copyright" role="note">
 				
-				&copy; 2016 Released under the MIT license &ndash;
+				&copy; 2017 Released under the MIT license &ndash;
 				
 				Documentation built with
 				<a href="https://www.gohugo.io" target="_blank">Hugo</a>

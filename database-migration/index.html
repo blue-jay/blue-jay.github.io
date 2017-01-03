@@ -457,9 +457,13 @@ env.json) and recorded in the <strong>migration</strong> table. This is how the
 database you add features or fix bugs in your database. The &lsquo;down&rsquo; file contains
 the code to remove the change or undo it.</p>
 
+<p>More than one migration can now be run on a database. You just have to specify
+a different table value in the env.json file under the MySQL.Migration.Table key.</p>
+
 <p><strong>Note 1</strong>: The <code>jay migrate</code> commands requires the environment variable,
 <strong>JAYCONFIG</strong>, to point to the env.json file path. The migration folder is specified
-in the env.json file under <strong>MySQL.MigrationFolder</strong>.</p>
+in the env.json file under <strong>MySQL.MigrationFolder</strong>. If the environment variable
+is not set, you can specify the &ndash;config or -c flag and pass the path to env.json.</p>
 
 <p><strong>Note 2</strong>: Make sure you do not create any migrations with a date earlier than
 any applied migrations. Jay will not go back and apply them. They must be
@@ -557,7 +561,7 @@ the modification of the <strong>migration</strong> table.</p>
 			
 			<aside class="copyright" role="note">
 				
-				&copy; 2016 Released under the MIT license &ndash;
+				&copy; 2017 Released under the MIT license &ndash;
 				
 				Documentation built with
 				<a href="https://www.gohugo.io" target="_blank">Hugo</a>
